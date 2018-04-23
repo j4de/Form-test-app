@@ -29,18 +29,19 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.getFileButton = new System.Windows.Forms.Button();
             this.textBoxFilePath = new System.Windows.Forms.TextBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.displayButton = new System.Windows.Forms.Button();
             this.barChartButton = new System.Windows.Forms.Button();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.BarChart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.fileDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BarChart1)).BeginInit();
@@ -60,6 +61,7 @@
             this.tableLayoutPanel1.Controls.Add(this.displayButton, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.barChartButton, 3, 3);
             this.tableLayoutPanel1.Controls.Add(this.BarChart1, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 2, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -127,25 +129,21 @@
             this.barChartButton.UseVisualStyleBackColor = true;
             this.barChartButton.Click += new System.EventHandler(this.barChartButton_Click);
             // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.Filter = "All files (*.csv*)|*.csv*";
-            // 
             // BarChart1
             // 
-            chartArea1.Name = "ChartArea1";
-            this.BarChart1.ChartAreas.Add(chartArea1);
+            chartArea2.Name = "ChartArea1";
+            this.BarChart1.ChartAreas.Add(chartArea2);
             this.tableLayoutPanel1.SetColumnSpan(this.BarChart1, 2);
             this.BarChart1.DataBindings.Add(new System.Windows.Forms.Binding("DataSource", this.fileDataBindingSource, "LengthOfMemory", true));
-            legend1.Name = "Legend1";
-            this.BarChart1.Legends.Add(legend1);
+            legend2.Name = "Legend1";
+            this.BarChart1.Legends.Add(legend2);
             this.BarChart1.Location = new System.Drawing.Point(465, 70);
             this.BarChart1.Name = "BarChart1";
             this.tableLayoutPanel1.SetRowSpan(this.BarChart1, 2);
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.BarChart1.Series.Add(series1);
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.BarChart1.Series.Add(series2);
             this.BarChart1.Size = new System.Drawing.Size(458, 240);
             this.BarChart1.TabIndex = 7;
             this.BarChart1.Text = "chart1";
@@ -153,6 +151,20 @@
             // fileDataBindingSource
             // 
             this.fileDataBindingSource.DataSource = typeof(TestAppFileRead.FileData);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.Filter = "All files (*.csv*)|*.csv*";
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(465, 54);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(55, 13);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "Total data";
             // 
             // Form1
             // 
@@ -183,6 +195,7 @@
         private System.Windows.Forms.Button barChartButton;
         private System.Windows.Forms.DataVisualization.Charting.Chart BarChart1;
         private System.Windows.Forms.BindingSource fileDataBindingSource;
+        private System.Windows.Forms.Label label1;
     }
 }
 
