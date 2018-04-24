@@ -27,17 +27,12 @@ namespace TestAppFileRead
         //Filter setup for CSV files in Form1.designer.cs
         private void getFileButton_Click(object sender, EventArgs e)
         {
-           
+
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 textBoxFilePath.Text = (openFileDialog1.FileName);
             }
-            
-        }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            
         }
 
 
@@ -59,16 +54,28 @@ namespace TestAppFileRead
             string megabyteOrKilobyte = "";
             FileInfo f = new FileInfo(filePath);
             long fileSize = f.Length;
-            if (fileSize > 1024)
+            if (fileSize > 1073741824)
+            {
+                fileSize = fileSize / 1073741824;
+                fileSize.ToString();
+                megabyteOrKilobyte = fileSize + " Gigabytes";
+            }
+            else if (fileSize > 1048576)
+            {
+                fileSize = fileSize / 1048576;
+                fileSize.ToString();
+                megabyteOrKilobyte = fileSize + " Megabytes";
+            }
+            else if (fileSize > 1024)
             {
                 fileSize = fileSize / 1024;
                 fileSize.ToString();
-                megabyteOrKilobyte = fileSize + "Megabytes";
+                megabyteOrKilobyte = fileSize + " Kilobytes";
             }
             else
             {
                 fileSize.ToString();
-                megabyteOrKilobyte = fileSize + "Kilobyte";
+                megabyteOrKilobyte = fileSize + "bytes";
             }
             //Confirm if the file size is exceptable to load
             if (MessageBox.Show("The file size is " + megabyteOrKilobyte + ""+". Do you want to load it?", " Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -100,116 +107,92 @@ namespace TestAppFileRead
                     dataGridView1.DataSource = null;
                     dataGridView1.DataSource = dataTable;
 
-                    //var results = from DataRow myRow in dataTable.Rows
-                    //              where (int)myRow[14] == 1
-                    //              select myRow;
-
-                    FindLengthForEachPID();
-
-                    var series = new Series("Process List");
-                    series.Points.DataBindXY(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, new[] { 100, 200, 90, 150, 20, 330, 500, 120, 50, 210 });
-                    BarChart1.Series.Add(series);
+                    FindLengthForEachProcess();                 
                 }
             }
             else
             {
                 dataGridView1.DataSource = null;
             }
-        
 
-           
         }
 
-        private void FindLengthForEachPID()
+        private void FindLengthForEachProcess()
         {
-            //find the rows with the matching PID's and then add the length for
+            int[] topLengths = new int[10];
+            string[] topProcessNames = new string[10];
+            //find the rows with the matching process name and then add the length for
             //each of these rows together and select the top ten values 
             //to populate the bar chart
-            //dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            Dictionary<string, List<int>> data = new Dictionary<string, List<int>>();
             try
             {
                 string stringLength = "";
                 int length = 0;
-                int totalLength = 0;
-                string pid = "";
+                string processName = "";
 
-                //have to put the length value into a string and take out any
-                //commas before converting it to an int.
                 foreach (DataGridViewRow row in dataGridView1.Rows)
                 {
-                    pid = row.Cells[2].Value.ToString();
+                    processName = row.Cells[1].Value.ToString();
+
+                    //have to put the length value into a string and take out any
+                    //commas before converting it to an int.
                     stringLength = row.Cells[4].Value.ToString();
                     stringLength = stringLength.Replace(",", "");
                     length = Convert.ToInt32(stringLength);
 
-                    if (data.ContainsKey(pid))
+                    //populate the arrays
+                    for (int i = 0; i < 9; i++)
                     {
-                        data[pid].Add(length);
-                        //totalLength += length;
-                    }
-                    else data.Add(pid, new List<int>(new int[] { length }));
+                        if (processName == topProcessNames[i])
+                        {
+                            topLengths[i] += length;
 
-                    totalLength += length;
+                        }
+                        if (processName != topProcessNames[i])
+                        {
+                            //check has it been previously added in the loop
+                            if (i > 0)
+                            {
+                                if (processName == topProcessNames[i - 1])
+                                {
+                                    topLengths[i - 1] += length;
+                                }
+                                else
+                                {
+                                    topProcessNames[i] = processName;
+                                    topLengths[i] += length;
+                                }
+                            }
+                            else
+                            {
+                                if (length > topLengths[i])
+                                {
+                                    topProcessNames[i] = processName;
+                                    topLengths[i] += length;
+                                }
+                            }
 
-
+                        }
+                    }//end for loop
                 }
-                GetMaxValue();
-
-                //foreach (var pidKey in data.Keys)
-                //{
-                //    if(pid == pidKey)
-                //    totalLength += length;
-
-
-                //}
-
             }
             catch (Exception exc)
             {
                 MessageBox.Show(exc.Message);
             }
+
+            GetChart(topLengths, topProcessNames);
         }
 
-        //Get the highest length value
-        private void GetMaxValue()
+        private void GetChart(int[] topLengths, string[] topProcessNames)
         {
-            int max = 0;
-            string str = "";
-            int strValue = 0;
-            string maxMessage = "The largest usage is ";
-            for (int i = 0; i <= dataGridView1.Rows.Count - 1; i++)
-            {
-                str = dataGridView1.Rows[i].Cells[4].Value.ToString();
-                str = str.Replace(",", "");
-                strValue = Convert.ToInt32(str);
-
-                if (max < strValue)
-                {
-                    max = strValue;
-                }
-            }
-            maxMessage = maxMessage + max.ToString();
-            label1.Text = maxMessage;
-        }
-
-
-
-        //Working Chart sample
-        private void barChartButton_Click(object sender, EventArgs e)
-        {
-
+            //Bar chart with array values
             var series = new Series("Process List");
-
-            // First parameter is X-Axis and Second is Collection of Y- Axis
-            series.Points.DataBindXY(new[] {1,2,3,4,5,6,7,8,9,10 }, new[] { 10, 20, 9, 15,2,33,50,12,5,21 });
+            series.Points.DataBindXY(new[] {topProcessNames[0], topProcessNames[1],topProcessNames[2],topProcessNames[3],topProcessNames[4],
+                                            topProcessNames[5], topProcessNames[6],topProcessNames[7],topProcessNames[8],topProcessNames[9]},
+                                     new[] {topLengths[0], topLengths[1], topLengths[2], topLengths[3], topLengths[4],
+                                            topLengths[5], topLengths[6], topLengths[7], topLengths[8], topLengths[9], });
             BarChart1.Series.Add(series);
-
-        }
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
         }
     }
 }
