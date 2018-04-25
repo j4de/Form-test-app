@@ -36,7 +36,7 @@ namespace TestAppFileRead
         }
 
 
-        //Only setup to Read in the data from a CSV file and display in the table
+        //Only setup to Read in the data from a Procmon CSV file and display in the table
         private void displayButton_Click(object sender, EventArgs e)
         {
             DataTable dataTable = new DataTable();
@@ -50,10 +50,59 @@ namespace TestAppFileRead
             StreamReader streamReader = new StreamReader(filePath);
             string[] totalData = new string[File.ReadAllLines(filePath).Length];
 
-            //Get the size of the file and append magabyte or kilobyte
-            string megabyteOrKilobyte = "";
+            string megabyteOrKilobyte;
+            long fileSize;
+            FindFileSize(filePath, out megabyteOrKilobyte, out fileSize);
+            //Confirm if the file size is exceptable to load
+            if (MessageBox.Show("The file size is " + megabyteOrKilobyte + "" + ". Do you want to load it?", " Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                if (fileSize != 0)
+                {
+                    totalData = streamReader.ReadLine().Split('"');
+                    while (!streamReader.EndOfStream)
+                    {
+                        
+                        totalData = streamReader.ReadLine().Split('"');
+
+                        //get value of length
+                        var match = regex.Match(totalData[13]);
+                        if (match.Success)
+                        {
+                            totalData[14] = match.Groups[1].Value;
+                        }
+                        if (totalData[1] != null)
+                        {
+                            //display relevant values
+                            dataTable.Rows.Add(
+                                                totalData[1], //time 
+                                                totalData[3], //process name 
+                                                totalData[5], //PID
+                                                totalData[9],//path
+                                                totalData[14] //length
+                                              );
+                        }
+                        
+                    }
+                    dataGridView1.DataSource = null;
+                    dataGridView1.DataSource = dataTable;
+
+                    FindLengthForEachProcess();
+                }
+            }
+            else
+            {
+                dataGridView1.DataSource = null;
+            }
+
+        }
+
+        //Convert file size for user information
+        private static void FindFileSize(string filePath, out string megabyteOrKilobyte, out long fileSize)
+        {
+            //Get the size of the file and append Gigabyte, magabyte or kilobyte
+            megabyteOrKilobyte = "";
             FileInfo f = new FileInfo(filePath);
-            long fileSize = f.Length;
+            fileSize = f.Length;
             if (fileSize > 1073741824)
             {
                 fileSize = fileSize / 1073741824;
@@ -77,62 +126,31 @@ namespace TestAppFileRead
                 fileSize.ToString();
                 megabyteOrKilobyte = fileSize + "bytes";
             }
-            //Confirm if the file size is exceptable to load
-            if (MessageBox.Show("The file size is " + megabyteOrKilobyte + ""+". Do you want to load it?", " Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                if (fileSize != 0)
-                {
-                    totalData = streamReader.ReadLine().Split('"');
-                    while (!streamReader.EndOfStream)
-                    {
-
-                        totalData = streamReader.ReadLine().Split('"');
-
-                        //get value of length
-                        var match = regex.Match(totalData[13]);
-                        if (match.Success)
-                        {
-                            totalData[14] = match.Groups[1].Value;
-                        }
-
-                        //display relevant values
-                        dataTable.Rows.Add(
-                                            totalData[1], //time 
-                                            totalData[3], //process name 
-                                            totalData[5], //PID
-                                            totalData[9],//path
-                                            totalData[14] //length
-                                          );
-                    }
-                    dataGridView1.DataSource = null;
-                    dataGridView1.DataSource = dataTable;
-
-                    FindLengthForEachProcess();                 
-                }
-            }
-            else
-            {
-                dataGridView1.DataSource = null;
-            }
-
         }
 
+        //Calculate the size/length of each process
         private void FindLengthForEachProcess()
         {
+            var ProcessList = new List<ProcessData>();
+            
             int[] topLengths = new int[10];
             string[] topProcessNames = new string[10];
+            string stringLength = "";
+            int length = 0;
+            string processName = "";
+            bool processFound = false;
+            int loopCounter = 0;
+
             //find the rows with the matching process name and then add the length for
             //each of these rows together and select the top ten values 
             //to populate the bar chart
             try
             {
-                string stringLength = "";
-                int length = 0;
-                string processName = "";
-
                 foreach (DataGridViewRow row in dataGridView1.Rows)
                 {
-                    processName = row.Cells[1].Value.ToString();
+
+                    processName = row.Cells[1].Value.ToString().ToLower();
+                    processName = processName.Remove(processName.IndexOf("."));
 
                     //have to put the length value into a string and take out any
                     //commas before converting it to an int.
@@ -140,51 +158,81 @@ namespace TestAppFileRead
                     stringLength = stringLength.Replace(",", "");
                     length = Convert.ToInt32(stringLength);
 
-                    //populate the arrays
-                    for (int i = 0; i < 9; i++)
+                    //If the process name is found in the list
+                    //append the length value
+                    foreach (var item in ProcessList)
                     {
-                        if (processName == topProcessNames[i])
+                        if (item.ProcessName == processName)
                         {
-                            topLengths[i] += length;
-
+                            item.ProcessLength += length;
+                            processFound = true;
                         }
-                        if (processName != topProcessNames[i])
+                        else
+                            processFound = false;
+
+                    }
+
+                    //else add a new process to the list
+                    if (processFound == false)
+                    {
+                        if (row != null)
                         {
-                            //check has it been previously added in the loop
-                            if (i > 0)
+                            ProcessList.Add(new ProcessData
                             {
-                                if (processName == topProcessNames[i - 1])
-                                {
-                                    topLengths[i - 1] += length;
-                                }
-                                else
-                                {
-                                    topProcessNames[i] = processName;
-                                    topLengths[i] += length;
-                                }
-                            }
-                            else
-                            {
-                                if (length > topLengths[i])
-                                {
-                                    topProcessNames[i] = processName;
-                                    topLengths[i] += length;
-                                }
-                            }
-
+                                ProcessLength = length,
+                                ProcessName = processName
+                            });
                         }
-                    }//end for loop
+
+                    }
+
+                    //for testing only
+                    loopCounter++;
+                    if (loopCounter == dataGridView1.RowCount -1)
+                        break;
                 }
+                GetDataForCharts(ProcessList, topLengths, topProcessNames);
+                
+
+                PopulateChart(topLengths, topProcessNames);
+
             }
             catch (Exception exc)
             {
                 MessageBox.Show(exc.Message);
             }
 
-            GetChart(topLengths, topProcessNames);
+           
         }
 
-        private void GetChart(int[] topLengths, string[] topProcessNames)
+        private void GetDataForCharts(List<ProcessData> ProcessList, int[] topLengths, string[] topProcessNames)
+        {
+            var topTenList = (ProcessList.OrderByDescending(i => i.ProcessLength).Take(10)).Distinct();
+
+            int topListCounter = 0;
+            foreach (var item in topTenList)
+            {
+                for (int i = 0; i < topLengths.Length; i++)
+                {
+                    if (topListCounter == i)
+                    {
+                        //convert ProcessLength to kilobytes
+                        topLengths[i] = Convert.ToInt32(item.ProcessLength / 1024);
+                        topProcessNames[i] = item.ProcessName;
+                    }
+
+                }
+                if (topListCounter == 0)
+                {
+                    processNameLabel.Text = item.ProcessName.ToString();
+                    lengthLabel.Text = item.ProcessLength.ToString();
+                }
+                topListCounter++;
+
+            }
+        }
+
+        private void PopulateChart(int[] topLengths, string[] topProcessNames)
         {
             //Bar chart with array values
             var series = new Series("Process List");
@@ -193,6 +241,13 @@ namespace TestAppFileRead
                                      new[] {topLengths[0], topLengths[1], topLengths[2], topLengths[3], topLengths[4],
                                             topLengths[5], topLengths[6], topLengths[7], topLengths[8], topLengths[9], });
             BarChart1.Series.Add(series);
+
+            pieChart1.Series[0].ChartType = SeriesChartType.Pie;
+            pieChart1.Series[0].Points.DataBindXY(topProcessNames, topLengths);
+            pieChart1.Legends[0].Enabled = true;
+            pieChart1.ChartAreas[0].Area3DStyle.Enable3D = true;
         }
+
+        
     }
 }
