@@ -16,7 +16,12 @@ namespace TestAppFileRead
     public partial class Form1 : Form
     {   
         //To parse the Length value from the column => details
-        public static Regex regex = new Regex(@"Length:\s*(\d+\,+[0-9]+[0-9]|\d+\,+[0-9]|[0-9]+[0-9]|\d)", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+        public static Regex regexLength = new Regex(@"Length:\s*(\d+\,+[0-9]+[0-9]|\d+\,+[0-9]|[0-9]+[0-9]|\d)", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+        //public static Regex regexOffset = new Regex(@"
+        //                    Offset:\s*(\d{2,3}|\d{2}|\d\D\d{2,3})|
+        //                    Offset:\s*(\d+\D\d{2,3})|
+        //                    Offset:\s*(\d\D\d{2,3}\D\d{2,3})|
+        //                    Offset:\s*(\d{1,3})", RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
         public Form1()
         {
@@ -44,6 +49,7 @@ namespace TestAppFileRead
             dataTable.Columns.Add("Process Name");
             dataTable.Columns.Add("PID");
             dataTable.Columns.Add("Path");
+            dataTable.Columns.Add("Offset");
             dataTable.Columns.Add("Length");
 
             string filePath = textBoxFilePath.Text;
@@ -52,7 +58,9 @@ namespace TestAppFileRead
 
             string megabyteOrKilobyte;
             long fileSize;
+
             FindFileSize(filePath, out megabyteOrKilobyte, out fileSize);
+
             //Confirm if the file size is exceptable to load
             if (MessageBox.Show("The file size is " + megabyteOrKilobyte + "" + ". Do you want to load it?", " Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
@@ -63,12 +71,29 @@ namespace TestAppFileRead
                     {
                         
                         totalData = streamReader.ReadLine().Split('"');
-
-                        //get value of length
-                        var match = regex.Match(totalData[13]);
-                        if (match.Success)
+                        //format time value
+                        totalData[1] = totalData[1].Substring(0,8);
+                        try
                         {
-                            totalData[14] = match.Groups[1].Value;
+                            //get value of length and remove the comma
+                            var match = regexLength.Match(totalData[13]);
+                            if (match.Success)
+                            {
+                                totalData[14] = match.Groups[1].Value;
+                                totalData[14] = totalData[14].Replace(",", "");
+                            }
+                            //get the offset value
+                            var match2 = regexOffset.Match(totalData[13]);
+                            if (match2.Success)
+                            {
+                                totalData[12] = match.Groups[1].Value;
+                                totalData[12] = totalData[12].Replace(",", "");
+                            }
+
+                        }
+                        catch (IncorrectFormatException exc)
+                        {
+                            MessageBox.Show(exc.Message, caption: "Must be a Procmon file saved in the CSV format. ");
                         }
                         if (totalData[1] != null)
                         {
@@ -78,7 +103,9 @@ namespace TestAppFileRead
                                                 totalData[3], //process name 
                                                 totalData[5], //PID
                                                 totalData[9],//path
+                                                 totalData[12],//offset
                                                 totalData[14] //length
+                                               
                                               );
                         }
                         
@@ -86,6 +113,9 @@ namespace TestAppFileRead
                     dataGridView1.DataSource = null;
                     dataGridView1.DataSource = dataTable;
 
+                    //Generate a new CSV file with just the data we need
+                    SaveToCSV(dataGridView1);
+                    
                     FindLengthForEachProcess();
                 }
             }
@@ -95,6 +125,52 @@ namespace TestAppFileRead
             }
 
         }
+        private void SaveToCSV(DataGridView DGV)
+        {
+            string filename = "";
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "CSV (*.csv)|*.csv";
+            sfd.FileName = "Output.csv";
+            int counter = 0;
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                MessageBox.Show("Data will be exported and you will be notified when it is ready.");
+                if (File.Exists(filename))
+                {
+                    try
+                    {
+                        File.Delete(filename);
+                    }
+                    catch (IOException ex)
+                    {
+                        MessageBox.Show("It wasn't possible to write the data to the disk." + ex.Message);
+                    }
+                }
+                int columnCount = DGV.ColumnCount;
+                string columnNames = "";
+                string[] output = new string[DGV.RowCount + 1];
+                for (int i = 0; i < columnCount; i++)
+                {
+                    columnNames += DGV.Columns[i].Name.ToString() + ",";
+                }
+                output[0] += columnNames;
+                for (int i = 1; (i - 1) < DGV.RowCount; i++)
+                {
+                    for (int j = 0; j < columnCount; j++)
+                    {
+                        
+                        output[i] += DGV.Rows[i - 1].Cells[j].Value.ToString() + ",";
+                        counter++;
+                    }
+                    //break out of loop to avoid null object reference
+                    if (i == DGV.RowCount - 1)
+                        break;
+                }
+                File.WriteAllLines(sfd.FileName, output, Encoding.UTF8);
+                MessageBox.Show("Your file was generated and its ready for use.");
+            }
+        }
+        
 
         //Convert file size for user information
         private static void FindFileSize(string filePath, out string megabyteOrKilobyte, out long fileSize)
@@ -135,8 +211,9 @@ namespace TestAppFileRead
             
             int[] topLengths = new int[10];
             string[] topProcessNames = new string[10];
-            string stringLength = "";
+            
             int length = 0;
+            int offset = 0;
             string processName = "";
             bool processFound = false;
             int loopCounter = 0;
@@ -149,14 +226,11 @@ namespace TestAppFileRead
                 foreach (DataGridViewRow row in dataGridView1.Rows)
                 {
 
-                    processName = row.Cells[1].Value.ToString().ToLower();
+                    processName = row.Cells[1].Value.ToString();
+                    //Remove entension, just for readability
                     processName = processName.Remove(processName.IndexOf("."));
-
-                    //have to put the length value into a string and take out any
-                    //commas before converting it to an int.
-                    stringLength = row.Cells[4].Value.ToString();
-                    stringLength = stringLength.Replace(",", "");
-                    length = Convert.ToInt32(stringLength);
+                    length = Convert.ToInt32(row.Cells[4].Value);
+                    offset = Convert.ToInt32(row.Cells[5].Value);
 
                     //If the process name is found in the list
                     //append the length value
@@ -169,31 +243,28 @@ namespace TestAppFileRead
                         }
                         else
                             processFound = false;
-
                     }
 
                     //else add a new process to the list
                     if (processFound == false)
                     {
-                        if (row != null)
+                        ProcessList.Add(new ProcessData
                         {
-                            ProcessList.Add(new ProcessData
-                            {
-                                ProcessLength = length,
-                                ProcessName = processName
-                            });
-                        }
-
+                            ProcessLength = length,
+                            ProcessName = processName,
+                            Offset = offset
+                        });
                     }
-
-                    //for testing only
+                    
+                    //To ensure it doesn't spill over and cause 
+                    //an null object reference
                     loopCounter++;
                     if (loopCounter == dataGridView1.RowCount -1)
                         break;
                 }
-                GetDataForCharts(ProcessList, topLengths, topProcessNames);
-                
+                totalProcessesLabel.Text = ProcessList.Count().ToString();
 
+                GetDataForCharts(ProcessList, topLengths, topProcessNames);           
                 PopulateChart(topLengths, topProcessNames);
 
             }
@@ -204,6 +275,8 @@ namespace TestAppFileRead
 
            
         }
+
+
 
         private void GetDataForCharts(List<ProcessData> ProcessList, int[] topLengths, string[] topProcessNames)
         {
@@ -234,14 +307,15 @@ namespace TestAppFileRead
 
         private void PopulateChart(int[] topLengths, string[] topProcessNames)
         {
-            //Bar chart with array values
-            var series = new Series("Process List");
-            series.Points.DataBindXY(new[] {topProcessNames[0], topProcessNames[1],topProcessNames[2],topProcessNames[3],topProcessNames[4],
-                                            topProcessNames[5], topProcessNames[6],topProcessNames[7],topProcessNames[8],topProcessNames[9]},
-                                     new[] {topLengths[0], topLengths[1], topLengths[2], topLengths[3], topLengths[4],
-                                            topLengths[5], topLengths[6], topLengths[7], topLengths[8], topLengths[9], });
-            BarChart1.Series.Add(series);
+            //BarChart1.Series.Add(series);
+            BarChart1.Series[0].ChartType = SeriesChartType.RangeColumn;
+            BarChart1.Series[0].Points.DataBindXY(new[] {topProcessNames[0], topProcessNames[1],topProcessNames[2],topProcessNames[3],topProcessNames[4],
+                                                         topProcessNames[5], topProcessNames[6],topProcessNames[7],topProcessNames[8],topProcessNames[9]},
+                                                  new[] {topLengths[0], topLengths[1], topLengths[2], topLengths[3], topLengths[4],
+                                                         topLengths[5], topLengths[6], topLengths[7], topLengths[8], topLengths[9], });
+            BarChart1.Legends[0].Enabled = true;
 
+            //3D Pie chart
             pieChart1.Series[0].ChartType = SeriesChartType.Pie;
             pieChart1.Series[0].Points.DataBindXY(topProcessNames, topLengths);
             pieChart1.Legends[0].Enabled = true;
