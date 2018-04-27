@@ -113,6 +113,7 @@ namespace TestAppFileRead
 
                     //Generate a new CSV file with just the data we need
                     SaveToCSV(dataGridView1);
+                    //StreamWriter sw = new StreamWriter();
                     
                     FindLengthForEachProcess();
                 }
@@ -251,7 +252,7 @@ namespace TestAppFileRead
             int loopCounter = 0;
             string processKeyString = "";
 
-            //find the rows with the matching process name and then add the length for
+            //find the rows with the matching process key and then add the length for
             //each of these rows together and select the top ten values 
             //to populate the bar chart
             try
@@ -263,14 +264,14 @@ namespace TestAppFileRead
                     processPID = row.Cells[DG_PID].Value.ToString();
                     processPath = row.Cells[DG_Path].Value.ToString();
                     processOffset = Convert.ToInt32(row.Cells[DG_Offset].Value);
-                    processLength = Convert.ToInt32(row.Cells[DG_Name].Value);
-                    
-                   // processKeyString = processName+"|"+
-                    //If the process name is found in the list
+                    processLength = Convert.ToInt32(row.Cells[DG_Length].Value);
+
+                    processKeyString = processName + "|" + processPID + "|" + processPath;
+                    //If the process processKey is found in the list
                     //append the length value
                     foreach (var item in ProcessList)
                     {
-                        if (item.ProcessName == processName )
+                        if (item.ProcessKey == processKeyString )
                         {
                             item.ProcessLength += processLength;
                             processFound = true;
@@ -286,7 +287,10 @@ namespace TestAppFileRead
                         {
                             ProcessLength = processLength,
                             ProcessName = processName,
-                            ProcessOffset = processOffset
+                            ProcessOffset = processOffset,
+                            ProcessPID = processPID,
+                            ProcessPath = processPath,
+                            ProcessKey = processKeyString
                         });
                     }
                     
@@ -296,9 +300,11 @@ namespace TestAppFileRead
                     if (loopCounter == dataGridView1.RowCount -1)
                         break;
                 }
+
                 totalProcessesLabel.Text = ProcessList.Count().ToString();
 
-                GetDataForCharts(ProcessList, topLengths, topProcessNames);           
+                GetDataForCharts(ProcessList, topLengths, topProcessNames);  
+                
                 PopulateChart(topLengths, topProcessNames);
 
             }
