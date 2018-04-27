@@ -14,14 +14,28 @@ using System.Windows.Forms.DataVisualization.Charting;
 namespace TestAppFileRead
 {
     public partial class Form1 : Form
-    {   
+    {
+        //Procmon data
+        private int PM_TimeOfDay = 1;
+        private int PM_ProcessName = 3;
+        private int PM_PID = 5;
+        private int PM_Path = 9;
+        private int PM_Offset = 12;
+        private int PM_Detail = 13;
+        private int PM_Length = 14;
+
+        //DataGridView data
+        private int DG_TimeOfDay = 0;
+        private int DG_Name = 1;
+        private int DG_PID = 2;
+        private int DG_Path = 3;
+        private int DG_Offset = 4;
+        private int DG_Length = 5;
+
+
         //To parse the Length value from the column => details
-        public static Regex regexLength = new Regex(@"Length:\s*(\d+\,+[0-9]+[0-9]|\d+\,+[0-9]|[0-9]+[0-9]|\d)", RegexOptions.CultureInvariant | RegexOptions.Compiled);
-        //public static Regex regexOffset = new Regex(@"
-        //                    Offset:\s*(\d{2,3}|\d{2}|\d\D\d{2,3})|
-        //                    Offset:\s*(\d+\D\d{2,3})|
-        //                    Offset:\s*(\d\D\d{2,3}\D\d{2,3})|
-        //                    Offset:\s*(\d{1,3})", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+        public static Regex regexLength = new Regex(@"Length:\s*(?<getLengthNum>\d+(,\d+)*)", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+        public static Regex regexOffset = new Regex(@"Offset:\s*(?<getOffsetNum>\d+(,\d+)*)", RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
         public Form1()
         {
@@ -69,46 +83,22 @@ namespace TestAppFileRead
                     totalData = streamReader.ReadLine().Split('"');
                     while (!streamReader.EndOfStream)
                     {
-                        
-                        totalData = streamReader.ReadLine().Split('"');
-                        //format time value
-                        totalData[1] = totalData[1].Substring(0,8);
-                        try
-                        {
-                            //get value of length and remove the comma
-                            var match = regexLength.Match(totalData[13]);
-                            if (match.Success)
-                            {
-                                totalData[14] = match.Groups[1].Value;
-                                totalData[14] = totalData[14].Replace(",", "");
-                            }
-                            //get the offset value
-                            var match2 = regexOffset.Match(totalData[13]);
-                            if (match2.Success)
-                            {
-                                totalData[12] = match.Groups[1].Value;
-                                totalData[12] = totalData[12].Replace(",", "");
-                            }
+                        totalData = ParseProcmonData(streamReader);
+                        //get the offset value
 
-                        }
-                        catch (IncorrectFormatException exc)
-                        {
-                            MessageBox.Show(exc.Message, caption: "Must be a Procmon file saved in the CSV format. ");
-                        }
                         if (totalData[1] != null)
                         {
                             //display relevant values
                             dataTable.Rows.Add(
-                                                totalData[1], //time 
-                                                totalData[3], //process name 
-                                                totalData[5], //PID
-                                                totalData[9],//path
-                                                 totalData[12],//offset
-                                                totalData[14] //length
-                                               
+                                                totalData[PM_TimeOfDay],
+                                                totalData[PM_ProcessName],
+                                                totalData[PM_PID],
+                                                totalData[PM_Path],
+                                                totalData[PM_Offset],
+                                                totalData[PM_Length]
                                               );
                         }
-                        
+
                     }
                     dataGridView1.DataSource = null;
                     dataGridView1.DataSource = dataTable;
@@ -125,8 +115,40 @@ namespace TestAppFileRead
             }
 
         }
+
+        private string[] ParseProcmonData(StreamReader streamReader)
+        {
+            string[] totalData = streamReader.ReadLine().Split('"');
+            
+            totalData[PM_TimeOfDay] = totalData[PM_TimeOfDay].Substring(0, 8);
+            try
+            {
+                
+                //get value of length and offset and remove any comma's
+                var match = regexLength.Match(totalData[PM_Detail]);
+                if (match.Success)
+                {
+                    totalData[PM_Length] = match.Groups["getLengthNum"].Value;
+                    totalData[PM_Length] = totalData[PM_Length].Replace(",", "");
+                }
+                var match2 = regexOffset.Match(totalData[PM_Detail]);
+                if (match2.Success)
+                {
+                    totalData[PM_Offset] = match2.Groups["getOffsetNum"].Value;
+                    totalData[PM_Offset] = totalData[PM_Offset].Replace(",", "");
+                }
+            }
+            catch (IncorrectFormatException exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+
+            return totalData;
+        }
+
         private void SaveToCSV(DataGridView DGV)
         {
+            //rewrite using streamerWriter ===> look up past work.
             string filename = "";
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "CSV (*.csv)|*.csv";
@@ -212,11 +234,14 @@ namespace TestAppFileRead
             int[] topLengths = new int[10];
             string[] topProcessNames = new string[10];
             
-            int length = 0;
-            int offset = 0;
+            int processLength = 0;
+            int processOffset = 0;
             string processName = "";
+            string processPath = "";
+            string processPID = "";
             bool processFound = false;
             int loopCounter = 0;
+            string processKeyString = "";
 
             //find the rows with the matching process name and then add the length for
             //each of these rows together and select the top ten values 
@@ -226,19 +251,20 @@ namespace TestAppFileRead
                 foreach (DataGridViewRow row in dataGridView1.Rows)
                 {
 
-                    processName = row.Cells[1].Value.ToString();
-                    //Remove entension, just for readability
-                    processName = processName.Remove(processName.IndexOf("."));
-                    length = Convert.ToInt32(row.Cells[4].Value);
-                    offset = Convert.ToInt32(row.Cells[5].Value);
-
+                    processName = row.Cells[DG_Name].Value.ToString();
+                    processPID = row.Cells[DG_PID].Value.ToString();
+                    processPath = row.Cells[DG_Path].Value.ToString();
+                    processOffset = Convert.ToInt32(row.Cells[DG_Offset].Value);
+                    processLength = Convert.ToInt32(row.Cells[DG_Name].Value);
+                    
+                   // processKeyString = processName+"|"+
                     //If the process name is found in the list
                     //append the length value
                     foreach (var item in ProcessList)
                     {
-                        if (item.ProcessName == processName)
+                        if (item.ProcessName == processName )
                         {
-                            item.ProcessLength += length;
+                            item.ProcessLength += processLength;
                             processFound = true;
                         }
                         else
@@ -250,9 +276,9 @@ namespace TestAppFileRead
                     {
                         ProcessList.Add(new ProcessData
                         {
-                            ProcessLength = length,
+                            ProcessLength = processLength,
                             ProcessName = processName,
-                            Offset = offset
+                            ProcessOffset = processOffset
                         });
                     }
                     
@@ -280,7 +306,7 @@ namespace TestAppFileRead
 
         private void GetDataForCharts(List<ProcessData> ProcessList, int[] topLengths, string[] topProcessNames)
         {
-            var topTenList = (ProcessList.OrderByDescending(i => i.ProcessLength).Take(10)).Distinct();
+            var topTenList = (ProcessList.OrderByDescending(i => i.ProcessLength).Take(10));
 
             int topListCounter = 0;
             foreach (var item in topTenList)

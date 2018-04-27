@@ -10,6 +10,8 @@ namespace TestAppFileRead
     {
         public string ProcessName { get; set; }
         public long ProcessLength { get; set; }
-        public long Offset { get; set; }
+        public long ProcessOffset { get; set; }
+        public string ProcessPID { get; set; }
+        public string ProcessPath { get; set; }
     }
 }
