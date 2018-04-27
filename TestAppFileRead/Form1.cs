@@ -72,6 +72,10 @@ namespace TestAppFileRead
 
             string megabyteOrKilobyte;
             long fileSize;
+            long stringSize;
+            long progress = 0;
+            long value;
+            
 
             FindFileSize(filePath, out megabyteOrKilobyte, out fileSize);
 
@@ -79,19 +83,31 @@ namespace TestAppFileRead
             if (MessageBox.Show("The file size is " + megabyteOrKilobyte + "" + ". Do you want to load it?", " Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 //progress bar
-                loadingForm load = new loadingForm(megabyteOrKilobyte, dataGridView1, this, fileSize);
+                loadingForm load = new loadingForm(megabyteOrKilobyte, dataGridView1, this, fileSize, progress);
                 load.Show();
 
                 if (fileSize != 0)
                 {
-                    totalData = streamReader.ReadLine().Split('"');
+                    string line = streamReader.ReadLine();
+                    totalData = line.Split('"');
                     while (!streamReader.EndOfStream)
                     {
+
                         totalData = ParseProcmonData(streamReader);
                         //get the offset value
 
+                        stringSize = line.Length;
+                        
+                        progress += stringSize;
+                        Update();
+
+
                         System.Threading.Thread.Sleep(100);
-                        //load.setprogress;
+                        load.setprogress(progress);
+                        if(load.iscanceled())
+                        {
+                            break;
+                        }
                         Application.DoEvents();
 
                         if (totalData[1] != null)
@@ -108,14 +124,19 @@ namespace TestAppFileRead
                         }
 
                     }
-                    dataGridView1.DataSource = null;
-                    dataGridView1.DataSource = dataTable;
+                    if (!load.iscanceled())
+                    {
 
-                    //Generate a new CSV file with just the data we need
-                    SaveToCSV(dataGridView1);
-                    //StreamWriter sw = new StreamWriter();
-                    
-                    FindLengthForEachProcess();
+                        dataGridView1.DataSource = null;
+                        dataGridView1.DataSource = dataTable;
+
+                        //Generate a new CSV file with just the data we need
+                        SaveToCSV(dataGridView1);
+                        //StreamWriter sw = new StreamWriter();
+
+                        FindLengthForEachProcess();
+                    }
+                    load.Close();
                 }
             }
             else
@@ -210,29 +231,29 @@ namespace TestAppFileRead
             megabyteOrKilobyte = "";
             FileInfo f = new FileInfo(filePath);
             fileSize = f.Length;
-            if (fileSize > 1073741824)
-            {
-                fileSize = fileSize / 1073741824;
-                fileSize.ToString();
-                megabyteOrKilobyte = fileSize + " Gigabytes";
-            }
-            else if (fileSize > 1048576)
-            {
-                fileSize = fileSize / 1048576;
-                fileSize.ToString();
-                megabyteOrKilobyte = fileSize + " Megabytes";
-            }
-            else if (fileSize > 1024)
-            {
-                fileSize = fileSize / 1024;
-                fileSize.ToString();
-                megabyteOrKilobyte = fileSize + " Kilobytes";
-            }
-            else
-            {
-                fileSize.ToString();
-                megabyteOrKilobyte = fileSize + "bytes";
-            }
+            //if (fileSize > 1073741824)
+            //{
+            //    fileSize = fileSize / 1073741824;
+            //    fileSize.ToString();
+            //    megabyteOrKilobyte = fileSize + " Gigabytes";
+            //}
+            //else if (fileSize > 1048576)
+            //{
+            //    fileSize = fileSize / 1048576;
+            //    fileSize.ToString();
+            //    megabyteOrKilobyte = fileSize + " Megabytes";
+            //}
+            //else if (fileSize > 1024)
+            //{
+            //    fileSize = fileSize / 1024;
+            //    fileSize.ToString();
+            //    megabyteOrKilobyte = fileSize + " Kilobytes";
+            //}
+            //else
+            //{
+            //    fileSize.ToString();
+            //    megabyteOrKilobyte = fileSize + "bytes";
+            //}
         }
 
         //Calculate the size/length of each process

@@ -16,31 +16,41 @@ namespace TestAppFileRead
         Form1 check;
         
         //public constant to check the progress of the %
-        int progress = 0;
+        long totprogress = 0;
         long sizefile = 0;
-
-        public loadingForm(string bytesize, DataGridView dgv, Form1 frm, long filesize)
+        long stringSize = 0;
+        Boolean canceled = false;
+        public loadingForm(string bytesize, DataGridView dgv, Form1 frm, long filesize, long progress)
         {
             InitializeComponent();
             bytesLbl.Text = "Uploading " + bytesize + ". Please wait.";
             _dgv = dgv;
             check = frm;
             sizefile = filesize;
+            totprogress = progress;
+            progressBar1.Maximum =Convert.ToInt32(filesize);
         }
 
         private void loadingForm_Load(object sender, EventArgs e)
         {
-
+            
         }
 
-        private async void Cancel_Click(object sender, EventArgs e)
+        private  void Cancel_Click(object sender, EventArgs e)
         {
+            canceled = true;
             Status.Text = "Loading Cancelled";
-            _dgv = null;
-            Form1 frm1 = new Form1();
+            Cancel.Enabled = true;
+        }
 
-            await Task.Delay(2000);
-            this.Hide();
+        internal void setprogress(long progress)
+        {
+            progressBar1.Value =Convert.ToInt32(progress);
+        }
+
+        internal bool iscanceled()
+        {
+            return canceled;
         }
     }
 }
