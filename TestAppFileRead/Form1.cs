@@ -78,6 +78,10 @@ namespace TestAppFileRead
             //Confirm if the file size is exceptable to load
             if (MessageBox.Show("The file size is " + megabyteOrKilobyte + "" + ". Do you want to load it?", " Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
+                //progress bar
+                loadingForm load = new loadingForm(megabyteOrKilobyte, dataGridView1, this, fileSize);
+                load.Show();
+
                 if (fileSize != 0)
                 {
                     totalData = streamReader.ReadLine().Split('"');
@@ -85,6 +89,10 @@ namespace TestAppFileRead
                     {
                         totalData = ParseProcmonData(streamReader);
                         //get the offset value
+
+                        System.Threading.Thread.Sleep(100);
+                        //load.setprogress;
+                        Application.DoEvents();
 
                         if (totalData[1] != null)
                         {
