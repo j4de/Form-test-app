@@ -97,46 +97,28 @@ namespace TestAppFileRead
                         //get the offset value
 
                         stringSize = line.Length;
-                        
+
                         progress += stringSize;
                         Update();
 
 
-                        System.Threading.Thread.Sleep(100);
+
                         load.setprogress(progress);
-                        if(load.iscanceled())
+                        if (load.iscanceled())
                         {
                             break;
                         }
                         Application.DoEvents();
 
-                        if (totalData[1] != null)
-                        {
-                            //display relevant values
-                            dataTable.Rows.Add(
-                                                totalData[PM_TimeOfDay],
-                                                totalData[PM_ProcessName],
-                                                totalData[PM_PID],
-                                                totalData[PM_Path],
-                                                totalData[PM_Offset],
-                                                totalData[PM_Length]
-                                              );
-                        }
+                        AddProcmonTableData(dataTable, totalData);
 
                     }
-                    if (!load.iscanceled())
-                    {
+                    //create a new datatabel for the parsed data
+                    DataTable parsedTableData = new DataTable();
 
-                        dataGridView1.DataSource = null;
-                        dataGridView1.DataSource = dataTable;
+                    //If file load is not cancelled
+                    ProcessFileData(dataTable, load);
 
-                        //Generate a new CSV file with just the data we need
-                        SaveToCSV(dataGridView1);
-                        //StreamWriter sw = new StreamWriter();
-
-                        FindLengthForEachProcess();
-                    }
-                    load.Close();
                 }
             }
             else
@@ -144,6 +126,35 @@ namespace TestAppFileRead
                 dataGridView1.DataSource = null;
             }
 
+        }
+
+        private void AddProcmonTableData(DataTable dataTable, string[] totalData)
+        {
+            if (totalData[1] != null)
+            {
+                //display relevant values
+                dataTable.Rows.Add(
+                                    totalData[PM_TimeOfDay],
+                                    totalData[PM_ProcessName],
+                                    totalData[PM_PID],
+                                    totalData[PM_Path],
+                                    totalData[PM_Offset],
+                                    totalData[PM_Length]
+                                  );
+            }
+        }
+
+        private void ProcessFileData(DataTable dataTable, loadingForm load)
+        {
+            if (!load.iscanceled())
+            {
+
+                dataGridView1.DataSource = null;
+                dataGridView1.DataSource = dataTable;
+                FindLengthForEachProcess();
+                load.Close();
+                SaveToCSV(dataGridView1);
+            }
         }
 
         private string[] ParseProcmonData(StreamReader streamReader)
