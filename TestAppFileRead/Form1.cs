@@ -80,8 +80,8 @@ namespace TestAppFileRead
             FindFileSize(filePath, out megabyteOrKilobyte, out fileSize);
 
             //Confirm if the file size is exceptable to load
-            if (MessageBox.Show("The file size is " + megabyteOrKilobyte + "" + ". Do you want to load it?", " Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
+            //if (MessageBox.Show("The file size is " + megabyteOrKilobyte + "" + ". Do you want to load it?", " Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            //{
                 //progress bar
                 loadingForm load = new loadingForm(megabyteOrKilobyte, dataGridView1, this, fileSize, progress);
                 load.Show();
@@ -120,17 +120,17 @@ namespace TestAppFileRead
                     ProcessFileData(dataTable, load);
 
                 }
-            }
-            else
-            {
-                dataGridView1.DataSource = null;
-            }
+            //}
+            //else
+            //{
+            //    dataGridView1.DataSource = null;
+            //}
 
         }
 
         private void AddProcmonTableData(DataTable dataTable, string[] totalData)
         {
-            if (totalData[1] != null)
+            if (totalData[PM_TimeOfDay] != null)
             {
                 //display relevant values
                 dataTable.Rows.Add(
@@ -295,7 +295,16 @@ namespace TestAppFileRead
                     processName = row.Cells[DG_Name].Value.ToString();
                     processPID = row.Cells[DG_PID].Value.ToString();
                     processPath = row.Cells[DG_Path].Value.ToString();
-                    processOffset = Convert.ToInt32(row.Cells[DG_Offset].Value);
+                    
+                    //Some offset values have a value of -1 which throws an exception
+                    if (row.Cells[DG_Offset].Value.ToString() == ",")
+                    {
+                        processOffset = -1;
+                    }
+                    else
+                    {
+                        processOffset = Convert.ToInt32(row.Cells[DG_Offset].Value);
+                    }
                     processLength = Convert.ToInt32(row.Cells[DG_Length].Value);
 
                     processKeyString = processName + "|" + processPID + "|" + processPath;
@@ -345,7 +354,7 @@ namespace TestAppFileRead
                 MessageBox.Show(exc.Message);
             }
 
-           
+
         }
 
 
