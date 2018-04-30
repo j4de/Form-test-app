@@ -28,12 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.saveButton = new System.Windows.Forms.Button();
             this.totalProcessesLabel = new System.Windows.Forms.Label();
@@ -60,8 +60,8 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 11.79884F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 17.69826F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 9.30576F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 4.014598F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34.85968F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.2824F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 26.49903F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 11.07829F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 5.555555F));
             this.tableLayoutPanel1.Controls.Add(this.saveButton, 6, 10);
@@ -73,7 +73,7 @@
             this.tableLayoutPanel1.Controls.Add(this.displayButton, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.pieChart1, 5, 4);
             this.tableLayoutPanel1.Controls.Add(this.exitButton, 6, 11);
-            this.tableLayoutPanel1.Controls.Add(this.BarChart1, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.BarChart1, 0, 4);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -185,20 +185,20 @@
             // 
             // pieChart1
             // 
-            chartArea3.Name = "ChartArea1";
-            this.pieChart1.ChartAreas.Add(chartArea3);
+            chartArea1.Name = "ChartArea1";
+            this.pieChart1.ChartAreas.Add(chartArea1);
             this.tableLayoutPanel1.SetColumnSpan(this.pieChart1, 3);
-            legend3.Name = "Legend1";
-            this.pieChart1.Legends.Add(legend3);
-            this.pieChart1.Location = new System.Drawing.Point(502, 287);
+            legend1.Name = "Legend1";
+            this.pieChart1.Legends.Add(legend1);
+            this.pieChart1.Location = new System.Drawing.Point(588, 287);
             this.pieChart1.Name = "pieChart1";
             this.tableLayoutPanel1.SetRowSpan(this.pieChart1, 6);
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
-            series3.Legend = "Legend1";
-            series3.Name = "Series1";
-            this.pieChart1.Series.Add(series3);
-            this.pieChart1.Size = new System.Drawing.Size(461, 297);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.pieChart1.Series.Add(series1);
+            this.pieChart1.Size = new System.Drawing.Size(443, 297);
             this.pieChart1.TabIndex = 11;
             this.pieChart1.Text = "chart1";
             // 
@@ -216,19 +216,19 @@
             // 
             // BarChart1
             // 
-            chartArea4.Name = "ChartArea1";
-            this.BarChart1.ChartAreas.Add(chartArea4);
-            this.tableLayoutPanel1.SetColumnSpan(this.BarChart1, 4);
-            legend4.Name = "Legend1";
-            this.BarChart1.Legends.Add(legend4);
-            this.BarChart1.Location = new System.Drawing.Point(60, 287);
+            chartArea2.Name = "ChartArea1";
+            this.BarChart1.ChartAreas.Add(chartArea2);
+            this.tableLayoutPanel1.SetColumnSpan(this.BarChart1, 5);
+            legend2.Name = "Legend1";
+            this.BarChart1.Legends.Add(legend2);
+            this.BarChart1.Location = new System.Drawing.Point(3, 287);
             this.BarChart1.Name = "BarChart1";
             this.tableLayoutPanel1.SetRowSpan(this.BarChart1, 6);
-            series4.ChartArea = "ChartArea1";
-            series4.Legend = "Legend1";
-            series4.Name = "Series1";
-            this.BarChart1.Series.Add(series4);
-            this.BarChart1.Size = new System.Drawing.Size(436, 297);
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.BarChart1.Series.Add(series2);
+            this.BarChart1.Size = new System.Drawing.Size(579, 297);
             this.BarChart1.TabIndex = 7;
             this.BarChart1.Text = "chart1";
             // 

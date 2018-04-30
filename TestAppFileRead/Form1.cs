@@ -156,9 +156,9 @@ namespace TestAppFileRead
                 
 
                 totalData[PM_TimeOfDay] = totalData[PM_TimeOfDay].Substring(0, 8);
-
+                
                 //To  deal with an illigal symbol
-                if (totalData[PM_Path].ToString() == @"\Device\HarddiskVolume3촧")
+                if (totalData[PM_Path].ToString() == @"\Device\HarddiskVolume3촧"|| totalData[PM_Path].ToString() == @"\Device\HarddiskVolume3엡\u0003")
                 {
                     totalData[PM_FileName] = "Device.HarddiskVolume3";
                 }
@@ -346,8 +346,8 @@ namespace TestAppFileRead
                             processFound = true;
                             break;
                         }
-                      
-                            
+
+
                     }
 
                     //else add a new process to the list
@@ -371,52 +371,10 @@ namespace TestAppFileRead
                     if (loopCounter == dataGridView1.RowCount - 1)
                         break;
                 }
-                List<ProcessData> SortedProcessList = ProcessList.OrderByDescending(o => o.ProcessLength).Take(10).ToList();
-
-
-
-                foreach (var item in SortedProcessList)
-                {
-
-                    foreach (DataGridViewRow row in dataGridView1.Rows)
-                    {
-                        row.Cells[DG_FileName].Value = item.ProcessFileName.ToString();
-                        row.Cells[DG_Name].Value = item.ProcessName;
-                        row.Cells[DG_Length].Value = item.ProcessLength;
-                        row.Cells[DG_Offset].Value = item.ProcessOffset;
-                        row.Cells[DG_PID].Value = item.ProcessPID;
-                        row.Cells[DG_Path].Value = item.ProcessPath;
-
-                    }
-
-                }
-
-                DataTable filteredTable = new DataTable();
-
-                filteredTable.Columns.Add("Process Name");
-                filteredTable.Columns.Add("PID");
-                filteredTable.Columns.Add("File Name");
-                filteredTable.Columns.Add("Offset");
-                filteredTable.Columns.Add("Length");
-                filteredTable.Columns.Add("Path");
-
-                for (int i = 0; i < SortedProcessList.Count; i++)
-                {
-                    filteredTable.Rows.Add(
-
-                                    SortedProcessList[i].ProcessName ,
-                                    SortedProcessList[i].ProcessPID,
-                                    SortedProcessList[i].ProcessFileName,
-                                    SortedProcessList[i].ProcessOffset,
-                                    SortedProcessList[i].ProcessLength,
-                                    SortedProcessList[i].ProcessPath
-                                  );
-                }
-                dataGridView1.DataSource = filteredTable;
-
+                SortedProcessList(ProcessList);
 
                 totalProcessesLabel.Text = ProcessList.Count().ToString();
-                
+
                 GetDataForCharts(ProcessList, topLengths, topProcessNames);
 
                 PopulateChart(topLengths, topProcessNames);
@@ -430,6 +388,32 @@ namespace TestAppFileRead
 
         }
 
+        private void SortedProcessList(List<ProcessData> ProcessList)
+        {
+            List<ProcessData> SortedProcessList = ProcessList.OrderByDescending(o => o.ProcessLength).Take(10).ToList();
+
+            DataTable filteredTable = new DataTable();
+            filteredTable.Columns.Add("Process Name");
+            filteredTable.Columns.Add("PID");
+            filteredTable.Columns.Add("File Name");
+            filteredTable.Columns.Add("Offset");
+            filteredTable.Columns.Add("Length");
+            filteredTable.Columns.Add("Path");
+
+            for (int i = 0; i < SortedProcessList.Count; i++)
+            {
+                filteredTable.Rows.Add(
+
+                                SortedProcessList[i].ProcessName,
+                                SortedProcessList[i].ProcessPID,
+                                SortedProcessList[i].ProcessFileName,
+                                SortedProcessList[i].ProcessOffset,
+                                SortedProcessList[i].ProcessLength,
+                                SortedProcessList[i].ProcessPath
+                              );
+            }
+            dataGridView1.DataSource = filteredTable;
+        }
 
         private void GetDataForCharts(List<ProcessData> ProcessList, int[] topLengths, string[] topProcessNames)
         {
