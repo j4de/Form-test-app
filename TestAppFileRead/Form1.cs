@@ -20,6 +20,7 @@ namespace TestAppFileRead
         private int PM_ProcessName = 3;
         private int PM_PID = 5;
         private int PM_Path = 9;
+        private int PM_FileName = 10;
         private int PM_Offset = 12;
         private int PM_Detail = 13;
         private int PM_Length = 14;
@@ -28,9 +29,10 @@ namespace TestAppFileRead
         private int DG_TimeOfDay = 0;
         private int DG_Name = 1;
         private int DG_PID = 2;
-        private int DG_Path = 3;
+        private int DG_FileName = 3;
         private int DG_Offset = 4;
         private int DG_Length = 5;
+        private int DG_Path = 6;
 
 
         //To parse the Length value from the column => details
@@ -55,16 +57,17 @@ namespace TestAppFileRead
         }
 
 
-        //Only setup to Read in the data from a Procmon CSV file and display in the table
+        //Only setup to Read in the data from a Procmon CSV file
         private void displayButton_Click(object sender, EventArgs e)
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("Time");
             dataTable.Columns.Add("Process Name");
             dataTable.Columns.Add("PID");
-            dataTable.Columns.Add("Path");
+            dataTable.Columns.Add("File Name");
             dataTable.Columns.Add("Offset");
             dataTable.Columns.Add("Length");
+            dataTable.Columns.Add("Path");
 
             string filePath = textBoxFilePath.Text;
             StreamReader streamReader = new StreamReader(filePath);
@@ -74,7 +77,6 @@ namespace TestAppFileRead
             long fileSize;
             long stringSize;
             long progress = 0;
-            long value;
             
 
             FindFileSize(filePath, out megabyteOrKilobyte, out fileSize);
@@ -85,7 +87,8 @@ namespace TestAppFileRead
                 //progress bar
                 loadingForm load = new loadingForm(megabyteOrKilobyte, dataGridView1, this, fileSize, progress);
                 load.Show();
-
+                //Reset the data grid
+                dataGridView1.DataSource = null;
                 if (fileSize != 0)
                 {
                     string line = streamReader.ReadLine();
@@ -97,93 +100,98 @@ namespace TestAppFileRead
                         //get the offset value
 
                         stringSize = line.Length;
-
                         progress += stringSize;
                         Update();
-
-
-
                         load.setprogress(progress);
                         if (load.iscanceled())
                         {
+                            load.Close();
                             break;
                         }
                         Application.DoEvents();
 
-                        AddProcmonTableData(dataTable, totalData);
-
-                    }
-                    //create a new datatabel for the parsed data
-                    DataTable parsedTableData = new DataTable();
-
-                    //If file load is not cancelled
-                    ProcessFileData(dataTable, load);
-
-                }
-            //}
-            //else
-            //{
-            //    dataGridView1.DataSource = null;
-            //}
-
-        }
-
-        private void AddProcmonTableData(DataTable dataTable, string[] totalData)
-        {
-            if (totalData[PM_TimeOfDay] != null)
-            {
-                //display relevant values
-                dataTable.Rows.Add(
+                    
+                    dataTable.Rows.Add(
                                     totalData[PM_TimeOfDay],
                                     totalData[PM_ProcessName],
                                     totalData[PM_PID],
-                                    totalData[PM_Path],
+                                    totalData[PM_FileName],
                                     totalData[PM_Offset],
-                                    totalData[PM_Length]
+                                    totalData[PM_Length],
+                                    totalData[PM_Path]
                                   );
+
+                }
+                
+                //If file load is not cancelled
+                ProcessFileData(dataTable, load);
+                
             }
+            //}
+            //else
+            //{
+            //   
+            //}
+           
+
         }
 
+      
         private void ProcessFileData(DataTable dataTable, loadingForm load)
         {
             if (!load.iscanceled())
             {
-
                 dataGridView1.DataSource = null;
                 dataGridView1.DataSource = dataTable;
                 FindLengthForEachProcess();
                 load.Close();
-                SaveToCSV(dataGridView1);
             }
         }
 
         private string[] ParseProcmonData(StreamReader streamReader)
         {
             string[] totalData = streamReader.ReadLine().Split('"');
-            
-            totalData[PM_TimeOfDay] = totalData[PM_TimeOfDay].Substring(0, 8);
-            try
+            foreach (var item in totalData)
             {
                 
-                //get value of length and offset and remove any comma's
-                var match = regexLength.Match(totalData[PM_Detail]);
-                if (match.Success)
-                {
-                    totalData[PM_Length] = match.Groups["getLengthNum"].Value;
-                    totalData[PM_Length] = totalData[PM_Length].Replace(",", "");
-                }
-                var match2 = regexOffset.Match(totalData[PM_Detail]);
-                if (match2.Success)
-                {
-                    totalData[PM_Offset] = match2.Groups["getOffsetNum"].Value;
-                    totalData[PM_Offset] = totalData[PM_Offset].Replace(",", "");
-                }
-            }
-            catch (IncorrectFormatException exc)
-            {
-                MessageBox.Show(exc.Message);
-            }
 
+                totalData[PM_TimeOfDay] = totalData[PM_TimeOfDay].Substring(0, 8);
+
+                //To  deal with an illigal symbol
+                if (totalData[PM_Path].ToString() == @"\Device\HarddiskVolume3촧")
+                {
+                    totalData[PM_FileName] = "Device.HarddiskVolume3";
+                }
+                else
+                totalData[PM_FileName] = Path.GetFileName(totalData[PM_Path]).ToString();
+
+                try
+                {
+
+                    //get value of length and offset and remove any comma's
+                    var match = regexLength.Match(totalData[PM_Detail]);
+                    if (match.Success)
+                    {
+                        totalData[PM_Length] = match.Groups["getLengthNum"].Value;
+                        totalData[PM_Length] = totalData[PM_Length].Replace(",", "");
+                    }
+                    var match2 = regexOffset.Match(totalData[PM_Detail]);
+                    if (match2.Success)
+                    {
+                        totalData[PM_Offset] = match2.Groups["getOffsetNum"].Value;
+                        totalData[PM_Offset] = totalData[PM_Offset].Replace(",", "");
+                    }
+                }
+                catch (IncorrectFormatException exc)
+                {
+                    MessageBox.Show(exc.Message);
+                }
+                //Add length together for the same process
+                //if (totalData[PM_PID] == item. )
+                //{
+
+                //}
+            }
             return totalData;
         }
 
@@ -278,6 +286,7 @@ namespace TestAppFileRead
             int processLength = 0;
             int processOffset = 0;
             string processName = "";
+            string processFileName = "";
             string processPath = "";
             string processPID = "";
             bool processFound = false;
@@ -291,11 +300,11 @@ namespace TestAppFileRead
             {
                 foreach (DataGridViewRow row in dataGridView1.Rows)
                 {
-
+                    processFileName = row.Cells[DG_FileName].Value.ToString();
                     processName = row.Cells[DG_Name].Value.ToString();
                     processPID = row.Cells[DG_PID].Value.ToString();
                     processPath = row.Cells[DG_Path].Value.ToString();
-                    
+
                     //Some offset values have a value of -1 which throws an exception
                     if (row.Cells[DG_Offset].Value.ToString() == ",")
                     {
@@ -310,15 +319,18 @@ namespace TestAppFileRead
                     processKeyString = processName + "|" + processPID + "|" + processPath;
                     //If the process processKey is found in the list
                     //append the length value
+                    processFound = false;
                     foreach (var item in ProcessList)
                     {
-                        if (item.ProcessKey == processKeyString )
+                        if (item.ProcessKey == processKeyString)
                         {
+
                             item.ProcessLength += processLength;
                             processFound = true;
+                            break;
                         }
-                        else
-                            processFound = false;
+                      
+                            
                     }
 
                     //else add a new process to the list
@@ -331,21 +343,44 @@ namespace TestAppFileRead
                             ProcessOffset = processOffset,
                             ProcessPID = processPID,
                             ProcessPath = processPath,
-                            ProcessKey = processKeyString
+                            ProcessKey = processKeyString,
+                            ProcessFileName = processFileName
                         });
                     }
-                    
+
                     //To ensure it doesn't spill over and cause 
                     //an null object reference
                     loopCounter++;
-                    if (loopCounter == dataGridView1.RowCount -1)
+                    if (loopCounter == dataGridView1.RowCount - 1)
                         break;
                 }
+                List<ProcessData> SortedProcessList = ProcessList.OrderByDescending(o => o.ProcessLength).Take(10).ToList();
+
+               
+
+                foreach (var item in SortedProcessList)
+                {
+
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    {
+                        row.Cells[DG_FileName].Value = item.ProcessFileName.ToString();
+                        row.Cells[DG_Name].Value = item.ProcessName;
+                        row.Cells[DG_Length].Value = item.ProcessLength;
+                        row.Cells[DG_Offset].Value = item.ProcessOffset;
+                        row.Cells[DG_PID].Value = item.ProcessPID;
+                        row.Cells[DG_Path].Value = item.ProcessPath;
+
+                    }
+
+                 }
+
+                    DataTable filteredTable = new DataTable();
+
 
                 totalProcessesLabel.Text = ProcessList.Count().ToString();
-
-                GetDataForCharts(ProcessList, topLengths, topProcessNames);  
                 
+                GetDataForCharts(ProcessList, topLengths, topProcessNames);
+
                 PopulateChart(topLengths, topProcessNames);
 
             }
@@ -358,29 +393,33 @@ namespace TestAppFileRead
         }
 
 
-
         private void GetDataForCharts(List<ProcessData> ProcessList, int[] topLengths, string[] topProcessNames)
         {
             var topTenList = (ProcessList.OrderByDescending(i => i.ProcessLength).Take(10));
-
+           
+            //to get the most used process
             int topListCounter = 0;
+
             foreach (var item in topTenList)
             {
                 for (int i = 0; i < topLengths.Length; i++)
                 {
+
                     if (topListCounter == i)
                     {
                         //convert ProcessLength to kilobytes
                         topLengths[i] = Convert.ToInt32(item.ProcessLength / 1024);
-                        topProcessNames[i] = item.ProcessName;
+                        topProcessNames[i] = item.ProcessFileName;
+                        
                     }
 
                 }
-                if (topListCounter == 0)
-                {
-                    processNameLabel.Text = item.ProcessName.ToString();
-                    lengthLabel.Text = item.ProcessLength.ToString();
-                }
+               
+                //if (topListCounter == 0)
+                //{
+                //    processNameLabel.Text = item.ProcessName.ToString();
+                //    lengthLabel.Text = item.ProcessLength.ToString();
+                //}
                 topListCounter++;
 
             }
@@ -403,7 +442,14 @@ namespace TestAppFileRead
             pieChart1.ChartAreas[0].Area3DStyle.Enable3D = true;
         }
 
-        
-       
+        private void ExitButton(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void SaveButton(object sender, EventArgs e)
+        {
+            SaveToCSV(dataGridView1);
+        }
     }
 }
