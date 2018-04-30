@@ -30,8 +30,8 @@
         {
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.Cancel = new System.Windows.Forms.Button();
-            this.Status = new System.Windows.Forms.Label();
             this.bytesLbl = new System.Windows.Forms.Label();
+            this.Status = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // progressBar1
@@ -51,23 +51,23 @@
             this.Cancel.UseVisualStyleBackColor = true;
             this.Cancel.Click += new System.EventHandler(this.Cancel_Click);
             // 
-            // Status
-            // 
-            this.Status.AutoSize = true;
-            this.Status.Location = new System.Drawing.Point(107, 35);
-            this.Status.Name = "Status";
-            this.Status.Size = new System.Drawing.Size(82, 13);
-            this.Status.TabIndex = 5;
-            this.Status.Text = "Processing...0%";
-            // 
             // bytesLbl
             // 
             this.bytesLbl.AutoSize = true;
-            this.bytesLbl.Location = new System.Drawing.Point(71, 9);
+            this.bytesLbl.Location = new System.Drawing.Point(72, 35);
             this.bytesLbl.Name = "bytesLbl";
             this.bytesLbl.Size = new System.Drawing.Size(161, 13);
             this.bytesLbl.TabIndex = 6;
             this.bytesLbl.Text = "Uploading 10 bytes. Please Wait";
+            // 
+            // Status
+            // 
+            this.Status.AutoSize = true;
+            this.Status.Location = new System.Drawing.Point(107, 9);
+            this.Status.Name = "Status";
+            this.Status.Size = new System.Drawing.Size(91, 13);
+            this.Status.TabIndex = 5;
+            this.Status.Text = "                            ";
             // 
             // loadingForm
             // 
@@ -90,7 +90,7 @@
 
         private System.Windows.Forms.ProgressBar progressBar1;
         public System.Windows.Forms.Button Cancel;
-        private System.Windows.Forms.Label Status;
         private System.Windows.Forms.Label bytesLbl;
+        private System.Windows.Forms.Label Status;
     }
 }

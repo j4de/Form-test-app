@@ -18,12 +18,12 @@ namespace TestAppFileRead
         //public constant to check the progress of the %
         long totprogress = 0;
         long sizefile = 0;
-        long stringSize = 0;
         Boolean canceled = false;
+        Boolean complete = false;
         public loadingForm(string bytesize, DataGridView dgv, Form1 frm, long filesize, long progress)
         {
             InitializeComponent();
-            bytesLbl.Text = "Uploading " + bytesize + ". Please wait.";
+            bytesLbl.Text = "Uploading " + filesize + " bytes. Please wait.";
             _dgv = dgv;
             check = frm;
             sizefile = filesize;
@@ -46,11 +46,20 @@ namespace TestAppFileRead
         internal void setprogress(long progress)
         {
             progressBar1.Value =Convert.ToInt32(progress);
+            //if (progressBar1.Value == progressBar1.Maximum)
+            //{
+            //    complete = true;
+            //}
         }
 
         internal bool iscanceled()
         {
             return canceled;
+        }
+
+        internal bool completed()
+        {
+            return complete;
         }
     }
 }
