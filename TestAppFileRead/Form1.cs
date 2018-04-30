@@ -356,7 +356,7 @@ namespace TestAppFileRead
                 }
                 List<ProcessData> SortedProcessList = ProcessList.OrderByDescending(o => o.ProcessLength).Take(10).ToList();
 
-               
+
 
                 foreach (var item in SortedProcessList)
                 {
@@ -372,9 +372,30 @@ namespace TestAppFileRead
 
                     }
 
-                 }
+                }
 
-                    DataTable filteredTable = new DataTable();
+                DataTable filteredTable = new DataTable();
+
+                filteredTable.Columns.Add("Process Name");
+                filteredTable.Columns.Add("PID");
+                filteredTable.Columns.Add("File Name");
+                filteredTable.Columns.Add("Offset");
+                filteredTable.Columns.Add("Length");
+                filteredTable.Columns.Add("Path");
+
+                for (int i = 0; i < SortedProcessList.Count; i++)
+                {
+                    filteredTable.Rows.Add(
+
+                                    SortedProcessList[i].ProcessName ,
+                                    SortedProcessList[i].ProcessPID,
+                                    SortedProcessList[i].ProcessFileName,
+                                    SortedProcessList[i].ProcessOffset,
+                                    SortedProcessList[i].ProcessLength,
+                                    SortedProcessList[i].ProcessPath
+                                  );
+                }
+                dataGridView1.DataSource = filteredTable;
 
 
                 totalProcessesLabel.Text = ProcessList.Count().ToString();
