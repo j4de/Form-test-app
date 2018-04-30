@@ -197,51 +197,68 @@ namespace TestAppFileRead
 
         private void SaveToCSV(DataGridView DGV)
         {
-            //rewrite using streamerWriter ===> look up past work.
             string filename = "";
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "CSV (*.csv)|*.csv";
             sfd.FileName = "Output.csv";
             int counter = 0;
+
+
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 MessageBox.Show("Data will be exported and you will be notified when it is ready.");
-                if (File.Exists(filename))
-                {
-                    try
-                    {
-                        File.Delete(filename);
-                    }
-                    catch (IOException ex)
-                    {
-                        MessageBox.Show("It wasn't possible to write the data to the disk." + ex.Message);
-                    }
-                }
+                filename = sfd.FileName;
+                Deleteifexists(filename);
                 int columnCount = DGV.ColumnCount;
                 string columnNames = "";
-                string[] output = new string[DGV.RowCount + 1];
+
+                SaveOutput(DGV, filename, ref counter, columnCount, ref columnNames);
+                MessageBox.Show("Your file was generated and its ready for use.");
+            }
+        }
+
+        private static void SaveOutput(DataGridView DGV, string filename, ref int counter, int columnCount, ref string columnNames)
+        {
+            using (StreamWriter sw = new StreamWriter(filename))
+            {
+
                 for (int i = 0; i < columnCount; i++)
                 {
                     columnNames += DGV.Columns[i].Name.ToString() + ",";
                 }
-                output[0] += columnNames;
+                sw.WriteLine(columnNames);
                 for (int i = 1; (i - 1) < DGV.RowCount; i++)
                 {
+                    string rowdata = "";
                     for (int j = 0; j < columnCount; j++)
                     {
-                        
-                        output[i] += DGV.Rows[i - 1].Cells[j].Value.ToString() + ",";
+
+                        rowdata += DGV.Rows[i - 1].Cells[j].Value.ToString() + ",";
                         counter++;
                     }
+                    sw.WriteLine(rowdata);
                     //break out of loop to avoid null object reference
                     if (i == DGV.RowCount - 1)
                         break;
                 }
-                File.WriteAllLines(sfd.FileName, output, Encoding.UTF8);
-                MessageBox.Show("Your file was generated and its ready for use.");
             }
         }
-        
+
+        private static void Deleteifexists(string filename)
+        {
+            if (File.Exists(filename))
+            {
+                try
+                {
+                    File.Delete(filename);
+                }
+                catch (IOException ex)
+                {
+                    MessageBox.Show("It wasn't possible to write the data to the disk." + ex.Message);
+                }
+            }
+        }
+
 
         //Convert file size for user information
         private static void FindFileSize(string filePath, out string megabyteOrKilobyte, out long fileSize)
