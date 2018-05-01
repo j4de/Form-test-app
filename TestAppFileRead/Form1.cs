@@ -295,10 +295,10 @@ namespace TestAppFileRead
         //Calculate the size/length of each process
         private void FindLengthForEachProcess()
         {
-            var ProcessList = new List<ProcessData>();
+            var ProcessFileList = new List<ProcessData>();
             
             int[] topLengths = new int[10];
-            string[] topProcessNames = new string[10];
+            string[] topFileNames = new string[10];
             
             int processLength = 0;
             int processOffset = 0;
@@ -337,7 +337,7 @@ namespace TestAppFileRead
                     //If the process processKey is found in the list
                     //append the length value
                     processFound = false;
-                    foreach (var item in ProcessList)
+                    foreach (var item in ProcessFileList)
                     {
                         if (item.ProcessKey == processKeyString)
                         {
@@ -353,7 +353,7 @@ namespace TestAppFileRead
                     //else add a new process to the list
                     if (processFound == false)
                     {
-                        ProcessList.Add(new ProcessData
+                        ProcessFileList.Add(new ProcessData
                         {
                             ProcessLength = processLength,
                             ProcessName = processName,
@@ -371,13 +371,13 @@ namespace TestAppFileRead
                     if (loopCounter == dataGridView1.RowCount - 1)
                         break;
                 }
-                SortedProcessList(ProcessList);
+                SortedFileList(ProcessFileList);
 
-                totalProcessesLabel.Text = ProcessList.Count().ToString();
+                totalProcessesLabel.Text = ProcessFileList.Count().ToString();
 
-                GetDataForCharts(ProcessList, topLengths, topProcessNames);
+                GetDataForCharts(ProcessFileList, topLengths, topFileNames);
 
-                PopulateChart(topLengths, topProcessNames);
+                PopulateChart(topLengths, topFileNames);
 
             }
             catch (Exception exc)
@@ -388,9 +388,9 @@ namespace TestAppFileRead
 
         }
 
-        private void SortedProcessList(List<ProcessData> ProcessList)
+        private void SortedFileList(List<ProcessData> ProcessFileList)
         {
-            List<ProcessData> SortedProcessList = ProcessList.OrderByDescending(o => o.ProcessLength).Take(10).ToList();
+            List<ProcessData> SortedFileList = ProcessFileList.OrderByDescending(o => o.ProcessLength).ToList();
 
             DataTable filteredTable = new DataTable();
             filteredTable.Columns.Add("Process Name");
@@ -400,50 +400,34 @@ namespace TestAppFileRead
             filteredTable.Columns.Add("Length");
             filteredTable.Columns.Add("Path");
 
-            for (int i = 0; i < SortedProcessList.Count; i++)
+            for (int i = 0; i < SortedFileList.Count; i++)
             {
                 filteredTable.Rows.Add(
-
-                                SortedProcessList[i].ProcessName,
-                                SortedProcessList[i].ProcessPID,
-                                SortedProcessList[i].ProcessFileName,
-                                SortedProcessList[i].ProcessOffset,
-                                SortedProcessList[i].ProcessLength,
-                                SortedProcessList[i].ProcessPath
+                                SortedFileList[i].ProcessName,
+                                SortedFileList[i].ProcessPID,
+                                SortedFileList[i].ProcessFileName,
+                                SortedFileList[i].ProcessOffset,
+                                SortedFileList[i].ProcessLength,
+                                SortedFileList[i].ProcessPath
                               );
             }
             dataGridView1.DataSource = filteredTable;
         }
 
-        private void GetDataForCharts(List<ProcessData> ProcessList, int[] topLengths, string[] topProcessNames)
+        //Add the top ten files and lengths to the 
+        private void GetDataForCharts(List<ProcessData> ProcessFileList, int[] topLengths, string[] topFileNames)
         {
-            var topTenList = (ProcessList.OrderByDescending(i => i.ProcessLength).Take(10));
-           
-            //to get the most used process
-            int topListCounter = 0;
-
+            var topTenList = (ProcessFileList.OrderByDescending(i => i.ProcessLength).Take(10));
+ 
             foreach (var item in topTenList)
             {
                 for (int i = 0; i < topLengths.Length; i++)
                 {
-
-                    if (topListCounter == i)
-                    {
                         //convert ProcessLength to kilobytes
                         topLengths[i] = Convert.ToInt32(item.ProcessLength / 1024);
-                        topProcessNames[i] = item.ProcessFileName;
-                        
-                    }
-
+                        topFileNames[i] = item.ProcessFileName;
                 }
                
-                //if (topListCounter == 0)
-                //{
-                //    processNameLabel.Text = item.ProcessName.ToString();
-                //    lengthLabel.Text = item.ProcessLength.ToString();
-                //}
-                topListCounter++;
-
             }
         }
 
