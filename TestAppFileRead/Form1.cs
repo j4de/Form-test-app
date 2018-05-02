@@ -26,7 +26,7 @@ namespace TestAppFileRead
         private int PM_Length = 14;
 
         //DataGridView data
-        //private int DG_TimeOfDay = 0;
+        private int DG_TimeOfDay = 0;
         private int DG_Name = 1;
         private int DG_PID = 2;
         private int DG_FileName = 3;
@@ -482,14 +482,16 @@ namespace TestAppFileRead
 
                     if (topProcessCounter == i)
                     {
-
                         topIDLengths[i] = Convert.ToInt32(item.ProcessLength);
                         topProcessID[i] = item.ProcessName + " " + item.ProcessPID;
+
                     }
 
                 }
                 topProcessCounter++;
+
             }
+            
         }
 
         private void PopulateChart(int[] topLengths, int[] topIDLengths, string[] topProcessNames, string[] topProcessID)
