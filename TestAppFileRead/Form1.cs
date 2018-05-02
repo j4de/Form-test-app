@@ -296,10 +296,13 @@ namespace TestAppFileRead
         private void FindLengthForEachProcess()
         {
             var ProcessFileList = new List<ProcessData>();
-            
+            var ProcessIDList = new List<ProcessData>();
+
             int[] topLengths = new int[10];
+            int[] topIDLengths = new int[10];
             string[] topFileNames = new string[10];
-            
+            string[] topProcessID = new string[10];
+
             int processLength = 0;
             int processOffset = 0;
             string processName = "";
@@ -309,6 +312,9 @@ namespace TestAppFileRead
             bool processFound = false;
             int loopCounter = 0;
             string processKeyString = "";
+            //Var for bar chart
+            string processKeyID = "";
+            bool processIDFound = false;
 
             //find the rows with the matching process key and then add the length for
             //each of these rows together and select the top ten values 
@@ -364,6 +370,35 @@ namespace TestAppFileRead
                             ProcessFileName = processFileName
                         });
                     }
+                    //########################################################
+
+                    processKeyID = processName + "|" + processPID;
+                    //If the process processKey is found in the list
+                    //append the length value
+                    processIDFound = false;
+                    foreach (var item in ProcessIDList)
+                    {
+                        if (item.ProcessKey == processKeyID)
+                        {
+                            item.ProcessLength += processLength;
+                            processIDFound = true;
+                            break;
+                        }
+                    }
+                    if (processIDFound == false)
+                    {
+                        ProcessIDList.Add(new ProcessData
+                        {
+                            ProcessLength = processLength,
+                            ProcessName = processName,
+                            ProcessOffset = processOffset,
+                            ProcessPID = processPID,
+                            ProcessPath = processPath,
+                            ProcessKey = processKeyID,
+                            ProcessFileName = processFileName
+                        });
+                    }
+                    //#############################################################
 
                     //To ensure it doesn't spill over and cause 
                     //an null object reference
@@ -375,9 +410,9 @@ namespace TestAppFileRead
 
                 totalProcessesLabel.Text = ProcessFileList.Count().ToString();
 
-                GetDataForCharts(ProcessFileList, topLengths, topFileNames);
+                GetDataForCharts(ProcessFileList, ProcessIDList, topLengths, topIDLengths, topFileNames, topProcessID);
 
-                PopulateChart(topLengths, topFileNames);
+                PopulateChart(topLengths, topIDLengths, topFileNames, topProcessID);
 
             }
             catch (Exception exc)
@@ -415,10 +450,11 @@ namespace TestAppFileRead
         }
 
         //Add the top ten files and lengths to the 
-        private void GetDataForCharts(List<ProcessData> ProcessFileList, int[] topLengths, string[] topFileNames)
+        private void GetDataForCharts(List<ProcessData> ProcessFileList, List<ProcessData> ProcessIDList, int[] topLengths, int[] topIDLengths, string[] topFileNames, string[] topProcessID)
         {
             var topTenList = (ProcessFileList.OrderByDescending(i => i.ProcessLength).Take(10));
- 
+            var topTenIDList = (ProcessIDList.OrderByDescending(i => i.ProcessLength).Take(10));
+
             foreach (var item in topTenList)
             {
                 for (int i = 0; i < topLengths.Length; i++)
@@ -429,9 +465,21 @@ namespace TestAppFileRead
                 }
                
             }
+            //##########################################################
+            foreach (var item in topTenIDList)
+            {
+                for (int i = 0; i < topIDLengths.Length; i++)
+                {
+                    
+                        topIDLengths[i] = Convert.ToInt32(item.ProcessLength);
+                        topProcessID[i] = item.ProcessName + " " + item.ProcessPID;
+                    
+                }
+            }
+            //##############################################################
         }
 
-        private void PopulateChart(int[] topLengths, string[] topProcessNames)
+        private void PopulateChart(int[] topLengths, int[] topIDLengths, string[] topProcessNames, string[] topProcessID)
         {
             //BarChart1.Series.Add(series);
             BarChart1.Series[0].ChartType = SeriesChartType.RangeColumn;
@@ -439,11 +487,13 @@ namespace TestAppFileRead
                                                          topProcessNames[5], topProcessNames[6],topProcessNames[7],topProcessNames[8],topProcessNames[9]},
                                                   new[] {topLengths[0], topLengths[1], topLengths[2], topLengths[3], topLengths[4],
                                                          topLengths[5], topLengths[6], topLengths[7], topLengths[8], topLengths[9], });
+            BarChart1.ChartAreas[0].AxisX.LabelStyle.Angle = -45;
+            BarChart1.ChartAreas[0].AxisX.Interval = 1;
             BarChart1.Legends[0].Enabled = true;
 
             //3D Pie chart
             pieChart1.Series[0].ChartType = SeriesChartType.Pie;
-            pieChart1.Series[0].Points.DataBindXY(topProcessNames, topLengths);
+            pieChart1.Series[0].Points.DataBindXY(topProcessID, topIDLengths);
             pieChart1.Legends[0].Enabled = true;
             pieChart1.ChartAreas[0].Area3DStyle.Enable3D = true;
         }
