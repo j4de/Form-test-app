@@ -470,10 +470,8 @@ namespace TestAppFileRead
             {
                 for (int i = 0; i < topIDLengths.Length; i++)
                 {
-                    
                         topIDLengths[i] = Convert.ToInt32(item.ProcessLength);
-                        topProcessID[i] = item.ProcessName + " " + item.ProcessPID;
-                    
+                        topProcessID[i] = item.ProcessName + " " + item.ProcessPID;                    
                 }
             }
             //##############################################################
