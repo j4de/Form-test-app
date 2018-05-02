@@ -371,7 +371,29 @@ namespace TestAppFileRead
                     if (loopCounter == dataGridView1.RowCount - 1)
                         break;
                 }
-                SortedFileList(ProcessFileList);
+                List<ProcessData> SortedProcessList = ProcessFileList.OrderByDescending(o => o.ProcessLength).ToList();
+                DataTable filteredTable = new DataTable();
+                filteredTable.Columns.Add("Process Name");
+                filteredTable.Columns.Add("PID");
+                filteredTable.Columns.Add("File Name");
+                filteredTable.Columns.Add("Offset");
+                filteredTable.Columns.Add("Length");
+                filteredTable.Columns.Add("Path");
+
+                for (int i = 0; i < SortedProcessList.Count; i++)
+                {
+                    filteredTable.Rows.Add(
+
+                                    SortedProcessList[i].ProcessName,
+                                    SortedProcessList[i].ProcessPID,
+                                    SortedProcessList[i].ProcessFileName,
+                                    SortedProcessList[i].ProcessOffset,
+                                    SortedProcessList[i].ProcessLength,
+                                    SortedProcessList[i].ProcessPath
+                                  );
+                }
+                dataGridView1.DataSource = filteredTable;
+                //SortedFileList(ProcessFileList);
 
                 totalProcessesLabel.Text = ProcessFileList.Count().ToString();
 
@@ -418,16 +440,26 @@ namespace TestAppFileRead
         private void GetDataForCharts(List<ProcessData> ProcessFileList, int[] topLengths, string[] topFileNames)
         {
             var topTenList = (ProcessFileList.OrderByDescending(i => i.ProcessLength).Take(10));
- 
+
+            //to get the most used process
+            int topListCounter = 0;
+
             foreach (var item in topTenList)
             {
                 for (int i = 0; i < topLengths.Length; i++)
                 {
+
+                    if (topListCounter == i)
+                    {
                         //convert ProcessLength to kilobytes
                         topLengths[i] = Convert.ToInt32(item.ProcessLength / 1024);
                         topFileNames[i] = item.ProcessFileName;
+
+                    }
+
                 }
-               
+                topListCounter++;
+
             }
         }
 
