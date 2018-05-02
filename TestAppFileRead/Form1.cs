@@ -26,7 +26,6 @@ namespace TestAppFileRead
         private int PM_Length = 14;
 
         //DataGridView data
-        private int DG_TimeOfDay = 0;
         private int DG_Name = 1;
         private int DG_PID = 2;
         private int DG_FileName = 3;
@@ -42,11 +41,12 @@ namespace TestAppFileRead
         public Form1()
         {
             InitializeComponent();
+            this.CenterToScreen();
         }
 
         //Get the file path selected.
         //Filter setup for CSV files in Form1.designer.cs
-        private void getFileButton_Click(object sender, EventArgs e)
+        private void GetFileButton(object sender, EventArgs e)
         {
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
@@ -58,7 +58,7 @@ namespace TestAppFileRead
 
 
         //Only setup to Read in the data from a Procmon CSV file
-        private void displayButton_Click(object sender, EventArgs e)
+        private void DisplayButton_Click(object sender, EventArgs e)
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("Time");
@@ -191,16 +191,18 @@ namespace TestAppFileRead
             return totalData;
         }
 
-        private void SaveToCSV(DataGridView DGVfiles, DataGridView DGVprocess)
+        private void SaveToCSV(DataGridView DGVfiles)
         {
             string filename = "";
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "CSV (*.csv)|*.csv";
-            sfd.FileName = "Output.csv";
-            
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "CSV (*.csv)|*.csv",
+                FileName = ""
+            };
+
             int counter = 0;
 
-
+            
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 filename = sfd.FileName;
@@ -237,11 +239,7 @@ namespace TestAppFileRead
                         break;
                 }
             }
-            //Create a new streamwriter to flush the data for the second file to be saved
-            using (StreamWriter sw2 = new StreamWriter(filename))
-            {
-
-            }
+            
         }
 
         private static void Deleteifexists(string filename)
@@ -406,7 +404,11 @@ namespace TestAppFileRead
                     if (loopCounter == dataGridView1.RowCount - 1)
                         break;
                 }
+                //All files accessed
                 SortedFileList(ProcessFileList);
+
+                //All processes executed
+                SortedProcessList(ProcessIDList);
 
                 totalProcessesLabel.Text = ProcessFileList.Count().ToString();
 
@@ -431,7 +433,6 @@ namespace TestAppFileRead
             filteredTable.Columns.Add("Process Name");
             filteredTable.Columns.Add("PID");
             filteredTable.Columns.Add("File Name");
-            //filteredTable.Columns.Add("Offset");
             filteredTable.Columns.Add("Length");
             filteredTable.Columns.Add("Path");
 
@@ -441,19 +442,46 @@ namespace TestAppFileRead
                                 SortedFileList[i].ProcessName,
                                 SortedFileList[i].ProcessPID,
                                 SortedFileList[i].ProcessFileName,
-                                //SortedFileList[i].ProcessOffset,
                                 SortedFileList[i].ProcessLength,
                                 SortedFileList[i].ProcessPath
                               );
             }
             dataGridView1.DataSource = filteredTable;
+
+        }
+        private void SortedProcessList(List<ProcessData> ProcessIDList)
+        {
+           
+
+            List<ProcessData> SortedProcessList = ProcessIDList.OrderByDescending(o => o.ProcessLength).ToList();
+
+            DataTable filteredTableProcesses = new DataTable();
+            filteredTableProcesses.Columns.Add("Process Name");
+            filteredTableProcesses.Columns.Add("PID");
+            filteredTableProcesses.Columns.Add("File Name");
+            filteredTableProcesses.Columns.Add("Length");
+            filteredTableProcesses.Columns.Add("Path");
+
+            for (int i = 0; i < SortedProcessList.Count; i++)
+            {
+                filteredTableProcesses.Rows.Add(
+                                SortedProcessList[i].ProcessName,
+                                SortedProcessList[i].ProcessPID,
+                                SortedProcessList[i].ProcessFileName,
+                                SortedProcessList[i].ProcessLength,
+                                SortedProcessList[i].ProcessPath
+                              );
+            }
+            dataGridViewProcesses.DataSource = filteredTableProcesses;
         }
 
-        //Add the top ten files and lengths to the 
+        //Add the top ten files and lengths
         private void GetDataForCharts(List<ProcessData> ProcessFileList, List<ProcessData> ProcessIDList, int[] topLengths, int[] topIDLengths, string[] topFileNames, string[] topProcessID)
         {
-            var topTenList = (ProcessFileList.OrderByDescending(i => i.ProcessLength).Take(10));
             var topTenIDList = (ProcessIDList.OrderByDescending(i => i.ProcessLength).Take(10));
+
+            var topTenList = (ProcessFileList.OrderByDescending(i => i.ProcessLength).Take(10));
+            
             int topListCounter = 0;
 
             foreach (var item in topTenList)
@@ -466,7 +494,6 @@ namespace TestAppFileRead
                         //convert ProcessLength to kilobytes
                         topLengths[i] = Convert.ToInt32(item.ProcessLength / 1024);
                         topFileNames[i] = item.ProcessFileName;
-
                     }
 
                 }
@@ -504,7 +531,9 @@ namespace TestAppFileRead
                                                          topLengths[5], topLengths[6], topLengths[7], topLengths[8], topLengths[9], });
             BarChart1.ChartAreas[0].AxisX.LabelStyle.Angle = -45;
             BarChart1.ChartAreas[0].AxisX.Interval = 1;
-            BarChart1.ChartAreas[0].AxisY.Title = "Byte Length";
+            BarChart1.Legends[0].Enabled = true;
+            BarChart1.ChartAreas[0].Area3DStyle.Enable3D = true;
+            BarChart1.ChartAreas[0].AxisY.Title = "Kilobytes Used";
             //BarChart1.ChartAreas[0].AxisY.TitleFont="Arial", 16, FontStyle.Bold;
             BarChart1.Legends[0].Enabled = true;
 
@@ -523,6 +552,8 @@ namespace TestAppFileRead
         private void SaveButton(object sender, EventArgs e)
         {
             SaveToCSV(dataGridView1);
+            SaveToCSV(dataGridViewProcesses);
         }
+        
     }
 }
