@@ -454,27 +454,42 @@ namespace TestAppFileRead
         {
             var topTenList = (ProcessFileList.OrderByDescending(i => i.ProcessLength).Take(10));
             var topTenIDList = (ProcessIDList.OrderByDescending(i => i.ProcessLength).Take(10));
+            int topListCounter = 0;
 
             foreach (var item in topTenList)
             {
                 for (int i = 0; i < topLengths.Length; i++)
                 {
+
+                    if (topListCounter == i)
+                    {
                         //convert ProcessLength to kilobytes
                         topLengths[i] = Convert.ToInt32(item.ProcessLength / 1024);
                         topFileNames[i] = item.ProcessFileName;
+
+                    }
+
                 }
-               
+                topListCounter++;
+
             }
-            //##########################################################
+
+            int topProcessCounter = 0;
             foreach (var item in topTenIDList)
             {
                 for (int i = 0; i < topIDLengths.Length; i++)
                 {
+
+                    if (topProcessCounter == i)
+                    {
+
                         topIDLengths[i] = Convert.ToInt32(item.ProcessLength);
-                        topProcessID[i] = item.ProcessName + " " + item.ProcessPID;                    
+                        topProcessID[i] = item.ProcessName + " " + item.ProcessPID;
+                    }
+
                 }
+                topProcessCounter++;
             }
-            //##############################################################
         }
 
         private void PopulateChart(int[] topLengths, int[] topIDLengths, string[] topProcessNames, string[] topProcessID)
