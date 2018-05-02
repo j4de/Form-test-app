@@ -504,6 +504,8 @@ namespace TestAppFileRead
                                                          topLengths[5], topLengths[6], topLengths[7], topLengths[8], topLengths[9], });
             BarChart1.ChartAreas[0].AxisX.LabelStyle.Angle = -45;
             BarChart1.ChartAreas[0].AxisX.Interval = 1;
+            BarChart1.ChartAreas[0].AxisY.Title = "Byte Length";
+            //BarChart1.ChartAreas[0].AxisY.TitleFont="Arial", 16, FontStyle.Bold;
             BarChart1.Legends[0].Enabled = true;
 
             //3D Pie chart
