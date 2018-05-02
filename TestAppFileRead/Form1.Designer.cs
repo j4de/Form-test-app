@@ -68,20 +68,20 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.06825F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 11.86944F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 5.555555F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 39F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 42F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Controls.Add(this.saveButton, 5, 14);
-            this.tableLayoutPanel1.Controls.Add(this.totalProcessesLabel, 6, 6);
+            this.tableLayoutPanel1.Controls.Add(this.totalProcessesLabel, 2, 14);
             this.tableLayoutPanel1.Controls.Add(this.textBoxFilePath, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.dataGridView1, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.getFileButton, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.displayButton, 6, 1);
-            this.tableLayoutPanel1.Controls.Add(this.pieChart1, 4, 7);
+            this.tableLayoutPanel1.Controls.Add(this.pieChart1, 4, 6);
             this.tableLayoutPanel1.Controls.Add(this.exitButton, 6, 14);
             this.tableLayoutPanel1.Controls.Add(this.BarChart1, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 5, 6);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 14);
             this.tableLayoutPanel1.Controls.Add(this.dataGridViewProcesses, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -116,9 +116,9 @@
             // 
             this.saveButton.BackColor = System.Drawing.Color.Green;
             this.saveButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.saveButton.Location = new System.Drawing.Point(613, 632);
+            this.saveButton.Location = new System.Drawing.Point(611, 632);
             this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(203, 26);
+            this.saveButton.Size = new System.Drawing.Size(202, 26);
             this.saveButton.TabIndex = 18;
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = false;
@@ -133,10 +133,10 @@
             this.totalProcessesLabel.BackColor = System.Drawing.SystemColors.HighlightText;
             this.totalProcessesLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.totalProcessesLabel.ForeColor = System.Drawing.Color.Black;
-            this.totalProcessesLabel.Location = new System.Drawing.Point(819, 302);
+            this.totalProcessesLabel.Location = new System.Drawing.Point(171, 629);
             this.totalProcessesLabel.Margin = new System.Windows.Forms.Padding(0);
             this.totalProcessesLabel.Name = "totalProcessesLabel";
-            this.totalProcessesLabel.Size = new System.Drawing.Size(118, 39);
+            this.totalProcessesLabel.Size = new System.Drawing.Size(175, 32);
             this.totalProcessesLabel.TabIndex = 15;
             this.totalProcessesLabel.Text = "number";
             this.totalProcessesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -145,9 +145,9 @@
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.textBoxFilePath, 4);
             this.textBoxFilePath.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.textBoxFilePath.Location = new System.Drawing.Point(175, 25);
+            this.textBoxFilePath.Location = new System.Drawing.Point(174, 25);
             this.textBoxFilePath.Name = "textBoxFilePath";
-            this.textBoxFilePath.Size = new System.Drawing.Size(641, 20);
+            this.textBoxFilePath.Size = new System.Drawing.Size(639, 20);
             this.textBoxFilePath.TabIndex = 1;
             // 
             // dataGridView1
@@ -158,7 +158,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(58, 51);
             this.dataGridView1.Name = "dataGridView1";
             this.tableLayoutPanel1.SetRowSpan(this.dataGridView1, 3);
-            this.dataGridView1.Size = new System.Drawing.Size(876, 240);
+            this.dataGridView1.Size = new System.Drawing.Size(872, 240);
             this.dataGridView1.TabIndex = 4;
             // 
             // getFileButton
@@ -168,7 +168,7 @@
             this.getFileButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.getFileButton.Location = new System.Drawing.Point(58, 20);
             this.getFileButton.Name = "getFileButton";
-            this.getFileButton.Size = new System.Drawing.Size(111, 25);
+            this.getFileButton.Size = new System.Drawing.Size(110, 25);
             this.getFileButton.TabIndex = 0;
             this.getFileButton.Text = "Get File";
             this.getFileButton.UseVisualStyleBackColor = false;
@@ -179,9 +179,9 @@
             this.displayButton.AutoSize = true;
             this.displayButton.BackColor = System.Drawing.Color.SteelBlue;
             this.displayButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.displayButton.Location = new System.Drawing.Point(822, 20);
+            this.displayButton.Location = new System.Drawing.Point(819, 20);
             this.displayButton.Name = "displayButton";
-            this.displayButton.Size = new System.Drawing.Size(112, 25);
+            this.displayButton.Size = new System.Drawing.Size(111, 25);
             this.displayButton.TabIndex = 3;
             this.displayButton.Text = "Display file info";
             this.displayButton.UseVisualStyleBackColor = false;
@@ -189,23 +189,24 @@
             // 
             // pieChart1
             // 
-            this.pieChart1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.pieChart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             chartArea1.Name = "ChartArea1";
             this.pieChart1.ChartAreas.Add(chartArea1);
             this.tableLayoutPanel1.SetColumnSpan(this.pieChart1, 5);
             legend1.Name = "Legend1";
             this.pieChart1.Legends.Add(legend1);
-            this.pieChart1.Location = new System.Drawing.Point(515, 344);
+            this.pieChart1.Location = new System.Drawing.Point(513, 305);
             this.pieChart1.Name = "pieChart1";
-            this.tableLayoutPanel1.SetRowSpan(this.pieChart1, 7);
+            this.tableLayoutPanel1.SetRowSpan(this.pieChart1, 8);
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
             series1.IsValueShownAsLabel = true;
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.pieChart1.Series.Add(series1);
-            this.pieChart1.Size = new System.Drawing.Size(516, 282);
+            this.pieChart1.Size = new System.Drawing.Size(518, 321);
             this.pieChart1.TabIndex = 11;
             this.pieChart1.Text = "chart1";
             title1.BorderColor = System.Drawing.Color.Black;
@@ -219,9 +220,9 @@
             this.exitButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.tableLayoutPanel1.SetColumnSpan(this.exitButton, 3);
             this.exitButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.exitButton.Location = new System.Drawing.Point(822, 632);
+            this.exitButton.Location = new System.Drawing.Point(819, 632);
             this.exitButton.Name = "exitButton";
-            this.exitButton.Size = new System.Drawing.Size(209, 26);
+            this.exitButton.Size = new System.Drawing.Size(212, 26);
             this.exitButton.TabIndex = 17;
             this.exitButton.Text = "Exit";
             this.exitButton.UseVisualStyleBackColor = false;
@@ -229,7 +230,8 @@
             // 
             // BarChart1
             // 
-            this.BarChart1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.BarChart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             chartArea2.Name = "ChartArea1";
             this.BarChart1.ChartAreas.Add(chartArea2);
@@ -249,7 +251,7 @@
             series2.SmartLabelStyle.IsMarkerOverlappingAllowed = true;
             series2.SmartLabelStyle.IsOverlappedHidden = false;
             this.BarChart1.Series.Add(series2);
-            this.BarChart1.Size = new System.Drawing.Size(506, 321);
+            this.BarChart1.Size = new System.Drawing.Size(504, 321);
             this.BarChart1.TabIndex = 7;
             this.BarChart1.Text = "chart1";
             title2.BorderColor = System.Drawing.Color.Black;
@@ -265,12 +267,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.SystemColors.HighlightText;
+            this.tableLayoutPanel1.SetColumnSpan(this.label1, 2);
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Black;
-            this.label1.Location = new System.Drawing.Point(610, 302);
+            this.label1.Location = new System.Drawing.Point(0, 629);
             this.label1.Margin = new System.Windows.Forms.Padding(0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(209, 39);
+            this.label1.Size = new System.Drawing.Size(171, 32);
             this.label1.TabIndex = 14;
             this.label1.Text = "Total Files:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
