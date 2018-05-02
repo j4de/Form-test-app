@@ -198,26 +198,31 @@ namespace TestAppFileRead
         private void SaveToCSV(DataGridView DGV)
         {
             string filename = "";
+            //string procfilename = "";
             SaveFileDialog sfd = new SaveFileDialog();
+            //SaveFileDialog spd = new SaveFileDialog();
             sfd.Filter = "CSV (*.csv)|*.csv";
             sfd.FileName = "Output.csv";
+            //spd.Filter = "CSV (*.csv)|*.csv";
+            //spd.FileName = "Procmetrics.csv";
             int counter = 0;
 
 
-            if (sfd.ShowDialog() == DialogResult.OK)
+            if (sfd.ShowDialog() == DialogResult.OK /*&& spd.ShowDialog() == DialogResult.OK*/)
             {
                 MessageBox.Show("Data will be exported and you will be notified when it is ready.");
                 filename = sfd.FileName;
-                Deleteifexists(filename);
+                //procfilename = spd.FileName;
+                Deleteifexists(filename/*, procfilename*/);
                 int columnCount = DGV.ColumnCount;
                 string columnNames = "";
 
-                SaveOutput(DGV, filename, ref counter, columnCount, ref columnNames);
+                SaveOutput(DGV, filename,/*procfilename,*/ ref counter, columnCount, ref columnNames);
                 MessageBox.Show("Your file was generated and its ready for use.");
             }
         }
 
-        private static void SaveOutput(DataGridView DGV, string filename, ref int counter, int columnCount, ref string columnNames)
+        private static void SaveOutput(DataGridView DGV, string filename,/*string procfilename,*/ ref int counter, int columnCount, ref string columnNames)
         {
             using (StreamWriter sw = new StreamWriter(filename))
             {
@@ -242,9 +247,29 @@ namespace TestAppFileRead
                         break;
                 }
             }
+            //using (StreamWriter psw = new StreamWriter("Procmetrics.csv"))
+            //{
+            //    for (int i = 0; i < columnCount; i++)
+            //    {
+            //        columnNames += DGV.Columns[i].Name.ToString() + ",";
+            //    }
+            //    psw.WriteLine(columnNames);
+            //    for (int i = 1; (i - 1) < DGV.RowCount; i++)
+            //    {
+            //        string procrowdata = "";
+            //        for (int k = 0; k < columnCount; k++)
+            //        {
+            //            procrowdata += DGV.Rows[i - 1].Cells[k].Value.ToString() + ",";
+            //            counter++;
+            //        }
+            //        psw.WriteLine(procrowdata);
+            //        if (i == DGV.RowCount - 1)
+            //            break;
+            //    }
+            //}
         }
 
-        private static void Deleteifexists(string filename)
+        private static void Deleteifexists(string filename/*, string procfilename*/)
         {
             if (File.Exists(filename))
             {
@@ -257,6 +282,17 @@ namespace TestAppFileRead
                     MessageBox.Show("It wasn't possible to write the data to the disk." + ex.Message);
                 }
             }
+            //if (File.Exists(procfilename))
+            //{
+            //    try
+            //    {
+            //        File.Delete(procfilename);
+            //    }
+            //    catch (IOException ex)
+            //    {
+            //        MessageBox.Show("Could not write data to Procmetrics.csv" + ex.Message);
+            //    }
+            //}
         }
 
 
