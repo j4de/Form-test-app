@@ -21,23 +21,23 @@ namespace TestAppFileRead
         private int PM_PID = 5;
         private int PM_Path = 9;
         private int PM_FileName = 10;
-        private int PM_Offset = 12;
+        //private int PM_Offset = 12;
         private int PM_Detail = 13;
         private int PM_Length = 14;
 
         //DataGridView data
-        private int DG_TimeOfDay = 0;
+        //private int DG_TimeOfDay = 0;
         private int DG_Name = 1;
         private int DG_PID = 2;
         private int DG_FileName = 3;
-        private int DG_Offset = 4;
-        private int DG_Length = 5;
-        private int DG_Path = 6;
+        //private int DG_Offset = 4;
+        private int DG_Length = 4;
+        private int DG_Path = 5;
 
 
         //To parse the Length value from the column => details
         public static Regex regexLength = new Regex(@"Length:\s*(?<getLengthNum>\d+(,\d+)*)", RegexOptions.CultureInvariant | RegexOptions.Compiled);
-        public static Regex regexOffset = new Regex(@"Offset:\s*(?<getOffsetNum>\d+(,\d+)*)", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+        //public static Regex regexOffset = new Regex(@"Offset:\s*(?<getOffsetNum>\d+(,\d+)*)", RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
         public Form1()
         {
@@ -65,7 +65,7 @@ namespace TestAppFileRead
             dataTable.Columns.Add("Process Name");
             dataTable.Columns.Add("PID");
             dataTable.Columns.Add("File Name");
-            dataTable.Columns.Add("Offset");
+            //dataTable.Columns.Add("Offset");
             dataTable.Columns.Add("Length");
             dataTable.Columns.Add("Path");
 
@@ -116,7 +116,7 @@ namespace TestAppFileRead
                                     totalData[PM_ProcessName],
                                     totalData[PM_PID],
                                     totalData[PM_FileName],
-                                    totalData[PM_Offset],
+                                    //totalData[PM_Offset],
                                     totalData[PM_Length],
                                     totalData[PM_Path]
                                   );
@@ -175,12 +175,12 @@ namespace TestAppFileRead
                         totalData[PM_Length] = match.Groups["getLengthNum"].Value;
                         totalData[PM_Length] = totalData[PM_Length].Replace(",", "");
                     }
-                    var match2 = regexOffset.Match(totalData[PM_Detail]);
-                    if (match2.Success)
-                    {
-                        totalData[PM_Offset] = match2.Groups["getOffsetNum"].Value;
-                        totalData[PM_Offset] = totalData[PM_Offset].Replace(",", "");
-                    }
+                    //var match2 = regexOffset.Match(totalData[PM_Detail]);
+                    //if (match2.Success)
+                    //{
+                    //    totalData[PM_Offset] = match2.Groups["getOffsetNum"].Value;
+                    //    totalData[PM_Offset] = totalData[PM_Offset].Replace(",", "");
+                    //}
                 }
                 catch (IncorrectFormatException exc)
                 {
@@ -304,7 +304,7 @@ namespace TestAppFileRead
             string[] topProcessID = new string[10];
 
             int processLength = 0;
-            int processOffset = 0;
+            //int processOffset = 0;
             string processName = "";
             string processFileName = "";
             string processPath = "";
@@ -329,14 +329,14 @@ namespace TestAppFileRead
                     processPath = row.Cells[DG_Path].Value.ToString();
 
                     //Some offset values have a value of -1 which throws an exception
-                    if (row.Cells[DG_Offset].Value.ToString() == ",")
-                    {
-                        processOffset = -1;
-                    }
-                    else
-                    {
-                        processOffset = Convert.ToInt32(row.Cells[DG_Offset].Value);
-                    }
+                    //if (row.Cells[DG_Offset].Value.ToString() == ",")
+                    //{
+                    //    processOffset = -1;
+                    //}
+                    //else
+                    //{
+                    //    processOffset = Convert.ToInt32(row.Cells[DG_Offset].Value);
+                    //}
                     processLength = Convert.ToInt32(row.Cells[DG_Length].Value);
 
                     processKeyString = processName + "|" + processPID + "|" + processPath;
@@ -363,7 +363,7 @@ namespace TestAppFileRead
                         {
                             ProcessLength = processLength,
                             ProcessName = processName,
-                            ProcessOffset = processOffset,
+                            //ProcessOffset = processOffset,
                             ProcessPID = processPID,
                             ProcessPath = processPath,
                             ProcessKey = processKeyString,
@@ -391,7 +391,7 @@ namespace TestAppFileRead
                         {
                             ProcessLength = processLength,
                             ProcessName = processName,
-                            ProcessOffset = processOffset,
+                            //ProcessOffset = processOffset,
                             ProcessPID = processPID,
                             ProcessPath = processPath,
                             ProcessKey = processKeyID,
@@ -431,7 +431,7 @@ namespace TestAppFileRead
             filteredTable.Columns.Add("Process Name");
             filteredTable.Columns.Add("PID");
             filteredTable.Columns.Add("File Name");
-            filteredTable.Columns.Add("Offset");
+            //filteredTable.Columns.Add("Offset");
             filteredTable.Columns.Add("Length");
             filteredTable.Columns.Add("Path");
 
@@ -441,7 +441,7 @@ namespace TestAppFileRead
                                 SortedFileList[i].ProcessName,
                                 SortedFileList[i].ProcessPID,
                                 SortedFileList[i].ProcessFileName,
-                                SortedFileList[i].ProcessOffset,
+                                //SortedFileList[i].ProcessOffset,
                                 SortedFileList[i].ProcessLength,
                                 SortedFileList[i].ProcessPath
                               );
