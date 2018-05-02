@@ -156,8 +156,8 @@ namespace TestAppFileRead
                 
 
                 totalData[PM_TimeOfDay] = totalData[PM_TimeOfDay].Substring(0, 8);
-                
-                //To  deal with an illigal symbol
+
+                //To  deal with an illigal symbols such as 촧
                 if (totalData[PM_Path].ToString() == @"\Device\HarddiskVolume3촧"|| totalData[PM_Path].ToString() == @"\Device\HarddiskVolume3엡\u0003")
                 {
                     totalData[PM_FileName] = "Device.HarddiskVolume3";
@@ -186,38 +186,33 @@ namespace TestAppFileRead
                 {
                     MessageBox.Show(exc.Message);
                 }
-                //Add length together for the same process
-                //if (totalData[PM_PID] == item. )
-                //{
-
-                //}
+               
             }
             return totalData;
         }
 
-        private void SaveToCSV(DataGridView DGV)
+        private void SaveToCSV(DataGridView DGVfiles, DataGridView DGVprocess)
         {
             string filename = "";
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "CSV (*.csv)|*.csv";
             sfd.FileName = "Output.csv";
+            
             int counter = 0;
 
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                MessageBox.Show("Data will be exported and you will be notified when it is ready.");
                 filename = sfd.FileName;
                 Deleteifexists(filename);
-                int columnCount = DGV.ColumnCount;
+                int columnCount = DGVfiles.ColumnCount;
                 string columnNames = "";
 
-                SaveOutput(DGV, filename, ref counter, columnCount, ref columnNames);
-                MessageBox.Show("Your file was generated and its ready for use.");
+                SaveOutputTotalFiles(DGVfiles, filename, ref counter, columnCount, ref columnNames);
             }
         }
 
-        private static void SaveOutput(DataGridView DGV, string filename, ref int counter, int columnCount, ref string columnNames)
+        private static void SaveOutputTotalFiles(DataGridView DGV, string filename, ref int counter, int columnCount, ref string columnNames)
         {
             using (StreamWriter sw = new StreamWriter(filename))
             {
@@ -241,6 +236,11 @@ namespace TestAppFileRead
                     if (i == DGV.RowCount - 1)
                         break;
                 }
+            }
+            //Create a new streamwriter to flush the data for the second file to be saved
+            using (StreamWriter sw2 = new StreamWriter(filename))
+            {
+
             }
         }
 
