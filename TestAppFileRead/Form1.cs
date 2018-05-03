@@ -571,20 +571,33 @@ namespace TestAppFileRead
                         break;
                 }
                 //All files accessed
+
                 SortedFileList(ProcessFileList);
 
                 //All processes executed
                 SortedProcessList(ProcessIDList);
 
                 //Combobox filter
-                OperationComboBox_SelectedIndexChanged(ProcessFileList);
+                
+                string operationCatergory = OperationComboBox.SelectedValue.ToString();
+
+                var selectedOperation = (ProcessFileList.OrderByDescending(i => i.ProcessLength).Where(p => p.Operation == operationCatergory));
+
+                OperationComboBox_SelectedIndexChanged(selectedOperation.ToList());
 
                 totalProcessesLabel.Text = ProcessFileList.Count().ToString();
 
-                GetDataForCharts(ProcessFileList, ProcessIDList, topLengths, topIDLengths, topFileNames, topProcessID);
+                if (operationCatergory !="All")
+                {
+                    GetDataForCharts(selectedOperation.ToList(), ProcessIDList, topLengths, topIDLengths, topFileNames, topProcessID);
 
+                }
+                else
+                {
+                    GetDataForCharts(ProcessFileList, ProcessIDList, topLengths, topIDLengths, topFileNames, topProcessID);
+
+                }
                 PopulateChart(topLengths, topIDLengths, topFileNames, topProcessID);
-
             }
             catch (Exception exc)
             {
@@ -593,6 +606,8 @@ namespace TestAppFileRead
 
 
         }
+
+
 
         private void SortedFileList(List<ProcessData> ProcessFileList)
         {
@@ -731,11 +746,11 @@ namespace TestAppFileRead
         private void OperationComboBox_SelectedIndexChanged(List<ProcessData> dataList)
         {
             
-            string operationCatergory = OperationComboBox.SelectedValue.ToString();
-            if (operationCatergory != "All")
+            string operationValue = OperationComboBox.SelectedValue.ToString();
+            if (operationValue != "All")
             {
                 var query = from ProcessData data in dataList
-                            where data.Operation == operationCatergory
+                            where data.Operation == operationValue
                             orderby data.ProcessLength descending
                             select data;
 
@@ -744,8 +759,7 @@ namespace TestAppFileRead
 
                 dataGridView1.DataSource = query.ToList();
                 dataGridViewProcesses.DataSource = query.ToList();
-            }
-            
+            }         
             
         }
     }
