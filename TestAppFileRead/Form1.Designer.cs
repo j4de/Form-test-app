@@ -69,7 +69,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.06825F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10.19368F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 7.135576F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 53F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -118,9 +118,9 @@
             // 
             this.saveButton.BackColor = System.Drawing.Color.Green;
             this.saveButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.saveButton.Location = new System.Drawing.Point(607, 632);
+            this.saveButton.Location = new System.Drawing.Point(605, 632);
             this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(201, 26);
+            this.saveButton.Size = new System.Drawing.Size(200, 26);
             this.saveButton.TabIndex = 18;
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = false;
@@ -135,10 +135,10 @@
             this.totalProcessesLabel.BackColor = System.Drawing.SystemColors.HighlightText;
             this.totalProcessesLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.totalProcessesLabel.ForeColor = System.Drawing.Color.Black;
-            this.totalProcessesLabel.Location = new System.Drawing.Point(170, 629);
+            this.totalProcessesLabel.Location = new System.Drawing.Point(169, 629);
             this.totalProcessesLabel.Margin = new System.Windows.Forms.Padding(0);
             this.totalProcessesLabel.Name = "totalProcessesLabel";
-            this.totalProcessesLabel.Size = new System.Drawing.Size(174, 32);
+            this.totalProcessesLabel.Size = new System.Drawing.Size(173, 32);
             this.totalProcessesLabel.TabIndex = 15;
             this.totalProcessesLabel.Text = "number";
             this.totalProcessesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -147,9 +147,9 @@
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.textBoxFilePath, 4);
             this.textBoxFilePath.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.textBoxFilePath.Location = new System.Drawing.Point(173, 25);
+            this.textBoxFilePath.Location = new System.Drawing.Point(172, 25);
             this.textBoxFilePath.Name = "textBoxFilePath";
-            this.textBoxFilePath.Size = new System.Drawing.Size(635, 20);
+            this.textBoxFilePath.Size = new System.Drawing.Size(633, 20);
             this.textBoxFilePath.TabIndex = 1;
             // 
             // dataGridView1
@@ -160,7 +160,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(57, 51);
             this.dataGridView1.Name = "dataGridView1";
             this.tableLayoutPanel1.SetRowSpan(this.dataGridView1, 3);
-            this.dataGridView1.Size = new System.Drawing.Size(851, 240);
+            this.dataGridView1.Size = new System.Drawing.Size(848, 240);
             this.dataGridView1.TabIndex = 4;
             // 
             // getFileButton
@@ -170,7 +170,7 @@
             this.getFileButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.getFileButton.Location = new System.Drawing.Point(57, 20);
             this.getFileButton.Name = "getFileButton";
-            this.getFileButton.Size = new System.Drawing.Size(110, 25);
+            this.getFileButton.Size = new System.Drawing.Size(109, 25);
             this.getFileButton.TabIndex = 0;
             this.getFileButton.Text = "Get File";
             this.getFileButton.UseVisualStyleBackColor = false;
@@ -181,7 +181,7 @@
             this.displayButton.AutoSize = true;
             this.displayButton.BackColor = System.Drawing.Color.SteelBlue;
             this.displayButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.displayButton.Location = new System.Drawing.Point(814, 20);
+            this.displayButton.Location = new System.Drawing.Point(811, 20);
             this.displayButton.Name = "displayButton";
             this.displayButton.Size = new System.Drawing.Size(94, 25);
             this.displayButton.TabIndex = 3;
@@ -199,7 +199,7 @@
             this.tableLayoutPanel1.SetColumnSpan(this.pieChart1, 5);
             legend3.Name = "Legend1";
             this.pieChart1.Legends.Add(legend3);
-            this.pieChart1.Location = new System.Drawing.Point(510, 305);
+            this.pieChart1.Location = new System.Drawing.Point(508, 305);
             this.pieChart1.Name = "pieChart1";
             this.tableLayoutPanel1.SetRowSpan(this.pieChart1, 8);
             series3.ChartArea = "ChartArea1";
@@ -208,7 +208,7 @@
             series3.Legend = "Legend1";
             series3.Name = "Series1";
             this.pieChart1.Series.Add(series3);
-            this.pieChart1.Size = new System.Drawing.Size(521, 321);
+            this.pieChart1.Size = new System.Drawing.Size(523, 321);
             this.pieChart1.TabIndex = 11;
             this.pieChart1.Text = "chart1";
             title3.BorderColor = System.Drawing.Color.Black;
@@ -222,9 +222,9 @@
             this.exitButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.tableLayoutPanel1.SetColumnSpan(this.exitButton, 3);
             this.exitButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.exitButton.Location = new System.Drawing.Point(814, 632);
+            this.exitButton.Location = new System.Drawing.Point(811, 632);
             this.exitButton.Name = "exitButton";
-            this.exitButton.Size = new System.Drawing.Size(217, 26);
+            this.exitButton.Size = new System.Drawing.Size(220, 26);
             this.exitButton.TabIndex = 17;
             this.exitButton.Text = "Exit";
             this.exitButton.UseVisualStyleBackColor = false;
@@ -253,7 +253,7 @@
             series4.SmartLabelStyle.IsMarkerOverlappingAllowed = true;
             series4.SmartLabelStyle.IsOverlappedHidden = false;
             this.BarChart1.Series.Add(series4);
-            this.BarChart1.Size = new System.Drawing.Size(501, 321);
+            this.BarChart1.Size = new System.Drawing.Size(499, 321);
             this.BarChart1.TabIndex = 7;
             this.BarChart1.Text = "chart1";
             title4.BorderColor = System.Drawing.Color.Black;
@@ -275,7 +275,7 @@
             this.label1.Location = new System.Drawing.Point(0, 629);
             this.label1.Margin = new System.Windows.Forms.Padding(0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(170, 32);
+            this.label1.Size = new System.Drawing.Size(169, 32);
             this.label1.TabIndex = 14;
             this.label1.Text = "Total Files:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -292,7 +292,6 @@
             // OperationComboBox
             // 
             this.OperationComboBox.BackColor = System.Drawing.SystemColors.Window;
-            this.OperationComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.OperationComboBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.OperationComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.OperationComboBox.FormattingEnabled = true;
@@ -301,7 +300,7 @@
             "Write",
             "Create",
             "Close"});
-            this.OperationComboBox.Location = new System.Drawing.Point(914, 20);
+            this.OperationComboBox.Location = new System.Drawing.Point(911, 20);
             this.OperationComboBox.Name = "OperationComboBox";
             this.OperationComboBox.Size = new System.Drawing.Size(64, 24);
             this.OperationComboBox.TabIndex = 20;
