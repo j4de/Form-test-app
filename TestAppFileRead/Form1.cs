@@ -554,6 +554,10 @@ namespace TestAppFileRead
             SaveToCSV(dataGridView1);
             SaveToCSV(dataGridViewProcesses);
         }
-        
+
+        private void OperationComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
