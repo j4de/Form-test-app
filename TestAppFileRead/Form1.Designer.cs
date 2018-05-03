@@ -28,14 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title3 = new System.Windows.Forms.DataVisualization.Charting.Title();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title4 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title5 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.saveButton = new System.Windows.Forms.Button();
             this.totalProcessesLabel = new System.Windows.Forms.Label();
@@ -68,7 +68,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.06825F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 11.86944F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 5.555555F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -116,9 +116,9 @@
             // 
             this.saveButton.BackColor = System.Drawing.Color.Green;
             this.saveButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.saveButton.Location = new System.Drawing.Point(608, 632);
+            this.saveButton.Location = new System.Drawing.Point(607, 632);
             this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(202, 26);
+            this.saveButton.Size = new System.Drawing.Size(201, 26);
             this.saveButton.TabIndex = 18;
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = false;
@@ -146,18 +146,21 @@
             this.textBoxFilePath.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.textBoxFilePath.Location = new System.Drawing.Point(173, 25);
             this.textBoxFilePath.Name = "textBoxFilePath";
-            this.textBoxFilePath.Size = new System.Drawing.Size(637, 20);
+            this.textBoxFilePath.Size = new System.Drawing.Size(635, 20);
             this.textBoxFilePath.TabIndex = 1;
             // 
             // dataGridView1
             // 
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.tableLayoutPanel1.SetColumnSpan(this.dataGridView1, 6);
             this.dataGridView1.Location = new System.Drawing.Point(57, 51);
             this.dataGridView1.Name = "dataGridView1";
             this.tableLayoutPanel1.SetRowSpan(this.dataGridView1, 3);
-            this.dataGridView1.Size = new System.Drawing.Size(870, 240);
+            this.dataGridView1.Size = new System.Drawing.Size(867, 240);
             this.dataGridView1.TabIndex = 4;
             // 
             // getFileButton
@@ -175,12 +178,14 @@
             // 
             // displayButton
             // 
+            this.displayButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.displayButton.AutoSize = true;
             this.displayButton.BackColor = System.Drawing.Color.SteelBlue;
             this.displayButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.displayButton.Location = new System.Drawing.Point(816, 20);
+            this.displayButton.Location = new System.Drawing.Point(814, 20);
             this.displayButton.Name = "displayButton";
-            this.displayButton.Size = new System.Drawing.Size(111, 25);
+            this.displayButton.Size = new System.Drawing.Size(110, 25);
             this.displayButton.TabIndex = 3;
             this.displayButton.Text = "Display file info";
             this.displayButton.UseVisualStyleBackColor = false;
@@ -191,37 +196,37 @@
             this.pieChart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea3.Name = "ChartArea1";
-            this.pieChart1.ChartAreas.Add(chartArea3);
+            chartArea5.Name = "ChartArea1";
+            this.pieChart1.ChartAreas.Add(chartArea5);
             this.tableLayoutPanel1.SetColumnSpan(this.pieChart1, 5);
-            legend3.Name = "Legend1";
-            this.pieChart1.Legends.Add(legend3);
-            this.pieChart1.Location = new System.Drawing.Point(511, 305);
+            legend5.Name = "Legend1";
+            this.pieChart1.Legends.Add(legend5);
+            this.pieChart1.Location = new System.Drawing.Point(510, 305);
             this.pieChart1.Name = "pieChart1";
             this.tableLayoutPanel1.SetRowSpan(this.pieChart1, 8);
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
-            series3.IsValueShownAsLabel = true;
-            series3.Legend = "Legend1";
-            series3.Name = "Series1";
-            this.pieChart1.Series.Add(series3);
-            this.pieChart1.Size = new System.Drawing.Size(520, 321);
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series5.IsValueShownAsLabel = true;
+            series5.Legend = "Legend1";
+            series5.Name = "Series1";
+            this.pieChart1.Series.Add(series5);
+            this.pieChart1.Size = new System.Drawing.Size(521, 321);
             this.pieChart1.TabIndex = 11;
             this.pieChart1.Text = "chart1";
-            title3.BorderColor = System.Drawing.Color.Black;
-            title3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            title3.Name = "Title1";
-            title3.Text = "Processes That Use The Most Memory";
-            this.pieChart1.Titles.Add(title3);
+            title5.BorderColor = System.Drawing.Color.Black;
+            title5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            title5.Name = "Title1";
+            title5.Text = "Processes That Use The Most Memory";
+            this.pieChart1.Titles.Add(title5);
             // 
             // exitButton
             // 
             this.exitButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.tableLayoutPanel1.SetColumnSpan(this.exitButton, 3);
             this.exitButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.exitButton.Location = new System.Drawing.Point(816, 632);
+            this.exitButton.Location = new System.Drawing.Point(814, 632);
             this.exitButton.Name = "exitButton";
-            this.exitButton.Size = new System.Drawing.Size(215, 26);
+            this.exitButton.Size = new System.Drawing.Size(217, 26);
             this.exitButton.TabIndex = 17;
             this.exitButton.Text = "Exit";
             this.exitButton.UseVisualStyleBackColor = false;
@@ -232,32 +237,32 @@
             this.BarChart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea4.Name = "ChartArea1";
-            this.BarChart1.ChartAreas.Add(chartArea4);
+            chartArea6.Name = "ChartArea1";
+            this.BarChart1.ChartAreas.Add(chartArea6);
             this.tableLayoutPanel1.SetColumnSpan(this.BarChart1, 4);
-            legend4.DockedToChartArea = "ChartArea1";
-            legend4.IsDockedInsideChartArea = false;
-            legend4.Name = "Legend1";
-            this.BarChart1.Legends.Add(legend4);
+            legend6.DockedToChartArea = "ChartArea1";
+            legend6.IsDockedInsideChartArea = false;
+            legend6.Name = "Legend1";
+            this.BarChart1.Legends.Add(legend6);
             this.BarChart1.Location = new System.Drawing.Point(3, 305);
             this.BarChart1.Name = "BarChart1";
             this.tableLayoutPanel1.SetRowSpan(this.BarChart1, 8);
-            series4.ChartArea = "ChartArea1";
-            series4.IsValueShownAsLabel = true;
-            series4.LabelAngle = -90;
-            series4.Legend = "Legend1";
-            series4.Name = "kilobytes";
-            series4.SmartLabelStyle.IsMarkerOverlappingAllowed = true;
-            series4.SmartLabelStyle.IsOverlappedHidden = false;
-            this.BarChart1.Series.Add(series4);
-            this.BarChart1.Size = new System.Drawing.Size(502, 321);
+            series6.ChartArea = "ChartArea1";
+            series6.IsValueShownAsLabel = true;
+            series6.LabelAngle = -90;
+            series6.Legend = "Legend1";
+            series6.Name = "kilobytes";
+            series6.SmartLabelStyle.IsMarkerOverlappingAllowed = true;
+            series6.SmartLabelStyle.IsOverlappedHidden = false;
+            this.BarChart1.Series.Add(series6);
+            this.BarChart1.Size = new System.Drawing.Size(501, 321);
             this.BarChart1.TabIndex = 7;
             this.BarChart1.Text = "chart1";
-            title4.BorderColor = System.Drawing.Color.Black;
-            title4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            title4.Name = "Title1";
-            title4.Text = "Files That Use The Most Memory";
-            this.BarChart1.Titles.Add(title4);
+            title6.BorderColor = System.Drawing.Color.Black;
+            title6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            title6.Name = "Title1";
+            title6.Text = "Files That Use The Most Memory";
+            this.BarChart1.Titles.Add(title6);
             // 
             // label1
             // 
