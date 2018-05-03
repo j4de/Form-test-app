@@ -15,5 +15,6 @@ namespace TestAppFileRead
         public string ProcessPath { get; set; }
         public string ProcessKey { get; set; }
         public string ProcessFileName { get; set; }
+        public string Operation { get; set; }
     }
 }
