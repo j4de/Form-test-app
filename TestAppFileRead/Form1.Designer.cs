@@ -28,14 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title5 = new System.Windows.Forms.DataVisualization.Charting.Title();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.saveButton = new System.Windows.Forms.Button();
             this.totalProcessesLabel = new System.Windows.Forms.Label();
@@ -48,6 +48,7 @@
             this.BarChart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.label1 = new System.Windows.Forms.Label();
             this.dataGridViewProcesses = new System.Windows.Forms.DataGridView();
+            this.OperationComboBox = new System.Windows.Forms.ComboBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -83,6 +84,7 @@
             this.tableLayoutPanel1.Controls.Add(this.BarChart1, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 14);
             this.tableLayoutPanel1.Controls.Add(this.dataGridViewProcesses, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.OperationComboBox, 7, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -151,9 +153,6 @@
             // 
             // dataGridView1
             // 
-            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.tableLayoutPanel1.SetColumnSpan(this.dataGridView1, 6);
@@ -178,8 +177,6 @@
             // 
             // displayButton
             // 
-            this.displayButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.displayButton.AutoSize = true;
             this.displayButton.BackColor = System.Drawing.Color.SteelBlue;
             this.displayButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -196,28 +193,28 @@
             this.pieChart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea5.Name = "ChartArea1";
-            this.pieChart1.ChartAreas.Add(chartArea5);
+            chartArea1.Name = "ChartArea1";
+            this.pieChart1.ChartAreas.Add(chartArea1);
             this.tableLayoutPanel1.SetColumnSpan(this.pieChart1, 5);
-            legend5.Name = "Legend1";
-            this.pieChart1.Legends.Add(legend5);
+            legend1.Name = "Legend1";
+            this.pieChart1.Legends.Add(legend1);
             this.pieChart1.Location = new System.Drawing.Point(510, 305);
             this.pieChart1.Name = "pieChart1";
             this.tableLayoutPanel1.SetRowSpan(this.pieChart1, 8);
-            series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
-            series5.IsValueShownAsLabel = true;
-            series5.Legend = "Legend1";
-            series5.Name = "Series1";
-            this.pieChart1.Series.Add(series5);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series1.IsValueShownAsLabel = true;
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.pieChart1.Series.Add(series1);
             this.pieChart1.Size = new System.Drawing.Size(521, 321);
             this.pieChart1.TabIndex = 11;
             this.pieChart1.Text = "chart1";
-            title5.BorderColor = System.Drawing.Color.Black;
-            title5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            title5.Name = "Title1";
-            title5.Text = "Processes That Use The Most Memory";
-            this.pieChart1.Titles.Add(title5);
+            title1.BorderColor = System.Drawing.Color.Black;
+            title1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            title1.Name = "Title1";
+            title1.Text = "Processes That Use The Most Memory";
+            this.pieChart1.Titles.Add(title1);
             // 
             // exitButton
             // 
@@ -237,32 +234,32 @@
             this.BarChart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea6.Name = "ChartArea1";
-            this.BarChart1.ChartAreas.Add(chartArea6);
+            chartArea2.Name = "ChartArea1";
+            this.BarChart1.ChartAreas.Add(chartArea2);
             this.tableLayoutPanel1.SetColumnSpan(this.BarChart1, 4);
-            legend6.DockedToChartArea = "ChartArea1";
-            legend6.IsDockedInsideChartArea = false;
-            legend6.Name = "Legend1";
-            this.BarChart1.Legends.Add(legend6);
+            legend2.DockedToChartArea = "ChartArea1";
+            legend2.IsDockedInsideChartArea = false;
+            legend2.Name = "Legend1";
+            this.BarChart1.Legends.Add(legend2);
             this.BarChart1.Location = new System.Drawing.Point(3, 305);
             this.BarChart1.Name = "BarChart1";
             this.tableLayoutPanel1.SetRowSpan(this.BarChart1, 8);
-            series6.ChartArea = "ChartArea1";
-            series6.IsValueShownAsLabel = true;
-            series6.LabelAngle = -90;
-            series6.Legend = "Legend1";
-            series6.Name = "kilobytes";
-            series6.SmartLabelStyle.IsMarkerOverlappingAllowed = true;
-            series6.SmartLabelStyle.IsOverlappedHidden = false;
-            this.BarChart1.Series.Add(series6);
+            series2.ChartArea = "ChartArea1";
+            series2.IsValueShownAsLabel = true;
+            series2.LabelAngle = -90;
+            series2.Legend = "Legend1";
+            series2.Name = "kilobytes";
+            series2.SmartLabelStyle.IsMarkerOverlappingAllowed = true;
+            series2.SmartLabelStyle.IsOverlappedHidden = false;
+            this.BarChart1.Series.Add(series2);
             this.BarChart1.Size = new System.Drawing.Size(501, 321);
             this.BarChart1.TabIndex = 7;
             this.BarChart1.Text = "chart1";
-            title6.BorderColor = System.Drawing.Color.Black;
-            title6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            title6.Name = "Title1";
-            title6.Text = "Files That Use The Most Memory";
-            this.BarChart1.Titles.Add(title6);
+            title2.BorderColor = System.Drawing.Color.Black;
+            title2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            title2.Name = "Title1";
+            title2.Text = "Files That Use The Most Memory";
+            this.BarChart1.Titles.Add(title2);
             // 
             // label1
             // 
@@ -290,6 +287,24 @@
             this.dataGridViewProcesses.Size = new System.Drawing.Size(48, 25);
             this.dataGridViewProcesses.TabIndex = 19;
             this.dataGridViewProcesses.Visible = false;
+            // 
+            // OperationComboBox
+            // 
+            this.OperationComboBox.BackColor = System.Drawing.SystemColors.Window;
+            this.OperationComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.OperationComboBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.OperationComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OperationComboBox.FormattingEnabled = true;
+            this.OperationComboBox.Items.AddRange(new object[] {
+            "Read",
+            "Write",
+            "Create",
+            "Close"});
+            this.OperationComboBox.Location = new System.Drawing.Point(930, 20);
+            this.OperationComboBox.Name = "OperationComboBox";
+            this.OperationComboBox.Size = new System.Drawing.Size(48, 24);
+            this.OperationComboBox.TabIndex = 20;
+            this.OperationComboBox.SelectedIndexChanged += new System.EventHandler(this.OperationComboBox_SelectedIndexChanged);
             // 
             // openFileDialog1
             // 
@@ -329,6 +344,7 @@
         private System.Windows.Forms.Button exitButton;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.DataGridView dataGridViewProcesses;
+        private System.Windows.Forms.ComboBox OperationComboBox;
     }
 }
 
