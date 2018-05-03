@@ -19,9 +19,9 @@ namespace TestAppFileRead
         private int PM_TimeOfDay = 1;
         private int PM_ProcessName = 3;
         private int PM_PID = 5;
+        private int PM_Operation = 7;
         private int PM_Path = 9;
         private int PM_FileName = 10;
-        //private int PM_Offset = 12;
         private int PM_Detail = 13;
         private int PM_Length = 14;
 
@@ -29,21 +29,191 @@ namespace TestAppFileRead
         private int DG_Name = 1;
         private int DG_PID = 2;
         private int DG_FileName = 3;
-        //private int DG_Offset = 4;
-        private int DG_Length = 4;
-        private int DG_Path = 5;
+        private int DG_Operation = 4;
+        private int DG_Length = 5;
+        private int DG_Path = 6;
 
 
         //To parse the Length value from the column => details
         public static Regex regexLength = new Regex(@"Length:\s*(?<getLengthNum>\d+(,\d+)*)", RegexOptions.CultureInvariant | RegexOptions.Compiled);
         //public static Regex regexOffset = new Regex(@"Offset:\s*(?<getOffsetNum>\d+(,\d+)*)", RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
+        public enum OperationType { All,
+                        CancelRemoveDevice,
+                        CancelStopDevice,
+                        CloseFile,
+                        CreateFile,
+                        CreateFileMapping,
+                        CreateMailSlot,
+                        CreatePipe,
+                        DebugOutputProfiling,
+                        DeviceChange,
+                        DeviceIoControl,
+                        DeviceUsageNotification,
+                        Eject,
+                        FileSystemControl,
+                        FilterResourceRequirements,
+                        FlushBuffersFile,
+                        InternalDeviceIoControl,
+                        LoadImage,
+                        LockFile,
+                        NotifyChangeDirectory,
+                        Power,
+                        ProcessCreate,
+                        ProcessExit,
+                        ProcessProfiling,
+                        ProcessStart,
+                        ProcessStatistics,
+                        QueryAllInformationFile,
+                        QueryAttributeCacheInformation,
+                        QueryAttributeInformationVolume,
+                        QueryAttributeTag,
+                        QueryAttributeTagFile,
+                        QueryBasicInformationFile,
+                        QueryBusInformation,
+                        QueryCapabilities,
+                        QueryCompressionInformationFile,
+                        QueryControlInformationVolume,
+                        QueryDesiredStorageClassInformation,
+                        QueryDeviceInformationVolume,
+                        QueryDeviceRelations,
+                        QueryDeviceText,
+                        QueryDirectory,
+                        QueryEAFile,
+                        QueryEaInformationFile,
+                        QueryEndOfFile,
+                        QueryFileInternalInformationFile,
+                        QueryFileQuota,
+                        QueryFullSizeInformationVolume,
+                        QueryHardLinkFullIdInformation,
+                        QueryId,
+                        QueryIdBothDirectory,
+                        QueryIdExtdBothDirectoryInformation,
+                        QueryIdExtdDirectoryInformation,
+                        QueryIdGlobalTxDirectoryInformation,
+                        QueryIdInformation,
+                        QueryInformationVolume,
+                        QueryInterface,
+                        QueryIoPiorityHint,
+                        QueryIsRemoteDeviceInformation,
+                        QueryLabelInformationVolume,
+                        QueryLegacyBusInformation,
+                        QueryLinkInformationBypassAccessCheck,
+                        QueryLinks,
+                        QueryMemoryPartitionInformation,
+                        QueryMoveClusterInformationFile,
+                        QueryNameInformationFile,
+                        QueryNetworkOpenInformationFile,
+                        QueryNetworkPhysicalNameInformationFile,
+                        QueryNormalizedNameInformationFile,
+                        QueryNumaNodeInformation,
+                        QueryObjectIdInformationVolume,
+                        QueryOpen,
+                        QueryPnpDeviceState,
+                        QueryPositionInformationFile,
+                        QueryRemoteProtocolInformation,
+                        QueryRemoveDevice,
+                        QueryRenameInformationBypassAccessCheck,
+                        QueryResourceRequirements,
+                        QueryResources,
+                        QuerySecurityFile,
+                        QueryShortNameInformationFile,
+                        QuerySizeInformationVolume,
+                        QueryStandardInformationFile,
+                        QueryStandardLinkInformation,
+                        QueryStatInformation,
+                        QueryStopDevice,
+                        QueryStreamInformationFile,
+                        QueryValidDataLength,
+                        QueryVolumeNameInformation,
+                        ReadConfig,
+                        ReadFile,
+                        RegCloseKey,
+                        RegCreateKey,
+                        RegDeleteKey,
+                        RegDeleteValue,
+                        RegEnumKey,
+                        RegEnumValue,
+                        RegFlushKey,
+                        RegLoadKey,
+                        RegOpenKey,
+                        RegQueryKey,
+                        RegQueryKeySecurity,
+                        RegQueryMultipleValueKey,
+                        RegQueryValue,
+                        RegRenameKey,
+                        RegSetInfoKey,
+                        RegSetKeySecurity,
+                        RegSetValue,
+                        RegUnloadKey,
+                        RemoveDevice,
+                        SetAllocationInformationFile,
+                        SetBasicInformationFile,
+                        SetDispositionInformationEx,
+                        SetDispositionInformationFile,
+                        SetEAFile,
+                        SetEndOfFileInformationFile,
+                        SetFileQuota,
+                        SetFileStreamInformation,
+                        SetLinkInformationFile,
+                        SetLock,
+                        SetPipeInformation,
+                        SetPositionInformationFile,
+                        SetRenameInformationEx,
+                        SetRenameInformationExBypassAccessCheck,
+                        SetRenameInformationFile,
+                        SetReplaceCompletionInformation,
+                        SetSecurityFile,
+                        SetShortNameInformation,
+                        SetValidDataLengthInformationFile,
+                        SetVolumeInformation,
+                        Shutdown,
+                        StartDevice,
+                        StopDevice,
+                        SurpriseRemoval,
+                        SystemStatistics,
+                        SystemControl,
+                        TCPAccept,
+                        TCPConnect,
+                        TCPDisconnect,
+                        TCPOther,
+                        TCPReceive,
+                        TCPReconnect,
+                        TCPRetransmit,
+                        TCPSend,
+                        TCPTCPCopy,
+                        TCPUnknown,
+                        ThreadCreate,
+                        ThreadExit,
+                        ThreadProfile,
+                        ThreadProfiling,
+                        UDPAccept,
+                        UDPConnect,
+                        UDPDisconnect,
+                        UDPOther,
+                        UDPReceive,
+                        UDPReconnect,
+                        UDPRetransmit,
+                        UDPSend,
+                        UDPTCPCopy,
+                        UDPUnknown,
+                        UnlockFileAll,
+                        UnlockFileByKey,
+                        UnlockFileSingle,
+                        VolumeDismount,
+                        VolumeMount,
+                        WriteConfig,
+                        WriteFile
+        }
         public Form1()
         {
             InitializeComponent();
             this.CenterToScreen();
-        }
+            OperationComboBox.DataSource = Enum.GetNames(typeof(OperationType));
+            OperationComboBox.SelectedIndex = 0;
 
+        }
+       
         //Get the file path selected.
         //Filter setup for CSV files in Form1.designer.cs
         private void GetFileButton(object sender, EventArgs e)
@@ -65,25 +235,27 @@ namespace TestAppFileRead
             dataTable.Columns.Add("Process Name");
             dataTable.Columns.Add("PID");
             dataTable.Columns.Add("File Name");
-            //dataTable.Columns.Add("Offset");
+            dataTable.Columns.Add("Operation");
             dataTable.Columns.Add("Length");
             dataTable.Columns.Add("Path");
 
             string filePath = textBoxFilePath.Text;
-            StreamReader streamReader = new StreamReader(filePath);
-            string[] totalData = new string[File.ReadAllLines(filePath).Length];
+            try
+            {
+                StreamReader streamReader = new StreamReader(filePath);
+                string[] totalData = new string[File.ReadAllLines(filePath).Length];
 
-            string megabyteOrKilobyte;
-            long fileSize;
-            long stringSize;
-            long progress = 0;
-            
+                string megabyteOrKilobyte;
+                long fileSize;
+                long stringSize;
+                long progress = 0;
 
-            FindFileSize(filePath, out megabyteOrKilobyte, out fileSize);
 
-            //Confirm if the file size is exceptable to load
-            //if (MessageBox.Show("The file size is " + megabyteOrKilobyte + "" + ". Do you want to load it?", " Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            //{
+                FindFileSize(filePath, out megabyteOrKilobyte, out fileSize);
+
+                //Confirm if the file size is exceptable to load
+                //if (MessageBox.Show("The file size is " + megabyteOrKilobyte + "" + ". Do you want to load it?", " Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                //{
                 //progress bar
                 loadingForm load = new loadingForm(megabyteOrKilobyte, dataGridView1, this, fileSize, progress);
                 load.Show();
@@ -110,31 +282,35 @@ namespace TestAppFileRead
                         }
                         Application.DoEvents();
 
-                    
-                    dataTable.Rows.Add(
-                                    totalData[PM_TimeOfDay],
-                                    totalData[PM_ProcessName],
-                                    totalData[PM_PID],
-                                    totalData[PM_FileName],
-                                    //totalData[PM_Offset],
-                                    totalData[PM_Length],
-                                    totalData[PM_Path]
-                                  );
+
+                        dataTable.Rows.Add(
+                                        totalData[PM_TimeOfDay],
+                                        totalData[PM_ProcessName],
+                                        totalData[PM_PID],
+                                        totalData[PM_FileName],
+                                        totalData[PM_Operation],
+                                        totalData[PM_Length],
+                                        totalData[PM_Path]
+                                      );
+
+                    }
+
+                    //If file load is not cancelled
+                    ProcessFileData(dataTable, load);
 
                 }
-                
-                //If file load is not cancelled
-                ProcessFileData(dataTable, load);
-                
-            }
             //}
             //else
             //{
             //   
             //}
-           
-
         }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+
+}
 
       
         private void ProcessFileData(DataTable dataTable, loadingForm load)
@@ -150,37 +326,35 @@ namespace TestAppFileRead
 
         private string[] ParseProcmonData(StreamReader streamReader)
         {
+            string defaultLengthValue = "0";
+            string defaultPath = "noFilePathFound.cs";
             string[] totalData = streamReader.ReadLine().Split('"');
             foreach (var item in totalData)
             {
-                
-
-                totalData[PM_TimeOfDay] = totalData[PM_TimeOfDay].Substring(0, 8);
-
-                //To  deal with an illigal symbols such as 촧
-                if (totalData[PM_Path].ToString() == @"\Device\HarddiskVolume3촧"|| totalData[PM_Path].ToString() == @"\Device\HarddiskVolume3엡\u0003")
-                {
-                    totalData[PM_FileName] = "Device.HarddiskVolume3";
-                }
-                else
-                totalData[PM_FileName] = Path.GetFileName(totalData[PM_Path]).ToString();
 
                 try
-                {
+                { 
+                    totalData[PM_TimeOfDay] = totalData[PM_TimeOfDay].Substring(0, 8);
+                    totalData[PM_Operation] = totalData[PM_Operation].Replace(" ", "");
 
-                    //get value of length and offset and remove any comma's
+                    if (totalData[PM_FileName] == "")
+                    {
+                        totalData[PM_FileName] = defaultPath;
+                    }
+                    else
+                    totalData[PM_FileName] = Path.GetFileName(totalData[PM_Path]).ToString();
+
+                    //get value of length and remove any comma's
                     var match = regexLength.Match(totalData[PM_Detail]);
                     if (match.Success)
                     {
                         totalData[PM_Length] = match.Groups["getLengthNum"].Value;
                         totalData[PM_Length] = totalData[PM_Length].Replace(",", "");
                     }
-                    //var match2 = regexOffset.Match(totalData[PM_Detail]);
-                    //if (match2.Success)
-                    //{
-                    //    totalData[PM_Offset] = match2.Groups["getOffsetNum"].Value;
-                    //    totalData[PM_Offset] = totalData[PM_Offset].Replace(",", "");
-                    //}
+                    else
+                    {
+                        totalData[PM_Length] = defaultLengthValue;
+                    }
                 }
                 catch (IncorrectFormatException exc)
                 {
@@ -307,6 +481,7 @@ namespace TestAppFileRead
             string processFileName = "";
             string processPath = "";
             string processPID = "";
+            string processOperation = "";
             bool processFound = false;
             int loopCounter = 0;
             string processKeyString = "";
@@ -323,18 +498,9 @@ namespace TestAppFileRead
                 {
                     processFileName = row.Cells[DG_FileName].Value.ToString();
                     processName = row.Cells[DG_Name].Value.ToString();
+                    processOperation = row.Cells[DG_Operation].Value.ToString();
                     processPID = row.Cells[DG_PID].Value.ToString();
                     processPath = row.Cells[DG_Path].Value.ToString();
-
-                    //Some offset values have a value of -1 which throws an exception
-                    //if (row.Cells[DG_Offset].Value.ToString() == ",")
-                    //{
-                    //    processOffset = -1;
-                    //}
-                    //else
-                    //{
-                    //    processOffset = Convert.ToInt32(row.Cells[DG_Offset].Value);
-                    //}
                     processLength = Convert.ToInt32(row.Cells[DG_Length].Value);
 
                     processKeyString = processName + "|" + processPID + "|" + processPath;
@@ -361,7 +527,7 @@ namespace TestAppFileRead
                         {
                             ProcessLength = processLength,
                             ProcessName = processName,
-                            //ProcessOffset = processOffset,
+                            Operation = processOperation,
                             ProcessPID = processPID,
                             ProcessPath = processPath,
                             ProcessKey = processKeyString,
@@ -389,7 +555,7 @@ namespace TestAppFileRead
                         {
                             ProcessLength = processLength,
                             ProcessName = processName,
-                            //ProcessOffset = processOffset,
+                            Operation = processOperation,
                             ProcessPID = processPID,
                             ProcessPath = processPath,
                             ProcessKey = processKeyID,
@@ -409,6 +575,9 @@ namespace TestAppFileRead
 
                 //All processes executed
                 SortedProcessList(ProcessIDList);
+
+                //Combobox filter
+                OperationComboBox_SelectedIndexChanged(ProcessFileList);
 
                 totalProcessesLabel.Text = ProcessFileList.Count().ToString();
 
@@ -433,6 +602,7 @@ namespace TestAppFileRead
             filteredTable.Columns.Add("Process Name");
             filteredTable.Columns.Add("PID");
             filteredTable.Columns.Add("File Name");
+            filteredTable.Columns.Add("Operation");
             filteredTable.Columns.Add("Length");
             filteredTable.Columns.Add("Path");
 
@@ -442,6 +612,7 @@ namespace TestAppFileRead
                                 SortedFileList[i].ProcessName,
                                 SortedFileList[i].ProcessPID,
                                 SortedFileList[i].ProcessFileName,
+                                SortedFileList[i].Operation,
                                 SortedFileList[i].ProcessLength,
                                 SortedFileList[i].ProcessPath
                               );
@@ -459,6 +630,7 @@ namespace TestAppFileRead
             filteredTableProcesses.Columns.Add("Process Name");
             filteredTableProcesses.Columns.Add("PID");
             filteredTableProcesses.Columns.Add("File Name");
+            filteredTableProcesses.Columns.Add("Operation");
             filteredTableProcesses.Columns.Add("Length");
             filteredTableProcesses.Columns.Add("Path");
 
@@ -468,6 +640,7 @@ namespace TestAppFileRead
                                 SortedProcessList[i].ProcessName,
                                 SortedProcessList[i].ProcessPID,
                                 SortedProcessList[i].ProcessFileName,
+                                SortedProcessList[i].Operation,
                                 SortedProcessList[i].ProcessLength,
                                 SortedProcessList[i].ProcessPath
                               );
@@ -555,9 +728,25 @@ namespace TestAppFileRead
             SaveToCSV(dataGridViewProcesses);
         }
 
-        private void OperationComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void OperationComboBox_SelectedIndexChanged(List<ProcessData> dataList)
         {
+            
+            string operationCatergory = OperationComboBox.SelectedValue.ToString();
+            if (operationCatergory != "All")
+            {
+                var query = from ProcessData data in dataList
+                            where data.Operation == operationCatergory
+                            orderby data.ProcessLength descending
+                            select data;
 
+                dataGridView1.DataSource = null;
+                dataGridViewProcesses.DataSource = null;
+
+                dataGridView1.DataSource = query.ToList();
+                dataGridViewProcesses.DataSource = query.ToList();
+            }
+            
+            
         }
     }
 }
