@@ -299,18 +299,18 @@ namespace TestAppFileRead
                     ProcessFileData(dataTable, load);
 
                 }
-                //}
-                //else
-                //{
-                //   
-                //}
-            }
+            //}
+            //else
+            //{
+            //   
+            //}
+        }
             catch (Exception exc)
             {
                 MessageBox.Show(exc.Message);
             }
 
-        }
+}
 
       
         private void ProcessFileData(DataTable dataTable, loadingForm load)
@@ -326,37 +326,35 @@ namespace TestAppFileRead
 
         private string[] ParseProcmonData(StreamReader streamReader)
         {
+            string defaultLengthValue = "0";
+            string defaultPath = "noFilePathFound.cs";
             string[] totalData = streamReader.ReadLine().Split('"');
             foreach (var item in totalData)
             {
-                
-
-                totalData[PM_TimeOfDay] = totalData[PM_TimeOfDay].Substring(0, 8);
-                totalData[PM_Operation] = totalData[PM_Operation].Replace(" ", "");
-                //To  deal with an illigal symbols such as 촧
-                if (totalData[PM_Path].ToString() == @"\Device\HarddiskVolume3촧"|| totalData[PM_Path].ToString() == @"\Device\HarddiskVolume3엡\u0003")
-                {
-                    totalData[PM_FileName] = "Device.HarddiskVolume3";
-                }
-                else
-                totalData[PM_FileName] = Path.GetFileName(totalData[PM_Path]).ToString();
 
                 try
-                {
+                { 
+                    totalData[PM_TimeOfDay] = totalData[PM_TimeOfDay].Substring(0, 8);
+                    totalData[PM_Operation] = totalData[PM_Operation].Replace(" ", "");
 
-                    //get value of length and offset and remove any comma's
+                    if (totalData[PM_FileName] == "")
+                    {
+                        totalData[PM_FileName] = defaultPath;
+                    }
+                    else
+                    totalData[PM_FileName] = Path.GetFileName(totalData[PM_Path]).ToString();
+
+                    //get value of length and remove any comma's
                     var match = regexLength.Match(totalData[PM_Detail]);
                     if (match.Success)
                     {
                         totalData[PM_Length] = match.Groups["getLengthNum"].Value;
                         totalData[PM_Length] = totalData[PM_Length].Replace(",", "");
                     }
-                    //var match2 = regexOffset.Match(totalData[PM_Detail]);
-                    //if (match2.Success)
-                    //{
-                    //    totalData[PM_Offset] = match2.Groups["getOffsetNum"].Value;
-                    //    totalData[PM_Offset] = totalData[PM_Offset].Replace(",", "");
-                    //}
+                    else
+                    {
+                        totalData[PM_Length] = defaultLengthValue;
+                    }
                 }
                 catch (IncorrectFormatException exc)
                 {
@@ -503,16 +501,6 @@ namespace TestAppFileRead
                     processOperation = row.Cells[DG_Operation].Value.ToString();
                     processPID = row.Cells[DG_PID].Value.ToString();
                     processPath = row.Cells[DG_Path].Value.ToString();
-
-                    //Some offset values have a value of -1 which throws an exception
-                    //if (row.Cells[DG_Offset].Value.ToString() == ",")
-                    //{
-                    //    processOffset = -1;
-                    //}
-                    //else
-                    //{
-                    //    processOffset = Convert.ToInt32(row.Cells[DG_Offset].Value);
-                    //}
                     processLength = Convert.ToInt32(row.Cells[DG_Length].Value);
 
                     processKeyString = processName + "|" + processPID + "|" + processPath;
@@ -588,6 +576,9 @@ namespace TestAppFileRead
                 //All processes executed
                 SortedProcessList(ProcessIDList);
 
+                //Combobox filter
+                OperationComboBox_SelectedIndexChanged(ProcessFileList);
+
                 totalProcessesLabel.Text = ProcessFileList.Count().ToString();
 
                 GetDataForCharts(ProcessFileList, ProcessIDList, topLengths, topIDLengths, topFileNames, topProcessID);
@@ -639,6 +630,7 @@ namespace TestAppFileRead
             filteredTableProcesses.Columns.Add("Process Name");
             filteredTableProcesses.Columns.Add("PID");
             filteredTableProcesses.Columns.Add("File Name");
+            filteredTableProcesses.Columns.Add("Operation");
             filteredTableProcesses.Columns.Add("Length");
             filteredTableProcesses.Columns.Add("Path");
 
@@ -648,6 +640,7 @@ namespace TestAppFileRead
                                 SortedProcessList[i].ProcessName,
                                 SortedProcessList[i].ProcessPID,
                                 SortedProcessList[i].ProcessFileName,
+                                SortedProcessList[i].Operation,
                                 SortedProcessList[i].ProcessLength,
                                 SortedProcessList[i].ProcessPath
                               );
@@ -735,16 +728,24 @@ namespace TestAppFileRead
             SaveToCSV(dataGridViewProcesses);
         }
 
-        private void OperationComboBox_SelectedIndexChanged(object sender, EventArgs e, List<ProcessData> dataList)
+        private void OperationComboBox_SelectedIndexChanged(List<ProcessData> dataList)
         {
-            string operationCatergory = OperationComboBox.SelectedValue.ToString();
             
-            var query = from ProcessData data in dataList
-                        where data.Operation == operationCatergory
-                        select data;
+            string operationCatergory = OperationComboBox.SelectedValue.ToString();
+            if (operationCatergory != "All")
+            {
+                var query = from ProcessData data in dataList
+                            where data.Operation == operationCatergory
+                            orderby data.ProcessLength descending
+                            select data;
 
-            dataGridView1.DataSource = query.ToList();
-            dataGridViewProcesses.DataSource = query.ToList();
+                dataGridView1.DataSource = null;
+                dataGridViewProcesses.DataSource = null;
+
+                dataGridView1.DataSource = query.ToList();
+                dataGridViewProcesses.DataSource = query.ToList();
+            }
+            
             
         }
     }
