@@ -18,6 +18,7 @@ namespace TestAppFileRead
         //Procmon data
         private int PM_TimeOfDay = 1;
         private int PM_ProcessName = 3;
+        private int PM_lengthFromSmallArray = 4;
         private int PM_PID = 5;
         private int PM_Operation = 7;
         private int PM_Path = 9;
@@ -240,8 +241,8 @@ namespace TestAppFileRead
             dataTable.Columns.Add("Path");
 
             string filePath = textBoxFilePath.Text;
-            try
-            {
+            //try
+            //{
                 StreamReader streamReader = new StreamReader(filePath);
                 string[] totalData = new string[File.ReadAllLines(filePath).Length];
 
@@ -261,6 +262,7 @@ namespace TestAppFileRead
                 load.Show();
                 //Reset the data grid
                 dataGridView1.DataSource = null;
+               
                 if (fileSize != 0)
                 {
                     string line = streamReader.ReadLine();
@@ -281,9 +283,10 @@ namespace TestAppFileRead
                             break;
                         }
                         Application.DoEvents();
-
-
-                        dataTable.Rows.Add(
+                        
+                        if (totalData.Length == 15)
+                        {
+                            dataTable.Rows.Add(
                                         totalData[PM_TimeOfDay],
                                         totalData[PM_ProcessName],
                                         totalData[PM_PID],
@@ -291,7 +294,25 @@ namespace TestAppFileRead
                                         totalData[PM_Operation],
                                         totalData[PM_Length],
                                         totalData[PM_Path]
+                                        );
+                        }
+                        if (totalData.Length == 14)
+                        {
+                            dataTable.Rows.Add(
+                                        totalData[PM_TimeOfDay],
+                                        totalData[PM_ProcessName],
+                                        totalData[PM_PID],
+                                        totalData[PM_FileName],
+                                        totalData[PM_Operation],
+                                        totalData[PM_lengthFromSmallArray],
+                                        totalData[PM_Path]
                                       );
+                        }
+                        if(totalData.Length < 14)
+                        {
+
+                        }
+                       
 
                     }
 
@@ -303,12 +324,12 @@ namespace TestAppFileRead
             //else
             //{
             //   
-            //}
-        }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.Message);
-            }
+        //    //}
+        //}
+        //    catch (Exception exc)
+        //    {
+        //        MessageBox.Show(exc.Message);
+        //    }
 
 }
 
@@ -326,42 +347,87 @@ namespace TestAppFileRead
 
         private string[] ParseProcmonData(StreamReader streamReader)
         {
+            
             string defaultLengthValue = "0";
-            string defaultPath = "noFilePathFound.cs";
+            string defaultPath = "noFilePathFound";
             string[] totalData = streamReader.ReadLine().Split('"');
-            foreach (var item in totalData)
+            if (totalData.Length == 14)
             {
 
-                try
-                { 
-                    totalData[PM_TimeOfDay] = totalData[PM_TimeOfDay].Substring(0, 8);
-                    totalData[PM_Operation] = totalData[PM_Operation].Replace(" ", "");
-
-                    if (totalData[PM_FileName] == "")
-                    {
-                        totalData[PM_FileName] = defaultPath;
-                    }
-                    else
-                    totalData[PM_FileName] = Path.GetFileName(totalData[PM_Path]).ToString();
-
-                    //get value of length and remove any comma's
-                    var match = regexLength.Match(totalData[PM_Detail]);
-                    if (match.Success)
-                    {
-                        totalData[PM_Length] = match.Groups["getLengthNum"].Value;
-                        totalData[PM_Length] = totalData[PM_Length].Replace(",", "");
-                    }
-                    else
-                    {
-                        totalData[PM_Length] = defaultLengthValue;
-                    }
-                }
-                catch (IncorrectFormatException exc)
+                foreach (var item in totalData)
                 {
-                    MessageBox.Show(exc.Message);
+
+                    try
+                    {
+                        //totalData[PM_TimeOfDay] = totalData[PM_TimeOfDay].Substring(0, 8);
+                        totalData[PM_Operation] = totalData[PM_Operation].Replace(" ", "");
+
+                        if (totalData[PM_FileName] == "")
+                        {
+                            totalData[PM_FileName] = defaultPath;
+                        }
+                        else
+                            totalData[PM_FileName] = Path.GetFileName(totalData[PM_Path]).ToString();
+
+                        //get value of length and remove any comma's
+                        var match = regexLength.Match(totalData[PM_Detail]);
+                        if (match.Success)
+                        {
+                            totalData[PM_lengthFromSmallArray] = match.Groups["getLengthNum"].Value;
+                            totalData[PM_lengthFromSmallArray] = totalData[PM_Length].Replace(",", "");
+                        }
+                        else
+                        {
+                            totalData[PM_lengthFromSmallArray] = defaultLengthValue;
+                        }
+                    }
+
+                    catch (IncorrectFormatException exc)
+                    {
+                        MessageBox.Show(exc.Message);
+                    }
                 }
-               
+      
             }
+            else
+                foreach (var item in totalData)
+                {
+
+                    try
+                    {
+
+                        
+                        if (totalData.Length > 12)
+                        {
+                            totalData[PM_Operation] = totalData[PM_Operation].Replace(" ", "");
+                            if (totalData[PM_FileName] == "")
+                            {
+                                totalData[PM_FileName] = defaultPath;
+                            }
+                            else
+                                totalData[PM_FileName] = Path.GetFileName(totalData[PM_Path]).ToString();
+
+                            //get value of length and remove any comma's
+                            var match = regexLength.Match(totalData[PM_Detail]);
+                            if (match.Success)
+                            {
+                                totalData[PM_Length] = match.Groups["getLengthNum"].Value;
+                                totalData[PM_Length] = totalData[PM_Length].Replace(",", "");
+                            }
+                            else
+                            {
+                                totalData[PM_Length] = defaultLengthValue;
+                            }
+                        }
+                      
+                       
+                    }
+
+                    catch (IncorrectFormatException exc)
+                    {
+                        MessageBox.Show(exc.Message);
+                    }
+                }
             return totalData;
         }
 
@@ -570,39 +636,39 @@ namespace TestAppFileRead
                     if (loopCounter == dataGridView1.RowCount - 1)
                         break;
                 }
-                //All files accessed
-
-                SortedFileList(ProcessFileList);
-
-                //All processes executed
-                SortedProcessList(ProcessIDList);
-
-                //Combobox filter
                 
-                string operationCatergory = OperationComboBox.SelectedValue.ToString();
-
-                var selectedOperation = (ProcessFileList.OrderByDescending(i => i.ProcessLength).Where(p => p.Operation == operationCatergory));
-
-                OperationComboBox_SelectedIndexChanged(selectedOperation.ToList());
-
-                totalProcessesLabel.Text = ProcessFileList.Count().ToString();
-
-                if (operationCatergory !="All")
-                {
-                    GetDataForCharts(selectedOperation.ToList(), ProcessIDList, topLengths, topIDLengths, topFileNames, topProcessID);
-
-                }
-                else
-                {
-                    GetDataForCharts(ProcessFileList, ProcessIDList, topLengths, topIDLengths, topFileNames, topProcessID);
-
-                }
-                PopulateChart(topLengths, topIDLengths, topFileNames, topProcessID);
             }
             catch (Exception exc)
             {
                 MessageBox.Show(exc.Message);
             }
+            //All files accessed
+
+            SortedFileList(ProcessFileList);
+
+            //All processes executed
+            SortedProcessList(ProcessIDList);
+
+            //Combobox filter
+            string operationCatergory = OperationComboBox.SelectedValue.ToString();
+
+            var selectedOperation = (ProcessFileList.OrderByDescending(i => i.ProcessLength).Where(p => p.Operation == operationCatergory));
+
+            OperationComboBox_SelectedIndexChanged(selectedOperation.ToList());
+
+            totalProcessesLabel.Text = ProcessFileList.Count().ToString();
+
+            if (operationCatergory == "All")
+            {
+                GetDataForCharts(ProcessFileList, ProcessIDList, topLengths, topIDLengths, topFileNames, topProcessID);
+
+            }
+            else
+            {
+                GetDataForCharts(selectedOperation.ToList(), ProcessIDList, topLengths, topIDLengths, topFileNames, topProcessID);
+
+            }
+            PopulateChart(topLengths, topIDLengths, topFileNames, topProcessID);
 
 
         }
@@ -679,8 +745,7 @@ namespace TestAppFileRead
 
                     if (topListCounter == i)
                     {
-                        //convert ProcessLength to kilobytes
-                        topLengths[i] = Convert.ToInt32(item.ProcessLength / 1024);
+                        topLengths[i] = Convert.ToInt32(item.ProcessLength);
                         topFileNames[i] = item.ProcessFileName;
                     }
 
@@ -697,6 +762,7 @@ namespace TestAppFileRead
 
                     if (topProcessCounter == i)
                     {
+                        //Convert byte to kilobyte
                         topIDLengths[i] = Convert.ToInt32(item.ProcessLength);
                         topProcessID[i] = item.ProcessName + " " + item.ProcessPID;
 
@@ -745,7 +811,8 @@ namespace TestAppFileRead
 
         private void OperationComboBox_SelectedIndexChanged(List<ProcessData> dataList)
         {
-            
+            //string processKeyString = processName + "|" + processPID + "|" + processPath;
+
             string operationValue = OperationComboBox.SelectedValue.ToString();
             if (operationValue != "All")
             {
@@ -753,14 +820,17 @@ namespace TestAppFileRead
                             where data.Operation == operationValue
                             orderby data.ProcessLength descending
                             select data;
-
+                
                 dataGridView1.DataSource = null;
-                dataGridViewProcesses.DataSource = null;
-
                 dataGridView1.DataSource = query.ToList();
-                dataGridViewProcesses.DataSource = query.ToList();
-            }         
-            
+
+                //var processList = query.GroupBy(x => x.ProcessKey).Select(x => x.First()).ToList();
+
+                //dataGridViewProcesses.DataSource = null;
+                //dataGridViewProcesses.DataSource = processList.ToList();
+            }
         }
+
+      
     }
 }

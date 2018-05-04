@@ -9,12 +9,12 @@ namespace TestAppFileRead
     public class ProcessData
     {
         public string ProcessName { get; set; }
-        public long ProcessLength { get; set; }
-        //public long ProcessOffset { get; set; }
         public string ProcessPID { get; set; }
-        public string ProcessPath { get; set; }
-        public string ProcessKey { get; set; }
         public string ProcessFileName { get; set; }
         public string Operation { get; set; }
+        public long ProcessLength { get; set; }
+        public string ProcessPath { get; set; }
+        public string ProcessKey { get; set; }
+      
     }
 }
