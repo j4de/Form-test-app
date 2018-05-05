@@ -650,22 +650,23 @@ namespace TestAppFileRead
             SortedProcessList(ProcessIDList);
 
             //Combobox filter
-            string operationCatergory = OperationComboBox.SelectedValue.ToString();
+            string operationName = OperationComboBox.SelectedValue.ToString();
 
-            var selectedOperation = (ProcessFileList.OrderByDescending(i => i.ProcessLength).Where(p => p.Operation == operationCatergory));
+            //var selectedOperation = (ProcessFileList.OrderByDescending(i => i.ProcessLength).Where(p => p.Operation == operationName));
 
-            OperationComboBox_SelectedIndexChanged(selectedOperation.ToList());
+
 
             totalProcessesLabel.Text = ProcessFileList.Count().ToString();
 
-            if (operationCatergory == "All")
+            if (operationName == "All")
             {
                 GetDataForCharts(ProcessFileList, ProcessIDList, topLengths, topIDLengths, topFileNames, topProcessID);
 
             }
             else
             {
-                GetDataForCharts(selectedOperation.ToList(), ProcessIDList, topLengths, topIDLengths, topFileNames, topProcessID);
+                OperationComboBox_SelectedIndexChanged(ProcessFileList, ProcessIDList);
+                GetDataForCharts(ProcessFileList, ProcessIDList, topLengths, topIDLengths, topFileNames, topProcessID);
 
             }
             PopulateChart(topLengths, topIDLengths, topFileNames, topProcessID);
@@ -787,7 +788,7 @@ namespace TestAppFileRead
             BarChart1.ChartAreas[0].AxisX.Interval = 1;
             BarChart1.Legends[0].Enabled = true;
             BarChart1.ChartAreas[0].Area3DStyle.Enable3D = true;
-            BarChart1.ChartAreas[0].AxisY.Title = "Kilobytes Used";
+            BarChart1.ChartAreas[0].AxisY.Title = "Bytes Used";
             //BarChart1.ChartAreas[0].AxisY.TitleFont="Arial", 16, FontStyle.Bold;
             BarChart1.Legends[0].Enabled = true;
 
@@ -809,14 +810,12 @@ namespace TestAppFileRead
             SaveToCSV(dataGridViewProcesses);
         }
 
-        private void OperationComboBox_SelectedIndexChanged(List<ProcessData> dataList)
+        private void OperationComboBox_SelectedIndexChanged(List<ProcessData> dataFileList, List<ProcessData> dataProcessesList)
         {
-            //string processKeyString = processName + "|" + processPID + "|" + processPath;
-
             string operationValue = OperationComboBox.SelectedValue.ToString();
             if (operationValue != "All")
             {
-                var query = from ProcessData data in dataList
+                var query = from ProcessData data in dataFileList
                             where data.Operation == operationValue
                             orderby data.ProcessLength descending
                             select data;
@@ -824,13 +823,13 @@ namespace TestAppFileRead
                 dataGridView1.DataSource = null;
                 dataGridView1.DataSource = query.ToList();
 
-                //var processList = query.GroupBy(x => x.ProcessKey).Select(x => x.First()).ToList();
+                dataProcessesList = query.GroupBy(x => x.ProcessName).Select(x => x.First()).ToList();
 
-                //dataGridViewProcesses.DataSource = null;
-                //dataGridViewProcesses.DataSource = processList.ToList();
+                dataGridViewProcesses.DataSource = null;
+                dataGridViewProcesses.DataSource = dataProcessesList;
             }
         }
 
-      
+        
     }
 }
