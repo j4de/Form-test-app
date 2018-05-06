@@ -813,6 +813,7 @@ namespace TestAppFileRead
         private void OperationComboBox_SelectedIndexChanged(List<ProcessData> dataFileList, List<ProcessData> dataProcessesList)
         {
             string operationValue = OperationComboBox.SelectedValue.ToString();
+            operationValue.Replace(" ", "");
             if (operationValue != "All")
             {
                 var query = from ProcessData data in dataFileList
