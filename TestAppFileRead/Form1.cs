@@ -39,7 +39,8 @@ namespace TestAppFileRead
         public static Regex regexLength = new Regex(@"Length:\s*(?<getLengthNum>\d+(,\d+)*)", RegexOptions.CultureInvariant | RegexOptions.Compiled);
         //public static Regex regexOffset = new Regex(@"Offset:\s*(?<getOffsetNum>\d+(,\d+)*)", RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
-        public enum OperationType { All,
+        public enum OperationType {
+                        All_Operations,
                         CancelRemoveDevice,
                         CancelStopDevice,
                         CloseFile,
@@ -814,23 +815,24 @@ namespace TestAppFileRead
         {
             string operationValue = OperationComboBox.SelectedValue.ToString();
             operationValue.Replace(" ", "");
-            if (operationValue != "All")
+            if (operationValue != "All_Operations")
             {
                 var query = from ProcessData data in dataFileList
                             where data.Operation == operationValue
                             orderby data.ProcessLength descending
                             select data;
                 
+                //files
                 dataGridView1.DataSource = null;
                 dataGridView1.DataSource = query.ToList();
 
+                //processes 
                 dataProcessesList = query.GroupBy(x => x.ProcessName).Select(x => x.First()).ToList();
-
                 dataGridViewProcesses.DataSource = null;
                 dataGridViewProcesses.DataSource = dataProcessesList;
             }
         }
 
-        
+       
     }
 }
