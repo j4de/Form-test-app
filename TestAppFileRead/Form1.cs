@@ -34,185 +34,185 @@ namespace TestAppFileRead
         private int DG_Length = 5;
         private int DG_Path = 6;
 
-
+        private List<string> operationList = new List<string>();
+        
         //To parse the Length value from the column => details
         public static Regex regexLength = new Regex(@"Length:\s*(?<getLengthNum>\d+(,\d+)*)", RegexOptions.CultureInvariant | RegexOptions.Compiled);
-        //public static Regex regexOffset = new Regex(@"Offset:\s*(?<getOffsetNum>\d+(,\d+)*)", RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
-        public enum OperationType {
-                        All_Operations,
-                        CancelRemoveDevice,
-                        CancelStopDevice,
-                        CloseFile,
-                        CreateFile,
-                        CreateFileMapping,
-                        CreateMailSlot,
-                        CreatePipe,
-                        DebugOutputProfiling,
-                        DeviceChange,
-                        DeviceIoControl,
-                        DeviceUsageNotification,
-                        Eject,
-                        FileSystemControl,
-                        FilterResourceRequirements,
-                        FlushBuffersFile,
-                        InternalDeviceIoControl,
-                        LoadImage,
-                        LockFile,
-                        NotifyChangeDirectory,
-                        Power,
-                        ProcessCreate,
-                        ProcessExit,
-                        ProcessProfiling,
-                        ProcessStart,
-                        ProcessStatistics,
-                        QueryAllInformationFile,
-                        QueryAttributeCacheInformation,
-                        QueryAttributeInformationVolume,
-                        QueryAttributeTag,
-                        QueryAttributeTagFile,
-                        QueryBasicInformationFile,
-                        QueryBusInformation,
-                        QueryCapabilities,
-                        QueryCompressionInformationFile,
-                        QueryControlInformationVolume,
-                        QueryDesiredStorageClassInformation,
-                        QueryDeviceInformationVolume,
-                        QueryDeviceRelations,
-                        QueryDeviceText,
-                        QueryDirectory,
-                        QueryEAFile,
-                        QueryEaInformationFile,
-                        QueryEndOfFile,
-                        QueryFileInternalInformationFile,
-                        QueryFileQuota,
-                        QueryFullSizeInformationVolume,
-                        QueryHardLinkFullIdInformation,
-                        QueryId,
-                        QueryIdBothDirectory,
-                        QueryIdExtdBothDirectoryInformation,
-                        QueryIdExtdDirectoryInformation,
-                        QueryIdGlobalTxDirectoryInformation,
-                        QueryIdInformation,
-                        QueryInformationVolume,
-                        QueryInterface,
-                        QueryIoPiorityHint,
-                        QueryIsRemoteDeviceInformation,
-                        QueryLabelInformationVolume,
-                        QueryLegacyBusInformation,
-                        QueryLinkInformationBypassAccessCheck,
-                        QueryLinks,
-                        QueryMemoryPartitionInformation,
-                        QueryMoveClusterInformationFile,
-                        QueryNameInformationFile,
-                        QueryNetworkOpenInformationFile,
-                        QueryNetworkPhysicalNameInformationFile,
-                        QueryNormalizedNameInformationFile,
-                        QueryNumaNodeInformation,
-                        QueryObjectIdInformationVolume,
-                        QueryOpen,
-                        QueryPnpDeviceState,
-                        QueryPositionInformationFile,
-                        QueryRemoteProtocolInformation,
-                        QueryRemoveDevice,
-                        QueryRenameInformationBypassAccessCheck,
-                        QueryResourceRequirements,
-                        QueryResources,
-                        QuerySecurityFile,
-                        QueryShortNameInformationFile,
-                        QuerySizeInformationVolume,
-                        QueryStandardInformationFile,
-                        QueryStandardLinkInformation,
-                        QueryStatInformation,
-                        QueryStopDevice,
-                        QueryStreamInformationFile,
-                        QueryValidDataLength,
-                        QueryVolumeNameInformation,
-                        ReadConfig,
-                        ReadFile,
-                        RegCloseKey,
-                        RegCreateKey,
-                        RegDeleteKey,
-                        RegDeleteValue,
-                        RegEnumKey,
-                        RegEnumValue,
-                        RegFlushKey,
-                        RegLoadKey,
-                        RegOpenKey,
-                        RegQueryKey,
-                        RegQueryKeySecurity,
-                        RegQueryMultipleValueKey,
-                        RegQueryValue,
-                        RegRenameKey,
-                        RegSetInfoKey,
-                        RegSetKeySecurity,
-                        RegSetValue,
-                        RegUnloadKey,
-                        RemoveDevice,
-                        SetAllocationInformationFile,
-                        SetBasicInformationFile,
-                        SetDispositionInformationEx,
-                        SetDispositionInformationFile,
-                        SetEAFile,
-                        SetEndOfFileInformationFile,
-                        SetFileQuota,
-                        SetFileStreamInformation,
-                        SetLinkInformationFile,
-                        SetLock,
-                        SetPipeInformation,
-                        SetPositionInformationFile,
-                        SetRenameInformationEx,
-                        SetRenameInformationExBypassAccessCheck,
-                        SetRenameInformationFile,
-                        SetReplaceCompletionInformation,
-                        SetSecurityFile,
-                        SetShortNameInformation,
-                        SetValidDataLengthInformationFile,
-                        SetVolumeInformation,
-                        Shutdown,
-                        StartDevice,
-                        StopDevice,
-                        SurpriseRemoval,
-                        SystemStatistics,
-                        SystemControl,
-                        TCPAccept,
-                        TCPConnect,
-                        TCPDisconnect,
-                        TCPOther,
-                        TCPReceive,
-                        TCPReconnect,
-                        TCPRetransmit,
-                        TCPSend,
-                        TCPTCPCopy,
-                        TCPUnknown,
-                        ThreadCreate,
-                        ThreadExit,
-                        ThreadProfile,
-                        ThreadProfiling,
-                        UDPAccept,
-                        UDPConnect,
-                        UDPDisconnect,
-                        UDPOther,
-                        UDPReceive,
-                        UDPReconnect,
-                        UDPRetransmit,
-                        UDPSend,
-                        UDPTCPCopy,
-                        UDPUnknown,
-                        UnlockFileAll,
-                        UnlockFileByKey,
-                        UnlockFileSingle,
-                        VolumeDismount,
-                        VolumeMount,
-                        WriteConfig,
-                        WriteFile
-        }
+        //public enum OperationType {
+        //                All_Operations,
+        //                CancelRemoveDevice,
+        //                CancelStopDevice,
+        //                CloseFile,
+        //                CreateFile,
+        //                CreateFileMapping,
+        //                CreateMailSlot,
+        //                CreatePipe,
+        //                DebugOutputProfiling,
+        //                DeviceChange,
+        //                DeviceIoControl,
+        //                DeviceUsageNotification,
+        //                Eject,
+        //                FileSystemControl,
+        //                FilterResourceRequirements,
+        //                FlushBuffersFile,
+        //                InternalDeviceIoControl,
+        //                LoadImage,
+        //                LockFile,
+        //                NotifyChangeDirectory,
+        //                Power,
+        //                ProcessCreate,
+        //                ProcessExit,
+        //                ProcessProfiling,
+        //                ProcessStart,
+        //                ProcessStatistics,
+        //                QueryAllInformationFile,
+        //                QueryAttributeCacheInformation,
+        //                QueryAttributeInformationVolume,
+        //                QueryAttributeTag,
+        //                QueryAttributeTagFile,
+        //                QueryBasicInformationFile,
+        //                QueryBusInformation,
+        //                QueryCapabilities,
+        //                QueryCompressionInformationFile,
+        //                QueryControlInformationVolume,
+        //                QueryDesiredStorageClassInformation,
+        //                QueryDeviceInformationVolume,
+        //                QueryDeviceRelations,
+        //                QueryDeviceText,
+        //                QueryDirectory,
+        //                QueryEAFile,
+        //                QueryEaInformationFile,
+        //                QueryEndOfFile,
+        //                QueryFileInternalInformationFile,
+        //                QueryFileQuota,
+        //                QueryFullSizeInformationVolume,
+        //                QueryHardLinkFullIdInformation,
+        //                QueryId,
+        //                QueryIdBothDirectory,
+        //                QueryIdExtdBothDirectoryInformation,
+        //                QueryIdExtdDirectoryInformation,
+        //                QueryIdGlobalTxDirectoryInformation,
+        //                QueryIdInformation,
+        //                QueryInformationVolume,
+        //                QueryInterface,
+        //                QueryIoPiorityHint,
+        //                QueryIsRemoteDeviceInformation,
+        //                QueryLabelInformationVolume,
+        //                QueryLegacyBusInformation,
+        //                QueryLinkInformationBypassAccessCheck,
+        //                QueryLinks,
+        //                QueryMemoryPartitionInformation,
+        //                QueryMoveClusterInformationFile,
+        //                QueryNameInformationFile,
+        //                QueryNetworkOpenInformationFile,
+        //                QueryNetworkPhysicalNameInformationFile,
+        //                QueryNormalizedNameInformationFile,
+        //                QueryNumaNodeInformation,
+        //                QueryObjectIdInformationVolume,
+        //                QueryOpen,
+        //                QueryPnpDeviceState,
+        //                QueryPositionInformationFile,
+        //                QueryRemoteProtocolInformation,
+        //                QueryRemoveDevice,
+        //                QueryRenameInformationBypassAccessCheck,
+        //                QueryResourceRequirements,
+        //                QueryResources,
+        //                QuerySecurityFile,
+        //                QueryShortNameInformationFile,
+        //                QuerySizeInformationVolume,
+        //                QueryStandardInformationFile,
+        //                QueryStandardLinkInformation,
+        //                QueryStatInformation,
+        //                QueryStopDevice,
+        //                QueryStreamInformationFile,
+        //                QueryValidDataLength,
+        //                QueryVolumeNameInformation,
+        //                ReadConfig,
+        //                ReadFile,
+        //                RegCloseKey,
+        //                RegCreateKey,
+        //                RegDeleteKey,
+        //                RegDeleteValue,
+        //                RegEnumKey,
+        //                RegEnumValue,
+        //                RegFlushKey,
+        //                RegLoadKey,
+        //                RegOpenKey,
+        //                RegQueryKey,
+        //                RegQueryKeySecurity,
+        //                RegQueryMultipleValueKey,
+        //                RegQueryValue,
+        //                RegRenameKey,
+        //                RegSetInfoKey,
+        //                RegSetKeySecurity,
+        //                RegSetValue,
+        //                RegUnloadKey,
+        //                RemoveDevice,
+        //                SetAllocationInformationFile,
+        //                SetBasicInformationFile,
+        //                SetDispositionInformationEx,
+        //                SetDispositionInformationFile,
+        //                SetEAFile,
+        //                SetEndOfFileInformationFile,
+        //                SetFileQuota,
+        //                SetFileStreamInformation,
+        //                SetLinkInformationFile,
+        //                SetLock,
+        //                SetPipeInformation,
+        //                SetPositionInformationFile,
+        //                SetRenameInformationEx,
+        //                SetRenameInformationExBypassAccessCheck,
+        //                SetRenameInformationFile,
+        //                SetReplaceCompletionInformation,
+        //                SetSecurityFile,
+        //                SetShortNameInformation,
+        //                SetValidDataLengthInformationFile,
+        //                SetVolumeInformation,
+        //                Shutdown,
+        //                StartDevice,
+        //                StopDevice,
+        //                SurpriseRemoval,
+        //                SystemStatistics,
+        //                SystemControl,
+        //                TCPAccept,
+        //                TCPConnect,
+        //                TCPDisconnect,
+        //                TCPOther,
+        //                TCPReceive,
+        //                TCPReconnect,
+        //                TCPRetransmit,
+        //                TCPSend,
+        //                TCPTCPCopy,
+        //                TCPUnknown,
+        //                ThreadCreate,
+        //                ThreadExit,
+        //                ThreadProfile,
+        //                ThreadProfiling,
+        //                UDPAccept,
+        //                UDPConnect,
+        //                UDPDisconnect,
+        //                UDPOther,
+        //                UDPReceive,
+        //                UDPReconnect,
+        //                UDPRetransmit,
+        //                UDPSend,
+        //                UDPTCPCopy,
+        //                UDPUnknown,
+        //                UnlockFileAll,
+        //                UnlockFileByKey,
+        //                UnlockFileSingle,
+        //                VolumeDismount,
+        //                VolumeMount,
+        //                WriteConfig,
+        //                WriteFile
+        //}
         public Form1()
         {
             InitializeComponent();
             this.CenterToScreen();
-            OperationComboBox.DataSource = Enum.GetNames(typeof(OperationType));
-            OperationComboBox.SelectedIndex = 0;
+            //OperationComboBox.DataSource = Enum.GetNames(typeof(OperationType));
+            //OperationComboBox.SelectedIndex = 0;
 
         }
        
@@ -242,6 +242,7 @@ namespace TestAppFileRead
             dataTable.Columns.Add("Path");
 
             string filePath = textBoxFilePath.Text;
+
             //try
             //{
                 StreamReader streamReader = new StreamReader(filePath);
@@ -254,16 +255,12 @@ namespace TestAppFileRead
 
 
                 FindFileSize(filePath, out megabyteOrKilobyte, out fileSize);
-
-                //Confirm if the file size is exceptable to load
-                //if (MessageBox.Show("The file size is " + megabyteOrKilobyte + "" + ". Do you want to load it?", " Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                //{
                 //progress bar
                 loadingForm load = new loadingForm(megabyteOrKilobyte, dataGridView1, this, fileSize, progress);
                 load.Show();
                 //Reset the data grid
                 dataGridView1.DataSource = null;
-               
+
                 if (fileSize != 0)
                 {
                     string line = streamReader.ReadLine();
@@ -284,7 +281,8 @@ namespace TestAppFileRead
                             break;
                         }
                         Application.DoEvents();
-                        
+
+                        //to deal with arrays of different sizes
                         if (totalData.Length == 15)
                         {
                             dataTable.Rows.Add(
@@ -309,11 +307,6 @@ namespace TestAppFileRead
                                         totalData[PM_Path]
                                       );
                         }
-                        if(totalData.Length < 14)
-                        {
-
-                        }
-                       
 
                     }
 
@@ -321,16 +314,12 @@ namespace TestAppFileRead
                     ProcessFileData(dataTable, load);
 
                 }
-            //}
-            //else
+        
+            //}//end try
+            //catch (Exception exc)
             //{
-            //   
-        //    //}
-        //}
-        //    catch (Exception exc)
-        //    {
-        //        MessageBox.Show(exc.Message);
-        //    }
+            //    MessageBox.Show(exc.Message);
+            //}
 
 }
 
@@ -360,7 +349,6 @@ namespace TestAppFileRead
 
                     try
                     {
-                        //totalData[PM_TimeOfDay] = totalData[PM_TimeOfDay].Substring(0, 8);
                         totalData[PM_Operation] = totalData[PM_Operation].Replace(" ", "");
 
                         if (totalData[PM_FileName] == "")
@@ -536,14 +524,13 @@ namespace TestAppFileRead
         {
             var ProcessFileList = new List<ProcessData>();
             var ProcessIDList = new List<ProcessData>();
-
+            
             int[] topLengths = new int[10];
             int[] topIDLengths = new int[10];
             string[] topFileNames = new string[10];
             string[] topProcessID = new string[10];
-
+            
             int processLength = 0;
-            //int processOffset = 0;
             string processName = "";
             string processFileName = "";
             string processPath = "";
@@ -559,123 +546,134 @@ namespace TestAppFileRead
             //find the rows with the matching process key and then add the length for
             //each of these rows together and select the top ten values 
             //to populate the bar chart
-            try
+            
+            foreach (DataGridViewRow row in dataGridView1.Rows)
             {
-                foreach (DataGridViewRow row in dataGridView1.Rows)
+                try
                 {
                     processFileName = row.Cells[DG_FileName].Value.ToString();
                     processName = row.Cells[DG_Name].Value.ToString();
                     processOperation = row.Cells[DG_Operation].Value.ToString();
                     processPID = row.Cells[DG_PID].Value.ToString();
                     processPath = row.Cells[DG_Path].Value.ToString();
-                    processLength = Convert.ToInt32(row.Cells[DG_Length].Value);
+                    int iPL = 0;
+                    int.TryParse(row.Cells[DG_Length].Value.ToString(), out iPL);
+                    processLength = iPL;
+
+                    
 
                     processKeyString = processName + "|" + processPID + "|" + processPath;
-                    //If the process processKey is found in the list
-                    //append the length value
-                    processFound = false;
-                    foreach (var item in ProcessFileList)
-                    {
-                        if (item.ProcessKey == processKeyString)
-                        {
-
-                            item.ProcessLength += processLength;
-                            processFound = true;
-                            break;
-                        }
-
-
-                    }
-
-                    //else add a new process to the list
-                    if (processFound == false)
-                    {
-                        ProcessFileList.Add(new ProcessData
-                        {
-                            ProcessLength = processLength,
-                            ProcessName = processName,
-                            Operation = processOperation,
-                            ProcessPID = processPID,
-                            ProcessPath = processPath,
-                            ProcessKey = processKeyString,
-                            ProcessFileName = processFileName
-                        });
-                    }
-                    //########################################################
-
                     processKeyID = processName + "|" + processPID;
                     //If the process processKey is found in the list
                     //append the length value
-                    processIDFound = false;
-                    foreach (var item in ProcessIDList)
-                    {
-                        if (item.ProcessKey == processKeyID)
-                        {
-                            item.ProcessLength += processLength;
-                            processIDFound = true;
-                            break;
-                        }
-                    }
-                    if (processIDFound == false)
-                    {
-                        ProcessIDList.Add(new ProcessData
-                        {
-                            ProcessLength = processLength,
-                            ProcessName = processName,
-                            Operation = processOperation,
-                            ProcessPID = processPID,
-                            ProcessPath = processPath,
-                            ProcessKey = processKeyID,
-                            ProcessFileName = processFileName
-                        });
-                    }
-                    //#############################################################
+                    processFound = AppendLength(ProcessFileList, processLength, processKeyString);
 
-                    //To ensure it doesn't spill over and cause 
-                    //an null object reference
+                    processIDFound = AppendLength(ProcessIDList, processLength, processKeyID);
+
+                    AddNewItemToList(ProcessFileList, processLength, processName, processFileName, processPath, processPID, processOperation, processFound, processKeyString);
+
+                    AddNewItemToList(ProcessIDList, processLength, processName, processFileName, processPath, processPID, processOperation, processIDFound, processKeyID);
+
+                    ComboBoxListItems(operationList, processOperation);
+
+
                     loopCounter++;
                     if (loopCounter == dataGridView1.RowCount - 1)
                         break;
+
                 }
-                
+                catch (Exception exc)
+                {
+                    MessageBox.Show(exc.Message);
+                }
             }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.Message);
-            }
-            //All files accessed
+
+           
 
             SortedFileList(ProcessFileList);
 
-            //All processes executed
             SortedProcessList(ProcessIDList);
 
-            //Combobox filter
-            string operationName = OperationComboBox.SelectedValue.ToString();
+            FilterOnCombobox(ProcessFileList, ProcessIDList, topLengths, topIDLengths, topFileNames, topProcessID);
 
-            //var selectedOperation = (ProcessFileList.OrderByDescending(i => i.ProcessLength).Where(p => p.Operation == operationName));
-
-
+            PopulateChart(topLengths, topIDLengths, topFileNames, topProcessID);
 
             totalProcessesLabel.Text = ProcessFileList.Count().ToString();
-
-            if (operationName == "All")
-            {
-                GetDataForCharts(ProcessFileList, ProcessIDList, topLengths, topIDLengths, topFileNames, topProcessID);
-
-            }
-            else
-            {
-                OperationComboBox_SelectedIndexChanged(ProcessFileList, ProcessIDList);
-                GetDataForCharts(ProcessFileList, ProcessIDList, topLengths, topIDLengths, topFileNames, topProcessID);
-
-            }
-            PopulateChart(topLengths, topIDLengths, topFileNames, topProcessID);
 
 
         }
 
+        private void ComboBoxListItems(List<string> operationList, string processOperation)
+        {
+            
+            bool alreadyExists = operationList.Any(x => x.Contains(processOperation));
+            if (alreadyExists == false)
+            {
+                operationList.Add(processOperation);
+                OperationComboBox.Items.Add(processOperation);
+            }
+ 
+        }
 
+        //add a new process to the list
+        private static void AddNewItemToList(List<ProcessData> ProcessFileList, int processLength, string processName, string processFileName, string processPath, string processPID, string processOperation, bool processFound, string keyString)
+        {
+            if (processFound == false)
+            {
+                ProcessFileList.Add(new ProcessData
+                {
+                    ProcessLength = processLength,
+                    ProcessName = processName,
+                    Operation = processOperation,
+                    ProcessPID = processPID,
+                    ProcessPath = processPath,
+                    ProcessKey = keyString,
+                    ProcessFileName = processFileName
+                });
+            }
+        }
+
+        //Append the length value
+        private static bool AppendLength(List<ProcessData> fileList, int length, string keyString)
+        {
+            bool processFound = false;
+            foreach (var item in fileList)
+            {
+                if (item.ProcessKey == keyString)
+                {
+
+                    item.ProcessLength += length;
+                    processFound = true;
+                    break;
+                }
+
+
+            }
+
+            return processFound;
+        }
+
+        private void FilterOnCombobox(List<ProcessData> ProcessFileList, List<ProcessData> ProcessIDList, int[] topLengths, int[] topIDLengths, string[] topFileNames, string[] topProcessID)
+        {
+
+
+            if (OperationComboBox.SelectedItem == null)
+            {
+                int i = operationList.FindIndex(x => x.StartsWith("WriteFile"));
+                if (operationList.Contains("WriteFile"))
+                {
+                    OperationComboBox.SelectedIndex = i;
+                }
+                else
+                {
+                    OperationComboBox.SelectedIndex = 0;
+                }
+            }
+            string operationName = OperationComboBox.SelectedItem.ToString();
+            OperationComboBox_SelectedIndexChanged(ProcessFileList, ProcessIDList);
+            GetDataForCharts(ProcessFileList, ProcessIDList, topLengths, topIDLengths, topFileNames, topProcessID);
+
+        }
 
         private void SortedFileList(List<ProcessData> ProcessFileList)
         {
@@ -734,43 +732,37 @@ namespace TestAppFileRead
         //Add the top ten files and lengths
         private void GetDataForCharts(List<ProcessData> ProcessFileList, List<ProcessData> ProcessIDList, int[] topLengths, int[] topIDLengths, string[] topFileNames, string[] topProcessID)
         {
-            var topTenIDList = (ProcessIDList.OrderByDescending(i => i.ProcessLength).Take(10));
 
-            var topTenList = (ProcessFileList.OrderByDescending(i => i.ProcessLength).Take(10));
+            string operationValue = OperationComboBox.SelectedItem.ToString();
+            var query = from ProcessData data in ProcessFileList
+                        where data.Operation == operationValue
+                        orderby data.ProcessLength descending
+                        select data;
+            var topTenIDList = (query.OrderByDescending(i => i.ProcessLength).Take(10));
+
+            var query2 = from ProcessData data in ProcessIDList
+                         where data.Operation == operationValue
+                        orderby data.ProcessLength descending
+                        select data;
+            var topTenList = (query2.OrderByDescending(i => i.ProcessLength).Take(10));
             
             int topListCounter = 0;
-
-            foreach (var item in topTenList)
+            foreach (var item in topTenIDList)
             {
-                for (int i = 0; i < topLengths.Length; i++)
-                {
+                        topLengths[topListCounter] = Convert.ToInt32(item.ProcessLength);
+                        topFileNames[topListCounter] = item.ProcessFileName;
 
-                    if (topListCounter == i)
-                    {
-                        topLengths[i] = Convert.ToInt32(item.ProcessLength);
-                        topFileNames[i] = item.ProcessFileName;
-                    }
-
-                }
                 topListCounter++;
-
             }
 
             int topProcessCounter = 0;
-            foreach (var item in topTenIDList)
+            foreach (var item in topTenList)
             {
-                for (int i = 0; i < topIDLengths.Length; i++)
-                {
-
-                    if (topProcessCounter == i)
-                    {
                         //Convert byte to kilobyte
-                        topIDLengths[i] = Convert.ToInt32(item.ProcessLength);
-                        topProcessID[i] = item.ProcessName + " " + item.ProcessPID;
+                        topIDLengths[topProcessCounter] = Convert.ToInt32(item.ProcessLength);
+                        topProcessID[topProcessCounter] = item.ProcessName + " " + item.ProcessPID;
 
-                    }
-
-                }
+              
                 topProcessCounter++;
 
             }
@@ -813,11 +805,8 @@ namespace TestAppFileRead
 
         private void OperationComboBox_SelectedIndexChanged(List<ProcessData> dataFileList, List<ProcessData> dataProcessesList)
         {
-            string operationValue = OperationComboBox.SelectedValue.ToString();
-            operationValue.Replace(" ", "");
-            if (operationValue != "All_Operations")
-            {
-                var query = from ProcessData data in dataFileList
+            string operationValue = OperationComboBox.SelectedItem.ToString();
+                           var query = from ProcessData data in dataFileList
                             where data.Operation == operationValue
                             orderby data.ProcessLength descending
                             select data;
@@ -830,9 +819,9 @@ namespace TestAppFileRead
                 dataProcessesList = query.GroupBy(x => x.ProcessName).Select(x => x.First()).ToList();
                 dataGridViewProcesses.DataSource = null;
                 dataGridViewProcesses.DataSource = dataProcessesList;
-            }
+            
         }
 
-       
+        
     }
 }
