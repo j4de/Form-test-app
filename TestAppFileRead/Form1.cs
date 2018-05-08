@@ -564,15 +564,15 @@ namespace TestAppFileRead
 
                     processKeyString = processName + "|" + processPID + "|" + processPath;
                     processKeyID = processName + "|" + processPID;
+
+                    AddNewItemToList(ProcessFileList, processLength, processName, processFileName, processPath, processPID, processOperation, processFound, processKeyString);
                     //If the process processKey is found in the list
                     //append the length value
                     processFound = AppendLength(ProcessFileList, processLength, processKeyString);
 
-                    processIDFound = AppendLength(ProcessIDList, processLength, processKeyID);
-
-                    AddNewItemToList(ProcessFileList, processLength, processName, processFileName, processPath, processPID, processOperation, processFound, processKeyString);
-
                     AddNewItemToList(ProcessIDList, processLength, processName, processFileName, processPath, processPID, processOperation, processIDFound, processKeyID);
+
+                    processIDFound = AppendLength(ProcessIDList, processLength, processKeyID);
 
                     ComboBoxListItems(operationList, processOperation);
 
@@ -631,6 +631,7 @@ namespace TestAppFileRead
                     ProcessFileName = processFileName
                 });
             }
+            
         }
 
         //Append the length value
