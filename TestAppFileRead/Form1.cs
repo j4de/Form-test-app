@@ -39,183 +39,15 @@ namespace TestAppFileRead
         //To parse the Length value from the column => details
         public static Regex regexLength = new Regex(@"Length:\s*(?<getLengthNum>\d+(,\d+)*)", RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
-        //public enum OperationType {
-        //                All_Operations,
-        //                CancelRemoveDevice,
-        //                CancelStopDevice,
-        //                CloseFile,
-        //                CreateFile,
-        //                CreateFileMapping,
-        //                CreateMailSlot,
-        //                CreatePipe,
-        //                DebugOutputProfiling,
-        //                DeviceChange,
-        //                DeviceIoControl,
-        //                DeviceUsageNotification,
-        //                Eject,
-        //                FileSystemControl,
-        //                FilterResourceRequirements,
-        //                FlushBuffersFile,
-        //                InternalDeviceIoControl,
-        //                LoadImage,
-        //                LockFile,
-        //                NotifyChangeDirectory,
-        //                Power,
-        //                ProcessCreate,
-        //                ProcessExit,
-        //                ProcessProfiling,
-        //                ProcessStart,
-        //                ProcessStatistics,
-        //                QueryAllInformationFile,
-        //                QueryAttributeCacheInformation,
-        //                QueryAttributeInformationVolume,
-        //                QueryAttributeTag,
-        //                QueryAttributeTagFile,
-        //                QueryBasicInformationFile,
-        //                QueryBusInformation,
-        //                QueryCapabilities,
-        //                QueryCompressionInformationFile,
-        //                QueryControlInformationVolume,
-        //                QueryDesiredStorageClassInformation,
-        //                QueryDeviceInformationVolume,
-        //                QueryDeviceRelations,
-        //                QueryDeviceText,
-        //                QueryDirectory,
-        //                QueryEAFile,
-        //                QueryEaInformationFile,
-        //                QueryEndOfFile,
-        //                QueryFileInternalInformationFile,
-        //                QueryFileQuota,
-        //                QueryFullSizeInformationVolume,
-        //                QueryHardLinkFullIdInformation,
-        //                QueryId,
-        //                QueryIdBothDirectory,
-        //                QueryIdExtdBothDirectoryInformation,
-        //                QueryIdExtdDirectoryInformation,
-        //                QueryIdGlobalTxDirectoryInformation,
-        //                QueryIdInformation,
-        //                QueryInformationVolume,
-        //                QueryInterface,
-        //                QueryIoPiorityHint,
-        //                QueryIsRemoteDeviceInformation,
-        //                QueryLabelInformationVolume,
-        //                QueryLegacyBusInformation,
-        //                QueryLinkInformationBypassAccessCheck,
-        //                QueryLinks,
-        //                QueryMemoryPartitionInformation,
-        //                QueryMoveClusterInformationFile,
-        //                QueryNameInformationFile,
-        //                QueryNetworkOpenInformationFile,
-        //                QueryNetworkPhysicalNameInformationFile,
-        //                QueryNormalizedNameInformationFile,
-        //                QueryNumaNodeInformation,
-        //                QueryObjectIdInformationVolume,
-        //                QueryOpen,
-        //                QueryPnpDeviceState,
-        //                QueryPositionInformationFile,
-        //                QueryRemoteProtocolInformation,
-        //                QueryRemoveDevice,
-        //                QueryRenameInformationBypassAccessCheck,
-        //                QueryResourceRequirements,
-        //                QueryResources,
-        //                QuerySecurityFile,
-        //                QueryShortNameInformationFile,
-        //                QuerySizeInformationVolume,
-        //                QueryStandardInformationFile,
-        //                QueryStandardLinkInformation,
-        //                QueryStatInformation,
-        //                QueryStopDevice,
-        //                QueryStreamInformationFile,
-        //                QueryValidDataLength,
-        //                QueryVolumeNameInformation,
-        //                ReadConfig,
-        //                ReadFile,
-        //                RegCloseKey,
-        //                RegCreateKey,
-        //                RegDeleteKey,
-        //                RegDeleteValue,
-        //                RegEnumKey,
-        //                RegEnumValue,
-        //                RegFlushKey,
-        //                RegLoadKey,
-        //                RegOpenKey,
-        //                RegQueryKey,
-        //                RegQueryKeySecurity,
-        //                RegQueryMultipleValueKey,
-        //                RegQueryValue,
-        //                RegRenameKey,
-        //                RegSetInfoKey,
-        //                RegSetKeySecurity,
-        //                RegSetValue,
-        //                RegUnloadKey,
-        //                RemoveDevice,
-        //                SetAllocationInformationFile,
-        //                SetBasicInformationFile,
-        //                SetDispositionInformationEx,
-        //                SetDispositionInformationFile,
-        //                SetEAFile,
-        //                SetEndOfFileInformationFile,
-        //                SetFileQuota,
-        //                SetFileStreamInformation,
-        //                SetLinkInformationFile,
-        //                SetLock,
-        //                SetPipeInformation,
-        //                SetPositionInformationFile,
-        //                SetRenameInformationEx,
-        //                SetRenameInformationExBypassAccessCheck,
-        //                SetRenameInformationFile,
-        //                SetReplaceCompletionInformation,
-        //                SetSecurityFile,
-        //                SetShortNameInformation,
-        //                SetValidDataLengthInformationFile,
-        //                SetVolumeInformation,
-        //                Shutdown,
-        //                StartDevice,
-        //                StopDevice,
-        //                SurpriseRemoval,
-        //                SystemStatistics,
-        //                SystemControl,
-        //                TCPAccept,
-        //                TCPConnect,
-        //                TCPDisconnect,
-        //                TCPOther,
-        //                TCPReceive,
-        //                TCPReconnect,
-        //                TCPRetransmit,
-        //                TCPSend,
-        //                TCPTCPCopy,
-        //                TCPUnknown,
-        //                ThreadCreate,
-        //                ThreadExit,
-        //                ThreadProfile,
-        //                ThreadProfiling,
-        //                UDPAccept,
-        //                UDPConnect,
-        //                UDPDisconnect,
-        //                UDPOther,
-        //                UDPReceive,
-        //                UDPReconnect,
-        //                UDPRetransmit,
-        //                UDPSend,
-        //                UDPTCPCopy,
-        //                UDPUnknown,
-        //                UnlockFileAll,
-        //                UnlockFileByKey,
-        //                UnlockFileSingle,
-        //                VolumeDismount,
-        //                VolumeMount,
-        //                WriteConfig,
-        //                WriteFile
-        //}
+        
         public Form1()
         {
             InitializeComponent();
             this.CenterToScreen();
-            //OperationComboBox.DataSource = Enum.GetNames(typeof(OperationType));
-            //OperationComboBox.SelectedIndex = 0;
+            
 
         }
-       
+        
         //Get the file path selected.
         //Filter setup for CSV files in Form1.designer.cs
         private void GetFileButton(object sender, EventArgs e)
@@ -240,11 +72,11 @@ namespace TestAppFileRead
             dataTable.Columns.Add("Operation");
             dataTable.Columns.Add("Length");
             dataTable.Columns.Add("Path");
-
+            
             string filePath = textBoxFilePath.Text;
 
-            //try
-            //{
+            try
+            {
                 StreamReader streamReader = new StreamReader(filePath);
                 string[] totalData = new string[File.ReadAllLines(filePath).Length];
 
@@ -273,6 +105,10 @@ namespace TestAppFileRead
 
                         stringSize = line.Length;
                         progress += stringSize;
+                        if (progress>7000000)
+                        {
+                            load.setprogress(progress);
+                        }
                         Update();
                         load.setprogress(progress);
                         if (load.iscanceled())
@@ -314,14 +150,14 @@ namespace TestAppFileRead
                     ProcessFileData(dataTable, load);
 
                 }
-        
-            //}//end try
-            //catch (Exception exc)
-            //{
-            //    MessageBox.Show(exc.Message);
-            //}
 
-}
+            }//end try
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+
+        }
 
       
         private void ProcessFileData(DataTable dataTable, loadingForm load)
@@ -464,7 +300,7 @@ namespace TestAppFileRead
                     }
                     sw.WriteLine(rowdata);
                     //break out of loop to avoid null object reference
-                    if (i == DGV.RowCount - 1)
+                    if (i == DGV.RowCount)
                         break;
                 }
             }
@@ -562,17 +398,20 @@ namespace TestAppFileRead
 
                     
 
-                    processKeyString = processName + "|" + processPID + "|" + processPath;
-                    processKeyID = processName + "|" + processPID;
+                    processKeyString = processName + "|" + processPID + "|" + processPath+ "|"+ processOperation;
+                    processKeyID = processName + "|" + processPID + "|" + processOperation;
 
-                    AddNewItemToList(ProcessFileList, processLength, processName, processFileName, processPath, processPID, processOperation, processFound, processKeyString);
-                    //If the process processKey is found in the list
-                    //append the length value
+                    //If the processKey is found in the list, append the length value and set processFound to true
                     processFound = AppendLength(ProcessFileList, processLength, processKeyString);
-
+                    if (processFound == false)
+                    {
+                        AddNewItemToList(ProcessFileList, processLength, processName, processFileName, processPath, processPID, processOperation, processFound, processKeyString);
+                    }
+                    
+                    processIDFound = AppendLength(ProcessIDList, processLength, processKeyID);
                     AddNewItemToList(ProcessIDList, processLength, processName, processFileName, processPath, processPID, processOperation, processIDFound, processKeyID);
 
-                    processIDFound = AppendLength(ProcessIDList, processLength, processKeyID);
+
 
                     ComboBoxListItems(operationList, processOperation);
 
@@ -648,7 +487,6 @@ namespace TestAppFileRead
                     break;
                 }
 
-
             }
 
             return processFound;
@@ -670,6 +508,7 @@ namespace TestAppFileRead
                     OperationComboBox.SelectedIndex = 0;
                 }
             }
+            
             string operationName = OperationComboBox.SelectedItem.ToString();
             OperationComboBox_SelectedIndexChanged(ProcessFileList, ProcessIDList);
             GetDataForCharts(ProcessFileList, ProcessIDList, topLengths, topIDLengths, topFileNames, topProcessID);
@@ -735,6 +574,7 @@ namespace TestAppFileRead
         {
 
             string operationValue = OperationComboBox.SelectedItem.ToString();
+
             var query = from ProcessData data in ProcessFileList
                         where data.Operation == operationValue
                         orderby data.ProcessLength descending
@@ -743,10 +583,12 @@ namespace TestAppFileRead
 
             var query2 = from ProcessData data in ProcessIDList
                          where data.Operation == operationValue
-                        orderby data.ProcessLength descending
-                        select data;
+                         orderby data.ProcessLength descending
+                         select data;
             var topTenList = (query2.OrderByDescending(i => i.ProcessLength).Take(10));
-            
+
+           
+
             int topListCounter = 0;
             foreach (var item in topTenIDList)
             {
@@ -807,7 +649,7 @@ namespace TestAppFileRead
         private void OperationComboBox_SelectedIndexChanged(List<ProcessData> dataFileList, List<ProcessData> dataProcessesList)
         {
             string operationValue = OperationComboBox.SelectedItem.ToString();
-                           var query = from ProcessData data in dataFileList
+                var query = from ProcessData data in dataFileList
                             where data.Operation == operationValue
                             orderby data.ProcessLength descending
                             select data;

@@ -28,7 +28,7 @@ namespace TestAppFileRead
             check = frm;
             sizefile = filesize;
             totprogress = progress;
-            progressBar1.Maximum =Convert.ToInt32(filesize);
+            progressBar1.Maximum = 100;
         }
 
         private void loadingForm_Load(object sender, EventArgs e)
@@ -45,7 +45,8 @@ namespace TestAppFileRead
 
         internal void setprogress(long progress)
         {
-            progressBar1.Value =Convert.ToInt32(progress);
+            int per = (int)(((double)progress / (double)sizefile )* 100);
+            progressBar1.Value = per;
             //if (progressBar1.Value == progressBar1.Maximum)
             //{
             //    complete = true;
