@@ -639,11 +639,49 @@ namespace TestAppFileRead
         {
             this.Close();
         }
+       
+        private void SaveXML()
+        {
+            string filename = "";
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "XML (*.xml)|*.xml",
+                FileName = ""
+            };
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                filename = sfd.FileName;
+                Deleteifexists(filename);
+                DataTable dt = new DataTable("itemstable");
 
+                for (int i = 0; i < dataGridView1.ColumnCount; i++)
+                {
+                    dt.Columns.Add(dataGridView1.Columns[i].Name, typeof(System.String));
+                }
+
+                DataRow myrow;
+                int icols = dataGridView1.Columns.Count;
+                foreach (DataGridViewRow drow in this.dataGridView1.Rows)
+                {
+                    myrow = dt.NewRow();
+                    for (int i = 0; i <= icols - 1; i++)
+                    {
+
+                        myrow[i] = drow.Cells[i].Value;
+                    }
+                    dt.Rows.Add(myrow);
+                }
+
+                dt.WriteXml(filename);
+            }
+            
+
+        }
         private void SaveButton(object sender, EventArgs e)
         {
             SaveToCSV(dataGridView1);
             SaveToCSV(dataGridViewProcesses);
+
         }
 
         private void OperationComboBox_SelectedIndexChanged(List<ProcessData> dataFileList, List<ProcessData> dataProcessesList)
