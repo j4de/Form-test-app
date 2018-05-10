@@ -256,6 +256,8 @@ namespace TestAppFileRead
             return totalData;
         }
 
+       
+
         private void SaveToCSV(DataGridView DGVfiles)
         {
             string filename = "";
@@ -642,8 +644,9 @@ namespace TestAppFileRead
 
         private void SaveButton(object sender, EventArgs e)
         {
-            SaveToCSV(dataGridView1);
-            SaveToCSV(dataGridViewProcesses);
+            //SaveToCSV(dataGridView1);
+            //SaveToCSV(dataGridViewProcesses);
+            SaveToXML(dataGridView1);
         }
 
         private void OperationComboBox_SelectedIndexChanged(List<ProcessData> dataFileList, List<ProcessData> dataProcessesList)
