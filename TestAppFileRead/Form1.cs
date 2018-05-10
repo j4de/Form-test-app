@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Xml;
 
 namespace TestAppFileRead
 {
@@ -27,6 +29,7 @@ namespace TestAppFileRead
         private int PM_Length = 14;
 
         //DataGridView data
+        private int DG_Time = 0;
         private int DG_Name = 1;
         private int DG_PID = 2;
         private int DG_FileName = 3;
@@ -145,7 +148,7 @@ namespace TestAppFileRead
                         }
 
                     }
-
+                    
                     //If file load is not cancelled
                     ProcessFileData(dataTable, load);
 
@@ -164,7 +167,7 @@ namespace TestAppFileRead
         {
             if (!load.iscanceled())
             {
-                dataGridView1.DataSource = null;
+                dataGridView1.DataSource = null;              
                 dataGridView1.DataSource = dataTable;
                 FindLengthForEachProcess();
                 load.Close();
@@ -177,6 +180,7 @@ namespace TestAppFileRead
             string defaultLengthValue = "0";
             string defaultPath = "noFilePathFound";
             string[] totalData = streamReader.ReadLine().Split('"');
+            
             if (totalData.Length == 14)
             {
 
@@ -186,7 +190,7 @@ namespace TestAppFileRead
                     try
                     {
                         totalData[PM_Operation] = totalData[PM_Operation].Replace(" ", "");
-
+                        totalData[PM_TimeOfDay] = totalData[PM_TimeOfDay].Substring(0, 8);
                         if (totalData[PM_FileName] == "")
                         {
                             totalData[PM_FileName] = defaultPath;
@@ -225,6 +229,7 @@ namespace TestAppFileRead
                         if (totalData.Length > 12)
                         {
                             totalData[PM_Operation] = totalData[PM_Operation].Replace(" ", "");
+                            totalData[PM_TimeOfDay] = totalData[PM_TimeOfDay].Substring(0, 8);
                             if (totalData[PM_FileName] == "")
                             {
                                 totalData[PM_FileName] = defaultPath;
@@ -367,6 +372,7 @@ namespace TestAppFileRead
             string[] topProcessID = new string[10];
             
             int processLength = 0;
+            string processTime;
             string processName = "";
             string processFileName = "";
             string processPath = "";
@@ -387,6 +393,7 @@ namespace TestAppFileRead
             {
                 try
                 {
+                    processTime = row.Cells[DG_Time].Value.ToString();
                     processFileName = row.Cells[DG_FileName].Value.ToString();
                     processName = row.Cells[DG_Name].Value.ToString();
                     processOperation = row.Cells[DG_Operation].Value.ToString();
@@ -405,11 +412,11 @@ namespace TestAppFileRead
                     processFound = AppendLength(ProcessFileList, processLength, processKeyString);
                     if (processFound == false)
                     {
-                        AddNewItemToList(ProcessFileList, processLength, processName, processFileName, processPath, processPID, processOperation, processFound, processKeyString);
+                        AddNewItemToList(ProcessFileList,  processLength, processName, processTime, processFileName, processPath, processPID, processOperation, processFound, processKeyString);
                     }
                     
                     processIDFound = AppendLength(ProcessIDList, processLength, processKeyID);
-                    AddNewItemToList(ProcessIDList, processLength, processName, processFileName, processPath, processPID, processOperation, processIDFound, processKeyID);
+                    AddNewItemToList(ProcessIDList, processLength, processName, processTime, processFileName,  processPath, processPID, processOperation, processIDFound, processKeyID);
 
 
 
@@ -448,6 +455,7 @@ namespace TestAppFileRead
             bool alreadyExists = operationList.Any(x => x.Contains(processOperation));
             if (alreadyExists == false)
             {
+               
                 operationList.Add(processOperation);
                 OperationComboBox.Items.Add(processOperation);
             }
@@ -455,19 +463,20 @@ namespace TestAppFileRead
         }
 
         //add a new process to the list
-        private static void AddNewItemToList(List<ProcessData> ProcessFileList, int processLength, string processName, string processFileName, string processPath, string processPID, string processOperation, bool processFound, string keyString)
+        private static void AddNewItemToList(List<ProcessData> ProcessFileList, int processLength, string processName, string processTime, string processFileName, string processPath, string processPID, string processOperation, bool processFound, string keyString)
         {
             if (processFound == false)
             {
                 ProcessFileList.Add(new ProcessData
                 {
-                    ProcessLength = processLength,
-                    ProcessName = processName,
+                    Time = processTime,
+                    Length = processLength,
+                    Name = processName,
                     Operation = processOperation,
-                    ProcessPID = processPID,
-                    ProcessPath = processPath,
+                    PID = processPID,
+                    Path = processPath,
                     ProcessKey = keyString,
-                    ProcessFileName = processFileName
+                    FileName = processFileName
                 });
             }
             
@@ -482,7 +491,7 @@ namespace TestAppFileRead
                 if (item.ProcessKey == keyString)
                 {
 
-                    item.ProcessLength += length;
+                    item.Length += length;
                     processFound = true;
                     break;
                 }
@@ -517,12 +526,15 @@ namespace TestAppFileRead
 
         private void SortedFileList(List<ProcessData> ProcessFileList)
         {
-            List<ProcessData> SortedFileList = ProcessFileList.OrderByDescending(o => o.ProcessLength).ToList();
+            List<ProcessData> SortedFileList = ProcessFileList.OrderByDescending(o => o.Length).ToList();
 
             DataTable filteredTable = new DataTable();
+            
             filteredTable.Columns.Add("Process Name");
             filteredTable.Columns.Add("PID");
+            filteredTable.Columns.Add("Time");
             filteredTable.Columns.Add("File Name");
+            
             filteredTable.Columns.Add("Operation");
             filteredTable.Columns.Add("Length");
             filteredTable.Columns.Add("Path");
@@ -530,12 +542,14 @@ namespace TestAppFileRead
             for (int i = 0; i < SortedFileList.Count; i++)
             {
                 filteredTable.Rows.Add(
-                                SortedFileList[i].ProcessName,
-                                SortedFileList[i].ProcessPID,
-                                SortedFileList[i].ProcessFileName,
+                                
+                                SortedFileList[i].Name,
+                                SortedFileList[i].PID,
+                                SortedFileList[i].FileName,
+                                SortedFileList[i].Time,
                                 SortedFileList[i].Operation,
-                                SortedFileList[i].ProcessLength,
-                                SortedFileList[i].ProcessPath
+                                SortedFileList[i].Length,
+                                SortedFileList[i].Path
                               );
             }
             dataGridView1.DataSource = filteredTable;
@@ -545,12 +559,15 @@ namespace TestAppFileRead
         {
            
 
-            List<ProcessData> SortedProcessList = ProcessIDList.OrderByDescending(o => o.ProcessLength).ToList();
+            List<ProcessData> SortedProcessList = ProcessIDList.OrderByDescending(o => o.Length).ToList();
 
             DataTable filteredTableProcesses = new DataTable();
+            
             filteredTableProcesses.Columns.Add("Process Name");
             filteredTableProcesses.Columns.Add("PID");
+            filteredTableProcesses.Columns.Add("Time");
             filteredTableProcesses.Columns.Add("File Name");
+            
             filteredTableProcesses.Columns.Add("Operation");
             filteredTableProcesses.Columns.Add("Length");
             filteredTableProcesses.Columns.Add("Path");
@@ -558,12 +575,14 @@ namespace TestAppFileRead
             for (int i = 0; i < SortedProcessList.Count; i++)
             {
                 filteredTableProcesses.Rows.Add(
-                                SortedProcessList[i].ProcessName,
-                                SortedProcessList[i].ProcessPID,
-                                SortedProcessList[i].ProcessFileName,
+                               
+                                SortedProcessList[i].Name,
+                                SortedProcessList[i].PID,
+                                SortedProcessList[i].FileName,
+                                SortedProcessList[i].Time,
                                 SortedProcessList[i].Operation,
-                                SortedProcessList[i].ProcessLength,
-                                SortedProcessList[i].ProcessPath
+                                SortedProcessList[i].Length,
+                                SortedProcessList[i].Path
                               );
             }
             dataGridViewProcesses.DataSource = filteredTableProcesses;
@@ -577,23 +596,23 @@ namespace TestAppFileRead
 
             var query = from ProcessData data in ProcessFileList
                         where data.Operation == operationValue
-                        orderby data.ProcessLength descending
+                        orderby data.Length descending
                         select data;
-            var topTenIDList = (query.OrderByDescending(i => i.ProcessLength).Take(10));
+            var topTenIDList = (query.OrderByDescending(i => i.Length).Take(10));
 
             var query2 = from ProcessData data in ProcessIDList
                          where data.Operation == operationValue
-                         orderby data.ProcessLength descending
+                         orderby data.Length descending
                          select data;
-            var topTenList = (query2.OrderByDescending(i => i.ProcessLength).Take(10));
+            var topTenList = (query2.OrderByDescending(i => i.Length).Take(10));
 
            
 
             int topListCounter = 0;
             foreach (var item in topTenIDList)
             {
-                        topLengths[topListCounter] = Convert.ToInt32(item.ProcessLength);
-                        topFileNames[topListCounter] = item.ProcessFileName;
+                        topLengths[topListCounter] = Convert.ToInt32(item.Length);
+                        topFileNames[topListCounter] = item.FileName;
 
                 topListCounter++;
             }
@@ -602,8 +621,8 @@ namespace TestAppFileRead
             foreach (var item in topTenList)
             {
                         //Convert byte to kilobyte
-                        topIDLengths[topProcessCounter] = Convert.ToInt32(item.ProcessLength);
-                        topProcessID[topProcessCounter] = item.ProcessName + " " + item.ProcessPID;
+                        topIDLengths[topProcessCounter] = Convert.ToInt32(item.Length);
+                        topProcessID[topProcessCounter] = item.Name + " " + item.PID;
 
               
                 topProcessCounter++;
@@ -652,36 +671,56 @@ namespace TestAppFileRead
             {
                 filename = sfd.FileName;
                 Deleteifexists(filename);
-                DataTable dt = new DataTable("itemstable");
+                DataTable dt = new DataTable("Msg");
 
-                for (int i = 0; i < dataGridView1.ColumnCount; i++)
-                {
-                    dt.Columns.Add(dataGridView1.Columns[i].Name, typeof(System.String));
-                }
+                XmlDocument doc = new XmlDocument();
 
-                DataRow myrow;
+                //the xml declaration 
+                XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+                XmlElement root = doc.DocumentElement;
+                doc.InsertBefore(xmlDeclaration, root);
+                XmlElement element0 = doc.CreateElement("ProcmonData", DateTime.Now.ToShortDateString());
+                doc.AppendChild(element0);
+
                 int icols = dataGridView1.Columns.Count;
                 foreach (DataGridViewRow drow in this.dataGridView1.Rows)
                 {
-                    myrow = dt.NewRow();
+                    XmlElement element1 = doc.CreateElement(string.Empty, "Msg", string.Empty);
+
+                    element0.AppendChild(element1);
+
+                    XmlElement element2 = doc.CreateElement(string.Empty, "Layer", Name="Core");
+                    element1.AppendChild(element2);
+
+                    XmlElement element3 = doc.CreateElement(string.Empty, "SourceLayer", Name="PMC");
+                    element2.AppendChild(element3);
+
                     for (int i = 0; i <= icols - 1; i++)
                     {
 
-                        myrow[i] = drow.Cells[i].Value;
+                        XmlElement element4 = doc.CreateElement(string.Empty, "Message", drow.Cells[i].Value.ToString());
+                        element3.AppendChild(element4);
+                        //take out the so as its not an attribute if the element
                     }
-                    dt.Rows.Add(myrow);
-                }
 
-                dt.WriteXml(filename);
+
+
+                    //XmlText text2 = doc.CreateTextNode("some text");
+                    //element4.AppendChild(text2);
+
+                }
+                doc.Save(filename);
+
             }
-            
+
 
         }
+        
         private void SaveButton(object sender, EventArgs e)
         {
-            SaveToCSV(dataGridView1);
-            SaveToCSV(dataGridViewProcesses);
-
+        //    SaveToCSV(dataGridView1);
+        //    SaveToCSV(dataGridViewProcesses);
+            SaveXML();
         }
 
         private void OperationComboBox_SelectedIndexChanged(List<ProcessData> dataFileList, List<ProcessData> dataProcessesList)
@@ -689,7 +728,7 @@ namespace TestAppFileRead
             string operationValue = OperationComboBox.SelectedItem.ToString();
                 var query = from ProcessData data in dataFileList
                             where data.Operation == operationValue
-                            orderby data.ProcessLength descending
+                            orderby data.Length descending
                             select data;
                 
                 //files
@@ -697,7 +736,7 @@ namespace TestAppFileRead
                 dataGridView1.DataSource = query.ToList();
 
                 //processes 
-                dataProcessesList = query.GroupBy(x => x.ProcessName).Select(x => x.First()).ToList();
+                dataProcessesList = query.GroupBy(x => x.Name).Select(x => x.First()).ToList();
                 dataGridViewProcesses.DataSource = null;
                 dataGridViewProcesses.DataSource = dataProcessesList;
             
