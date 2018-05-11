@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -659,68 +660,13 @@ namespace TestAppFileRead
             this.Close();
         }
        
-        private void SaveXML()
-        {
-            string filename = "";
-            SaveFileDialog sfd = new SaveFileDialog
-            {
-                Filter = "XML (*.xml)|*.xml",
-                FileName = ""
-            };
-            if (sfd.ShowDialog() == DialogResult.OK)
-            {
-                filename = sfd.FileName;
-                Deleteifexists(filename);
-                DataTable dt = new DataTable("Msg");
-
-                XmlDocument doc = new XmlDocument();
-
-                //the xml declaration 
-                XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
-                XmlElement root = doc.DocumentElement;
-                doc.InsertBefore(xmlDeclaration, root);
-                XmlElement element0 = doc.CreateElement("ProcmonData", DateTime.Now.ToShortDateString());
-                doc.AppendChild(element0);
-
-                int icols = dataGridView1.Columns.Count;
-                foreach (DataGridViewRow drow in this.dataGridView1.Rows)
-                {
-                    XmlElement element1 = doc.CreateElement(string.Empty, "Msg", string.Empty);
-
-                    element0.AppendChild(element1);
-
-                    XmlElement element2 = doc.CreateElement(string.Empty, "Layer", Name="Core");
-                    element1.AppendChild(element2);
-
-                    XmlElement element3 = doc.CreateElement(string.Empty, "SourceLayer", Name="PMC");
-                    element2.AppendChild(element3);
-
-                    for (int i = 0; i <= icols - 1; i++)
-                    {
-
-                        XmlElement element4 = doc.CreateElement(string.Empty, "Message", drow.Cells[i].Value.ToString());
-                        element3.AppendChild(element4);
-                        //take out the so as its not an attribute if the element
-                    }
-
-
-
-                    //XmlText text2 = doc.CreateTextNode("some text");
-                    //element4.AppendChild(text2);
-
-                }
-                doc.Save(filename);
-
-            }
-
-
-        }
+       
         
         private void SaveButton(object sender, EventArgs e)
         {
-        //    SaveToCSV(dataGridView1);
-        //    SaveToCSV(dataGridViewProcesses);
-            SaveXML();
+            SaveToCSV(dataGridView1);
+            SaveToCSV(dataGridViewProcesses);
+
         }
 
         private void OperationComboBox_SelectedIndexChanged(List<ProcessData> dataFileList, List<ProcessData> dataProcessesList)
@@ -742,6 +688,58 @@ namespace TestAppFileRead
             
         }
 
-        
+        private void SaveToXml(object sender, EventArgs e)
+        {
+            string filename = "";
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "XML (*.xml)|*.xml",
+                FileName = ""
+            };
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                filename = sfd.FileName;
+                Deleteifexists(filename);
+
+                XmlDocument doc = new XmlDocument();
+                XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+                XmlElement root = doc.DocumentElement;
+                doc.InsertBefore(xmlDeclaration, root);
+                XmlElement element0 = doc.CreateElement("ProcmonCSV");
+                doc.AppendChild(element0);
+
+                int icols = dataGridView1.Columns.Count;
+                foreach (DataGridViewRow drow in this.dataGridView1.Rows)
+                {
+                    XmlElement Msg = doc.CreateElement("Msg");
+                    Msg.SetAttribute("Date", DateTime.Now.ToShortDateString());
+                    Msg.SetAttribute("Time", "");
+                    element0.AppendChild(Msg);
+
+                    XmlElement Layer = doc.CreateElement("LayerName");
+                    Layer.SetAttribute("Name", "Core");
+                    Msg.AppendChild(Layer);
+
+                    XmlElement SourceLayer = doc.CreateElement("SourceLayer");
+                    SourceLayer.SetAttribute("Name", "PML");
+                    Layer.AppendChild(SourceLayer);
+
+                    XmlElement Message = doc.CreateElement("Message");
+                    Layer.AppendChild(Message);
+
+                    for (int i = 0; i <= icols - 2; i++)
+                    {
+                        Message.SetAttribute(dataGridView1.Columns[i].Name, drow.Cells[i].Value.ToString());
+                        Msg.SetAttribute("Time", drow.Cells[3].Value.ToString());
+                    }
+
+
+                }
+
+                doc.Save(filename);
+
+
+            }
+        }
     }
 }
