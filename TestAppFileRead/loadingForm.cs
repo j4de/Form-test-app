@@ -20,7 +20,7 @@ namespace TestAppFileRead
         long sizefile = 0;
         Boolean canceled = false;
         Boolean complete = false;
-        public loadingForm(string bytesize, DataGridView dgv, Form1 frm, long filesize, long progress)
+        public loadingForm(DataGridView dgv, Form1 frm, long filesize, long progress)
         {
             InitializeComponent();
             bytesLbl.Text = "Uploading " + filesize + " bytes. Please wait.";
@@ -28,6 +28,7 @@ namespace TestAppFileRead
             check = frm;
             sizefile = filesize;
             totprogress = progress;
+            progressBar1.Minimum = 0;
             progressBar1.Maximum = 100;
         }
 
@@ -45,12 +46,12 @@ namespace TestAppFileRead
 
         internal void setprogress(long progress)
         {
-            int per = (int)(((double)progress / (double)sizefile )* 100);
-            progressBar1.Value = per;
-            //if (progressBar1.Value == progressBar1.Maximum)
-            //{
-            //    complete = true;
-            //}
+
+                int per = (int)(((double)progress / (double)sizefile) * 100);
+                if (progressBar1.Value != per)
+                {
+                    progressBar1.Value = per;
+                }
         }
 
         internal bool iscanceled()
@@ -62,5 +63,7 @@ namespace TestAppFileRead
         {
             return complete;
         }
+
+        
     }
 }

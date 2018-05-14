@@ -68,6 +68,8 @@ namespace TestAppFileRead
         //Only setup to Read in the data from a Procmon CSV file
         private void DisplayButton_Click(object sender, EventArgs e)
         {
+
+
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("Time");
             dataTable.Columns.Add("Process Name");
@@ -84,43 +86,69 @@ namespace TestAppFileRead
                 StreamReader streamReader = new StreamReader(filePath);
                 string[] totalData = new string[File.ReadAllLines(filePath).Length];
 
-                string megabyteOrKilobyte;
                 long fileSize;
                 long stringSize;
                 long progress = 0;
 
 
-                FindFileSize(filePath, out megabyteOrKilobyte, out fileSize);
+                FindFileSize(filePath, out fileSize);
+
                 //progress bar
-                loadingForm load = new loadingForm(megabyteOrKilobyte, dataGridView1, this, fileSize, progress);
+                loadingForm load = new loadingForm(dataGridView1, this, 100, progress);
                 load.Show();
+                for(int p=0; p<101; p++)
+                {
+                    load.setprogress(p);
+                    System.Threading.Thread.Sleep(20);
+                    Application.DoEvents();
+                }
+                load.Close();
+
+                progress = 0;
+                load = new loadingForm(dataGridView1, this, fileSize, progress);
+                load.Show();
+
                 //Reset the data grid
                 dataGridView1.DataSource = null;
 
                 if (fileSize != 0)
                 {
+                    string defaultLengthValue = "0";
+                    string defaultPath = "noFilePathFound";
+                    
                     string line = streamReader.ReadLine();
-                    totalData = line.Split('"');
+
+                    int lineCount = 1;
+                    totalData = streamReader.ReadLine().Split('"');
+                    stringSize = line.Length + 2;
+                    progress += stringSize;
                     while (!streamReader.EndOfStream)
                     {
+                        lineCount++;
+                        line = streamReader.ReadLine();
+                        totalData = line.Split('"');
 
-                        totalData = ParseProcmonData(streamReader);
-                        //get the offset value
-
-                        stringSize = line.Length;
+                        stringSize = line.Length + 2;
                         progress += stringSize;
-                        if (progress>7000000)
-                        {
-                            load.setprogress(progress);
-                        }
-                        Update();
+
+                      
+                      
                         load.setprogress(progress);
                         if (load.iscanceled())
                         {
                             load.Close();
                             break;
                         }
-                        Application.DoEvents();
+                        
+                        if (lineCount%1000 == 0)
+                        {
+                            System.Threading.Thread.Sleep(5);
+                            Application.DoEvents();
+
+                        }
+                        ParseProcmonData(totalData, defaultLengthValue, defaultPath);
+
+
 
                         //to deal with arrays of different sizes
                         if (totalData.Length == 15)
@@ -149,7 +177,7 @@ namespace TestAppFileRead
                         }
 
                     }
-                    
+                    load.Close();
                     //If file load is not cancelled
                     ProcessFileData(dataTable, load);
 
@@ -163,28 +191,11 @@ namespace TestAppFileRead
 
         }
 
-      
-        private void ProcessFileData(DataTable dataTable, loadingForm load)
+        private void ParseProcmonData(string[] totalData, string defaultLengthValue, string defaultPath)
         {
-            if (!load.iscanceled())
-            {
-                dataGridView1.DataSource = null;              
-                dataGridView1.DataSource = dataTable;
-                FindLengthForEachProcess();
-                load.Close();
-            }
-        }
-
-        private string[] ParseProcmonData(StreamReader streamReader)
-        {
-            
-            string defaultLengthValue = "0";
-            string defaultPath = "noFilePathFound";
-            string[] totalData = streamReader.ReadLine().Split('"');
-            
             if (totalData.Length == 14)
             {
-
+                
                 foreach (var item in totalData)
                 {
 
@@ -217,7 +228,7 @@ namespace TestAppFileRead
                         MessageBox.Show(exc.Message);
                     }
                 }
-      
+
             }
             else
                 foreach (var item in totalData)
@@ -226,7 +237,7 @@ namespace TestAppFileRead
                     try
                     {
 
-                        
+
                         if (totalData.Length > 12)
                         {
                             totalData[PM_Operation] = totalData[PM_Operation].Replace(" ", "");
@@ -250,8 +261,8 @@ namespace TestAppFileRead
                                 totalData[PM_Length] = defaultLengthValue;
                             }
                         }
-                      
-                       
+
+
                     }
 
                     catch (IncorrectFormatException exc)
@@ -259,8 +270,107 @@ namespace TestAppFileRead
                         MessageBox.Show(exc.Message);
                     }
                 }
-            return totalData;
+            //get the offset value
         }
+
+        private void ProcessFileData(DataTable dataTable, loadingForm load)
+        {
+            if (!load.iscanceled())
+            {
+                dataGridViewAllData.DataSource = dataTable;
+                dataGridView1.DataSource = null;              
+                dataGridView1.DataSource = dataTable;
+                FindLengthForEachProcess();
+                load.Close();
+            }
+        }
+
+        //private string[] ParseProcmonData(StreamReader streamReader)
+        //{
+            
+        //    string defaultLengthValue = "0";
+        //    string defaultPath = "noFilePathFound";
+        //    string[] totalData = streamReader.ReadLine().Split('"');
+            
+        //    if (totalData.Length == 14)
+        //    {
+
+        //        foreach (var item in totalData)
+        //        {
+
+        //            try
+        //            {
+        //                totalData[PM_Operation] = totalData[PM_Operation].Replace(" ", "");
+        //                totalData[PM_TimeOfDay] = totalData[PM_TimeOfDay].Substring(0, 8);
+        //                if (totalData[PM_FileName] == "")
+        //                {
+        //                    totalData[PM_FileName] = defaultPath;
+        //                }
+        //                else
+        //                    totalData[PM_FileName] = Path.GetFileName(totalData[PM_Path]).ToString();
+
+        //                //get value of length and remove any comma's
+        //                var match = regexLength.Match(totalData[PM_Detail]);
+        //                if (match.Success)
+        //                {
+        //                    totalData[PM_lengthFromSmallArray] = match.Groups["getLengthNum"].Value;
+        //                    totalData[PM_lengthFromSmallArray] = totalData[PM_Length].Replace(",", "");
+        //                }
+        //                else
+        //                {
+        //                    totalData[PM_lengthFromSmallArray] = defaultLengthValue;
+        //                }
+        //            }
+
+        //            catch (IncorrectFormatException exc)
+        //            {
+        //                MessageBox.Show(exc.Message);
+        //            }
+        //        }
+      
+        //    }
+        //    else
+        //        foreach (var item in totalData)
+        //        {
+
+        //            try
+        //            {
+
+                        
+        //                if (totalData.Length > 12)
+        //                {
+        //                    totalData[PM_Operation] = totalData[PM_Operation].Replace(" ", "");
+        //                    totalData[PM_TimeOfDay] = totalData[PM_TimeOfDay].Substring(0, 8);
+        //                    if (totalData[PM_FileName] == "")
+        //                    {
+        //                        totalData[PM_FileName] = defaultPath;
+        //                    }
+        //                    else
+        //                        totalData[PM_FileName] = Path.GetFileName(totalData[PM_Path]).ToString();
+
+        //                    //get value of length and remove any comma's
+        //                    var match = regexLength.Match(totalData[PM_Detail]);
+        //                    if (match.Success)
+        //                    {
+        //                        totalData[PM_Length] = match.Groups["getLengthNum"].Value;
+        //                        totalData[PM_Length] = totalData[PM_Length].Replace(",", "");
+        //                    }
+        //                    else
+        //                    {
+        //                        totalData[PM_Length] = defaultLengthValue;
+        //                    }
+        //                }
+                      
+                       
+        //            }
+
+        //            catch (IncorrectFormatException exc)
+        //            {
+        //                MessageBox.Show(exc.Message);
+        //            }
+        //        }
+        //    return totalData;
+        //}
 
         private void SaveToCSV(DataGridView DGVfiles)
         {
@@ -330,35 +440,10 @@ namespace TestAppFileRead
 
 
         //Convert file size for user information
-        private static void FindFileSize(string filePath, out string megabyteOrKilobyte, out long fileSize)
+        private static void FindFileSize(string filePath, out long fileSize)
         {
-            //Get the size of the file and append Gigabyte, magabyte or kilobyte
-            megabyteOrKilobyte = "";
             FileInfo f = new FileInfo(filePath);
             fileSize = f.Length;
-            //if (fileSize > 1073741824)
-            //{
-            //    fileSize = fileSize / 1073741824;
-            //    fileSize.ToString();
-            //    megabyteOrKilobyte = fileSize + " Gigabytes";
-            //}
-            //else if (fileSize > 1048576)
-            //{
-            //    fileSize = fileSize / 1048576;
-            //    fileSize.ToString();
-            //    megabyteOrKilobyte = fileSize + " Megabytes";
-            //}
-            //else if (fileSize > 1024)
-            //{
-            //    fileSize = fileSize / 1024;
-            //    fileSize.ToString();
-            //    megabyteOrKilobyte = fileSize + " Kilobytes";
-            //}
-            //else
-            //{
-            //    fileSize.ToString();
-            //    megabyteOrKilobyte = fileSize + "bytes";
-            //}
         }
 
         //Calculate the size/length of each process
@@ -660,36 +745,9 @@ namespace TestAppFileRead
             this.Close();
         }
        
-       
-        
-        private void SaveButton(object sender, EventArgs e)
+        private void SaveFileOperationToXML()
         {
-            SaveToCSV(dataGridView1);
-            SaveToCSV(dataGridViewProcesses);
-
-        }
-
-        private void OperationComboBox_SelectedIndexChanged(List<ProcessData> dataFileList, List<ProcessData> dataProcessesList)
-        {
-            string operationValue = OperationComboBox.SelectedItem.ToString();
-                var query = from ProcessData data in dataFileList
-                            where data.Operation == operationValue
-                            orderby data.Length descending
-                            select data;
-                
-                //files
-                dataGridView1.DataSource = null;
-                dataGridView1.DataSource = query.ToList();
-
-                //processes 
-                dataProcessesList = query.GroupBy(x => x.Name).Select(x => x.First()).ToList();
-                dataGridViewProcesses.DataSource = null;
-                dataGridViewProcesses.DataSource = dataProcessesList;
-            
-        }
-
-        private void SaveToXml(object sender, EventArgs e)
-        {
+            MessageBox.Show("Save files accessed, based on operation, to XML format ?");
             string filename = "";
             SaveFileDialog sfd = new SaveFileDialog
             {
@@ -733,6 +791,60 @@ namespace TestAppFileRead
                         Msg.SetAttribute("Time", drow.Cells[3].Value.ToString());
                     }
 
+                    
+                }
+
+                doc.Save(filename);
+
+
+            }
+        }
+        private void SaveProcessesToXML()
+        {
+            MessageBox.Show("Save processes, based on operation, to XML format ?");
+            string filename = "";
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "XML (*.xml)|*.xml",
+                FileName = ""
+            };
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                filename = sfd.FileName;
+                Deleteifexists(filename);
+
+                XmlDocument doc = new XmlDocument();
+                XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+                XmlElement root = doc.DocumentElement;
+                doc.InsertBefore(xmlDeclaration, root);
+                XmlElement element0 = doc.CreateElement("ProcmonCSVprocess");
+                doc.AppendChild(element0);
+
+                int icols = dataGridView1.Columns.Count;
+                foreach (DataGridViewRow drow in this.dataGridViewProcesses.Rows)
+                {
+                    XmlElement Msg = doc.CreateElement("Msg");
+                    Msg.SetAttribute("Date", DateTime.Now.ToShortDateString());
+                    Msg.SetAttribute("Time", "");
+                    element0.AppendChild(Msg);
+
+                    XmlElement Layer = doc.CreateElement("LayerName");
+                    Layer.SetAttribute("Name", "Core");
+                    Msg.AppendChild(Layer);
+
+                    XmlElement SourceLayer = doc.CreateElement("SourceLayer");
+                    SourceLayer.SetAttribute("Name", "PML");
+                    Layer.AppendChild(SourceLayer);
+
+                    XmlElement Message = doc.CreateElement("Message");
+                    Layer.AppendChild(Message);
+
+                    for (int i = 0; i <= icols - 2; i++)
+                    {
+                        Message.SetAttribute(dataGridView1.Columns[i].Name, drow.Cells[i].Value.ToString());
+                        Msg.SetAttribute("Time", drow.Cells[3].Value.ToString());
+                    }
+
 
                 }
 
@@ -741,5 +853,105 @@ namespace TestAppFileRead
 
             }
         }
+        private void SaveAllDataToXML()
+        {
+            MessageBox.Show("Save ALL file data to XML format ?");
+            string filename = "";
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "XML (*.xml)|*.xml",
+                FileName = ""
+            };
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                filename = sfd.FileName;
+                Deleteifexists(filename);
+
+                XmlDocument doc = new XmlDocument();
+                XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+                XmlElement root = doc.DocumentElement;
+                doc.InsertBefore(xmlDeclaration, root);
+                XmlElement element0 = doc.CreateElement("ProcmonCsvAllData");
+                doc.AppendChild(element0);
+                int counter = 0;
+                int icols = dataGridViewAllData.Columns.Count;
+                foreach (DataGridViewRow drow in this.dataGridViewAllData.Rows)
+                {
+                    XmlElement msg = doc.CreateElement("Msg");
+                    msg.SetAttribute("Date", DateTime.Now.ToShortDateString());
+                    msg.SetAttribute("Time", drow.Cells[0].Value.ToString());
+
+                    XmlElement layer = doc.CreateElement("Layer");
+                    layer.SetAttribute("Name", "CORE");
+
+                    XmlElement slayer = doc.CreateElement("SourceLayer");
+                    slayer.SetAttribute("Name", "PML");
+                                
+
+                    XmlElement message = doc.CreateElement("Message");
+                    message.SetAttribute("ProcessName", drow.Cells[1].Value.ToString());
+                    message.SetAttribute("ProcessID", drow.Cells[2].Value.ToString());
+                    message.SetAttribute("FileName", drow.Cells[3].Value.ToString());
+                    message.SetAttribute("Operation", drow.Cells[4].Value.ToString());
+                    message.SetAttribute("Length", drow.Cells[5].Value.ToString());
+                    message.SetAttribute("Path", drow.Cells[6].Value.ToString());
+
+                    msg.AppendChild(layer);
+                    msg.AppendChild(slayer);
+                    msg.AppendChild(message);
+
+                    element0.AppendChild(msg);
+                    counter++;
+                    if (counter == dataGridViewAllData.RowCount -1)
+                    {
+                        break;
+                    }
+                }
+               
+
+                doc.Save(filename);
+
+
+            }
+        }
+        private void SaveCSV(object sender, EventArgs e)
+        {
+            SaveToCSV(dataGridView1);
+            SaveToCSV(dataGridViewProcesses);
+
+        }
+
+        private void OperationComboBox_SelectedIndexChanged(List<ProcessData> dataFileList, List<ProcessData> dataProcessesList)
+        {
+            string operationValue = OperationComboBox.SelectedItem.ToString();
+                var query = from ProcessData data in dataFileList
+                            where data.Operation == operationValue
+                            orderby data.Length descending
+                            select data;
+                
+                //files
+                dataGridView1.DataSource = null;
+                dataGridView1.DataSource = query.ToList();
+
+            var query2 = from ProcessData data in dataProcessesList
+                         where data.Operation == operationValue
+                         orderby data.Length descending
+                         select data;
+            var topTenList = (query2.OrderByDescending(i => i.Length));
+            //processes 
+            //dataProcessesList = query.GroupBy(x => x.Name).Select(x => x.First()).ToList();
+                //dataGridViewProcesses.DataSource = null;
+            dataGridViewProcesses.DataSource = topTenList.ToList();
+            
+        }
+
+        private void SaveXML(object sender, EventArgs e)
+        {
+            SaveFileOperationToXML();
+            SaveAllDataToXML();
+            SaveProcessesToXML();
+        }
+
+       
     }
 }
