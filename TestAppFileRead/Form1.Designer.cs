@@ -28,14 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title3 = new System.Windows.Forms.DataVisualization.Charting.Title();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title4 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title5 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.saveXMLbutton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
@@ -214,28 +214,28 @@
             this.pieChart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea3.Name = "ChartArea1";
-            this.pieChart1.ChartAreas.Add(chartArea3);
+            chartArea5.Name = "ChartArea1";
+            this.pieChart1.ChartAreas.Add(chartArea5);
             this.tableLayoutPanel1.SetColumnSpan(this.pieChart1, 6);
-            legend3.Name = "Legend1";
-            this.pieChart1.Legends.Add(legend3);
+            legend5.Name = "Legend1";
+            this.pieChart1.Legends.Add(legend5);
             this.pieChart1.Location = new System.Drawing.Point(466, 305);
             this.pieChart1.Name = "pieChart1";
             this.tableLayoutPanel1.SetRowSpan(this.pieChart1, 8);
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
-            series3.IsValueShownAsLabel = true;
-            series3.Legend = "Legend1";
-            series3.Name = "Series1";
-            this.pieChart1.Series.Add(series3);
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series5.IsValueShownAsLabel = true;
+            series5.Legend = "Legend1";
+            series5.Name = "Series1";
+            this.pieChart1.Series.Add(series5);
             this.pieChart1.Size = new System.Drawing.Size(565, 319);
             this.pieChart1.TabIndex = 11;
             this.pieChart1.Text = "chart1";
-            title3.BorderColor = System.Drawing.Color.Black;
-            title3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            title3.Name = "Title1";
-            title3.Text = "Top Processes";
-            this.pieChart1.Titles.Add(title3);
+            title5.BorderColor = System.Drawing.Color.Black;
+            title5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            title5.Name = "Title1";
+            title5.Text = "Top Processes";
+            this.pieChart1.Titles.Add(title5);
             // 
             // exitButton
             // 
@@ -256,34 +256,34 @@
             this.BarChart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea4.Name = "ChartArea1";
-            this.BarChart1.ChartAreas.Add(chartArea4);
+            chartArea6.Name = "ChartArea1";
+            this.BarChart1.ChartAreas.Add(chartArea6);
             this.tableLayoutPanel1.SetColumnSpan(this.BarChart1, 4);
-            legend4.DockedToChartArea = "ChartArea1";
-            legend4.IsDockedInsideChartArea = false;
-            legend4.Name = "Legend1";
-            this.BarChart1.Legends.Add(legend4);
+            legend6.DockedToChartArea = "ChartArea1";
+            legend6.IsDockedInsideChartArea = false;
+            legend6.Name = "Legend1";
+            this.BarChart1.Legends.Add(legend6);
             this.BarChart1.Location = new System.Drawing.Point(3, 305);
             this.BarChart1.Name = "BarChart1";
             this.tableLayoutPanel1.SetRowSpan(this.BarChart1, 8);
-            series4.ChartArea = "ChartArea1";
-            series4.IsValueShownAsLabel = true;
-            series4.LabelAngle = -90;
-            series4.Legend = "Legend1";
-            series4.Name = "Bytes";
-            series4.ShadowColor = System.Drawing.Color.Gray;
-            series4.ShadowOffset = 5;
-            series4.SmartLabelStyle.IsMarkerOverlappingAllowed = true;
-            series4.SmartLabelStyle.IsOverlappedHidden = false;
-            this.BarChart1.Series.Add(series4);
+            series6.ChartArea = "ChartArea1";
+            series6.IsValueShownAsLabel = true;
+            series6.LabelAngle = -90;
+            series6.Legend = "Legend1";
+            series6.Name = "Bytes";
+            series6.ShadowColor = System.Drawing.Color.Gray;
+            series6.ShadowOffset = 5;
+            series6.SmartLabelStyle.IsMarkerOverlappingAllowed = true;
+            series6.SmartLabelStyle.IsOverlappedHidden = false;
+            this.BarChart1.Series.Add(series6);
             this.BarChart1.Size = new System.Drawing.Size(457, 319);
             this.BarChart1.TabIndex = 7;
             this.BarChart1.Text = "chart1";
-            title4.BorderColor = System.Drawing.Color.Black;
-            title4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            title4.Name = "Title1";
-            title4.Text = "Files That Access The Most Memory";
-            this.BarChart1.Titles.Add(title4);
+            title6.BorderColor = System.Drawing.Color.Black;
+            title6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            title6.Name = "Title1";
+            title6.Text = "Files That Access The Most Memory";
+            this.BarChart1.Titles.Add(title6);
             // 
             // label1
             // 
@@ -334,6 +334,7 @@
             this.dataGridViewAllData.Name = "dataGridViewAllData";
             this.dataGridViewAllData.Size = new System.Drawing.Size(10, 11);
             this.dataGridViewAllData.TabIndex = 22;
+            this.dataGridViewAllData.Visible = false;
             // 
             // openFileDialog1
             // 

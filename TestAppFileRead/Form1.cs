@@ -94,20 +94,9 @@ namespace TestAppFileRead
                 FindFileSize(filePath, out fileSize);
 
                 //progress bar
-                loadingForm load = new loadingForm(dataGridView1, this, 100, progress);
+                loadingForm load = new loadingForm(dataGridView1, this, fileSize, progress);
                 load.Show();
-                for(int p=0; p<101; p++)
-                {
-                    load.setprogress(p);
-                    System.Threading.Thread.Sleep(20);
-                    Application.DoEvents();
-                }
-                load.Close();
-
-                progress = 0;
-                load = new loadingForm(dataGridView1, this, fileSize, progress);
-                load.Show();
-
+                
                 //Reset the data grid
                 dataGridView1.DataSource = null;
 
@@ -131,21 +120,16 @@ namespace TestAppFileRead
                         stringSize = line.Length + 2;
                         progress += stringSize;
 
-                      
-                      
+                        Update();
+                       
                         load.setprogress(progress);
                         if (load.iscanceled())
                         {
                             load.Close();
                             break;
                         }
-                        
-                        if (lineCount%1000 == 0)
-                        {
-                            System.Threading.Thread.Sleep(5);
-                            Application.DoEvents();
+                        Application.DoEvents();
 
-                        }
                         ParseProcmonData(totalData, defaultLengthValue, defaultPath);
 
 
@@ -285,92 +269,6 @@ namespace TestAppFileRead
             }
         }
 
-        //private string[] ParseProcmonData(StreamReader streamReader)
-        //{
-            
-        //    string defaultLengthValue = "0";
-        //    string defaultPath = "noFilePathFound";
-        //    string[] totalData = streamReader.ReadLine().Split('"');
-            
-        //    if (totalData.Length == 14)
-        //    {
-
-        //        foreach (var item in totalData)
-        //        {
-
-        //            try
-        //            {
-        //                totalData[PM_Operation] = totalData[PM_Operation].Replace(" ", "");
-        //                totalData[PM_TimeOfDay] = totalData[PM_TimeOfDay].Substring(0, 8);
-        //                if (totalData[PM_FileName] == "")
-        //                {
-        //                    totalData[PM_FileName] = defaultPath;
-        //                }
-        //                else
-        //                    totalData[PM_FileName] = Path.GetFileName(totalData[PM_Path]).ToString();
-
-        //                //get value of length and remove any comma's
-        //                var match = regexLength.Match(totalData[PM_Detail]);
-        //                if (match.Success)
-        //                {
-        //                    totalData[PM_lengthFromSmallArray] = match.Groups["getLengthNum"].Value;
-        //                    totalData[PM_lengthFromSmallArray] = totalData[PM_Length].Replace(",", "");
-        //                }
-        //                else
-        //                {
-        //                    totalData[PM_lengthFromSmallArray] = defaultLengthValue;
-        //                }
-        //            }
-
-        //            catch (IncorrectFormatException exc)
-        //            {
-        //                MessageBox.Show(exc.Message);
-        //            }
-        //        }
-      
-        //    }
-        //    else
-        //        foreach (var item in totalData)
-        //        {
-
-        //            try
-        //            {
-
-                        
-        //                if (totalData.Length > 12)
-        //                {
-        //                    totalData[PM_Operation] = totalData[PM_Operation].Replace(" ", "");
-        //                    totalData[PM_TimeOfDay] = totalData[PM_TimeOfDay].Substring(0, 8);
-        //                    if (totalData[PM_FileName] == "")
-        //                    {
-        //                        totalData[PM_FileName] = defaultPath;
-        //                    }
-        //                    else
-        //                        totalData[PM_FileName] = Path.GetFileName(totalData[PM_Path]).ToString();
-
-        //                    //get value of length and remove any comma's
-        //                    var match = regexLength.Match(totalData[PM_Detail]);
-        //                    if (match.Success)
-        //                    {
-        //                        totalData[PM_Length] = match.Groups["getLengthNum"].Value;
-        //                        totalData[PM_Length] = totalData[PM_Length].Replace(",", "");
-        //                    }
-        //                    else
-        //                    {
-        //                        totalData[PM_Length] = defaultLengthValue;
-        //                    }
-        //                }
-                      
-                       
-        //            }
-
-        //            catch (IncorrectFormatException exc)
-        //            {
-        //                MessageBox.Show(exc.Message);
-        //            }
-        //        }
-        //    return totalData;
-        //}
 
         private void SaveToCSV(DataGridView DGVfiles)
         {
@@ -474,7 +372,14 @@ namespace TestAppFileRead
             //find the rows with the matching process key and then add the length for
             //each of these rows together and select the top ten values 
             //to populate the bar chart
-            
+            long rowCount =0;
+            rowCount = dataGridView1.Rows.Count;
+            long progress = 1;
+
+            //progress bar
+            loadingForm load = new loadingForm(dataGridView1, this, rowCount, progress);
+            load.Show();
+
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
                 try
@@ -510,8 +415,22 @@ namespace TestAppFileRead
 
 
                     loopCounter++;
-                    if (loopCounter == dataGridView1.RowCount - 1)
+
+                    //Increment the progress bar
+                    progress++;
+                    load.setFilterprogress(progress);
+
+                    if (load.iscanceled())
+                    {
+                        load.Close();
                         break;
+                    }
+                    Application.DoEvents();
+                    if (loopCounter == dataGridView1.Rows.Count - 1)
+                    {
+                        break;
+                    }
+                       
 
                 }
                 catch (Exception exc)

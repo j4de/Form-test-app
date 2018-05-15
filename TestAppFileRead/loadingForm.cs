@@ -23,6 +23,7 @@ namespace TestAppFileRead
         public loadingForm(DataGridView dgv, Form1 frm, long filesize, long progress)
         {
             InitializeComponent();
+            CenterToScreen();
             bytesLbl.Text = "Uploading " + filesize + " bytes. Please wait.";
             _dgv = dgv;
             check = frm;
@@ -47,11 +48,19 @@ namespace TestAppFileRead
         internal void setprogress(long progress)
         {
 
-                int per = (int)(((double)progress / (double)sizefile) * 100);
-                if (progressBar1.Value != per)
-                {
-                    progressBar1.Value = per;
-                }
+            int per = (int)(((double)progress / (double)sizefile) * 100);
+            progressBar1.Value = per;
+            
+        }
+        internal void setFilterprogress(long progress)
+        {
+            bytesLbl.Text = "Filtering files.... ";
+            int per = (int)(((double)progress / (double)sizefile) * 100);
+            progressBar1.Value = per;
+            if (progressBar1.Value > 99)
+            {
+                Close();
+            } 
         }
 
         internal bool iscanceled()
